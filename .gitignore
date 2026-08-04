@@ -1,0 +1,11 @@
+# Fichiers système
+.DS_Store
+Thumbs.db
+
+# Fichiers de travail vidéo (sources non compressées)
+*_src.mp4
+
+# Remarque : supabase/config.js EST volontairement inclus.
+# La clé "anon public" de Supabase est faite pour être publique
+# (elle est de toute façon visible dans le site en ligne).
+# La sécurité est assurée par les règles RLS dans Supabase.

@@ -1,0 +1,2 @@
+Mets ici TOUTES les photos .webp du site (ex. DUS_P1.webp, STOMS_P1.webp, ...).
+Elles sont dans tes telechargements. Le site les cherche a "photos/NOM.webp".
