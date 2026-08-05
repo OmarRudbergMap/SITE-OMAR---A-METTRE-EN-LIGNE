@@ -2956,7 +2956,7 @@ function integrerFan(fn){
     var _memeVille=(typeof MOI!=="undefined"&&MOI&&MOI.ville&&fn.ville&&MOI.ville.toLowerCase()===fn.ville.toLowerCase());
     var _estMoi=!!fn.estMoi || (typeof MOI!=="undefined"&&MOI&&MOI.prenom&&fn.prenom===MOI.prenom&&_memeVille) ||
                 (!!fn.fanId && typeof MOI!=="undefined"&&MOI&&MOI.fanId&&fn.fanId===MOI.fanId);
-    HISTOIRES.push({prenom:fn.prenom,age:fn.age,pays:fn.drapeau,annee:fn.annee,chanson:fn.chanson,
+    HISTOIRES.push({prenom:fn.prenom,age:fn.age,pays:fn.drapeau,ville:fn.ville,annee:fn.annee,chanson:fn.chanson,
       langue:(LANG||"en").toUpperCase(),photo:HISTOIRES.length%PHOTOS.length,photoFan:fn.photo||null,
       texte:fn.histoire,likes:fn.likesHistoire||0,coms:0,
       estMoi:_estMoi, fanId:fn.fanId||(_estMoi&&typeof MOI!=="undefined"&&MOI?MOI.fanId:null)});
@@ -6305,7 +6305,16 @@ async function chargerFansSupabase(){
     data.forEach(function(row){
       const code=String(row.pays||"XX").toUpperCase();
       const cle=((row.pseudo||"")+"|"+(row.ville||"")).toLowerCase();
-      if(vus.has(cle)) return;
+      if(vus.has(cle)){
+        /* fan déjà affiché localement → on complète sa photo/histoire depuis la base VALIDÉE */
+        if(row.photo || row.histoire){
+          var fx=(window.REGISTRE_FANS||[]).find(function(x){return ((x.prenom||"")+"|"+(x.ville||"")).toLowerCase()===cle;});
+          if(fx){ if(row.photo && !fx.photo) fx.photo=row.photo; if(row.histoire && !fx.histoire) fx.histoire=row.histoire; }
+          var hx=(typeof HISTOIRES!=="undefined"?HISTOIRES:[]).find(function(x){return ((x.prenom||"")+"|"+(x.ville||"")).toLowerCase()===cle;});
+          if(hx){ if(row.photo) hx.photoFan=row.photo; if(row.histoire) hx.texte=row.histoire; }
+        }
+        return;
+      }
       vus.add(cle);
       let age=0;
       if(row.date_naissance){ const dn=new Date(row.date_naissance);
