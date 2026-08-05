@@ -3618,6 +3618,8 @@ function demarrerCarrousels(){
     function suivant(){
       if(!document.body.contains(c)){clearTimeout(c._t);return;}
       if(c.dataset.tenue && Date.now() < +c.dataset.tenue){planifier(800);return;}
+      /* Si la personne regarde une vidéo (elle l'a lancée elle-même), on n'avance pas. */
+      if([...c.querySelectorAll("video")].some(v=>!v.paused && !v.ended)){planifier(1200);return;}
       const s=visibles();
       if(pause||s.length<2){planifier(3000);return;}
       let idx=0,ecart=1e9;
@@ -3630,12 +3632,10 @@ function demarrerCarrousels(){
       c.scrollTo({left:Math.max(0,cible.offsetLeft-(c.clientWidth-cible.clientWidth)/2),behavior:"smooth"});
       const video=cible.querySelector("video");
       if(video){
-        try{video.currentTime=0;}catch(e){}
-        video.muted=false;
-        const p=video.play&&video.play();
-        if(p&&p.catch)p.catch(()=>{video.muted=true;const q=video.play();if(q&&q.catch)q.catch(()=>{});});
-        video.onended=()=>planifier(400);
-        planifier(((video.duration&&isFinite(video.duration))?video.duration:8)*1000+800);
+        /* PAS de lecture automatique : la vidéo reste en pause, son coupé,
+           jusqu'à ce que la personne clique dessus (bouton lecture natif). */
+        try{ video.pause(); }catch(e){}
+        planifier(6000);
       } else {
         planifier(cible.dataset.type==="video"?8000:3000);
       }
@@ -6155,6 +6155,39 @@ for(const etape of [traduirePage,rendreProgression,rendreExtension,majLecteur]){
     if(window.rendreExtension) rendreExtension();  /* re-rendre profil, passeport, awards… avec les données restaurées */
   }catch(err){ console.warn("Restauration de la sauvegarde impossible :", err); }
 })();
+
+/* --- Fans VALIDÉS depuis Supabase → carte mondiale + histoires (visibles par TOUS) --- */
+async function chargerFansSupabase(){
+  if(!window._sb) return;
+  try{
+    const rep=await window._sb.from("fans")
+      .select("pseudo,ville,pays,date_naissance,histoire").eq("valide",true);
+    if(rep.error){ console.warn("Supabase lecture fans:",rep.error.message); return; }
+    const data=rep.data||[];
+    if(!data.length) return;
+    const vus=new Set((window.REGISTRE_FANS||[]).map(f=>((f.prenom||"")+"|"+(f.ville||"")).toLowerCase()));
+    data.forEach(function(row){
+      const code=String(row.pays||"XX").toUpperCase();
+      const cle=((row.pseudo||"")+"|"+(row.ville||"")).toLowerCase();
+      if(vus.has(cle)) return;
+      vus.add(cle);
+      let age=0;
+      if(row.date_naissance){ const dn=new Date(row.date_naissance);
+        if(!isNaN(dn.getTime())) age=Math.max(0,Math.floor((Date.now()-dn.getTime())/(365.25*864e5))); }
+      integrerFan({ prenom:row.pseudo||"Fan", code:code, ville:row.ville||"",
+        drapeau:drapeauISO(code), age:age, depuis:"", annee:(new Date()).getFullYear(),
+        chanson:"", concert:"", rencontre:false, histoire:row.histoire||"",
+        photo:null, tampons:0, inscritLe:(new Date()).toISOString() });
+    });
+    toutMettreAJour(true);
+    if(window.rendreHistoires) rendreHistoires();
+    if(window.rendreExtension) rendreExtension();
+    console.log("Fans validés chargés depuis Supabase :", data.length);
+  }catch(e){ console.warn("Supabase lecture fans:",e); }
+}
+window.chargerFansSupabase=chargerFansSupabase;
+chargerFansSupabase();
+
 allerA(location.hash.slice(1)||"accueil");
 
 /* ================================================================
