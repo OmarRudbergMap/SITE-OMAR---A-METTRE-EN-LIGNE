@@ -1103,7 +1103,7 @@ en:{
   "toast.editSent":"Your new version was sent to the moderator for approval ✦",
   "toast.photoChanged":"New photo applied! It will be reviewed by the moderator before publication ✦",
   "sto.readMore":"Read the full story →","sto.collapse":"Collapse ↑",
-  "sto.since":"fan since","sto.yo":"yo","sto.changePhoto":"📷 Change my photo","sto.editText":"✏️ Edit my story",
+  "sto.since":"fan since","sto.yo":"yo","sto.changePhoto":"📷 Change my photo","sto.changeBg":"🖼️ Background photo","sto.editText":"✏️ Edit my story",
   "sto.sendApproval":"Send for approval ✦","sto.cancel":"Cancel",
   "sto.ownerNote":"Each fan chooses and uploads their own Omar photo, and can change it or edit their story at any time (with moderator approval).",
   "map.eyebrow":"Explore","map.title":"The flat map of all fans","map.hint":"Tap a glowing dot to open that fan's profile and story.",
@@ -1249,7 +1249,7 @@ fr:{
   "sto.quote":"Parce que derrière chaque fan se cache une histoire qui mérite d'être racontée.",
   "sto.tellBtn":"Raconter mon histoire ✦",
   "sto.readMore":"Lire l'histoire complète →","sto.collapse":"Replier ↑","sto.since":"fan depuis","sto.yo":"ans",
-  "sto.changePhoto":"📷 Changer ma photo","sto.editText":"✏️ Modifier mon histoire",
+  "sto.changePhoto":"📷 Changer ma photo","sto.changeBg":"🖼️ Photo de fond","sto.editText":"✏️ Modifier mon histoire",
   "sto.sendApproval":"Envoyer pour validation ✦","sto.cancel":"Annuler",
   "sto.ownerNote":"Chaque fan choisit et télécharge lui-même sa photo d'Omar, et peut la changer ou modifier son histoire à tout moment (avec validation de la modératrice).",
   "prj.eyebrow":"Créons ensemble","prj.title":"Projets de la communauté",
@@ -1420,7 +1420,7 @@ es:{
   "sto.quote":"Porque detrás de cada fan hay una historia que merece ser contada.",
   "sto.tellBtn":"Contar mi historia ✦",
   "sto.readMore":"Leer la historia completa →","sto.collapse":"Plegar ↑","sto.since":"fan desde","sto.yo":"años",
-  "sto.changePhoto":"📷 Cambiar mi foto","sto.editText":"✏️ Modificar mi historia",
+  "sto.changePhoto":"📷 Cambiar mi foto","sto.changeBg":"🖼️ Foto de fondo","sto.editText":"✏️ Modificar mi historia",
   "sto.sendApproval":"Enviar para aprobación ✦","sto.cancel":"Cancelar",
   "sto.ownerNote":"Cada fan elige y sube su propia foto de Omar, y puede cambiarla o modificar su historia en cualquier momento (con la aprobación de la moderadora).",
   "prj.eyebrow":"Creemos juntos","prj.title":"Proyectos de la comunidad",
@@ -1590,7 +1590,7 @@ sv:{
   "sto.quote":"För bakom varje fan finns en historia som förtjänar att berättas.",
   "sto.tellBtn":"Berätta min historia ✦",
   "sto.readMore":"Läs hela historien →","sto.collapse":"Fäll ihop ↑","sto.since":"fan sedan","sto.yo":"år",
-  "sto.changePhoto":"📷 Byt min bild","sto.editText":"✏️ Redigera min historia",
+  "sto.changePhoto":"📷 Byt min bild","sto.changeBg":"🖼️ Bakgrundsbild","sto.editText":"✏️ Redigera min historia",
   "sto.sendApproval":"Skicka för godkännande ✦","sto.cancel":"Avbryt",
   "sto.ownerNote":"Varje fan väljer och laddar upp sin egen bild på Omar, och kan byta den eller redigera sin historia när som helst (med moderatorns godkännande).",
   "prj.eyebrow":"Vi skapar tillsammans","prj.title":"Communityts projekt",
@@ -1760,7 +1760,7 @@ de:{
   "sto.quote":"Denn hinter jedem Fan steckt eine Geschichte, die es verdient, erzählt zu werden.",
   "sto.tellBtn":"Meine Geschichte erzählen ✦",
   "sto.readMore":"Ganze Geschichte lesen →","sto.collapse":"Einklappen ↑","sto.since":"Fan seit","sto.yo":"Jahre",
-  "sto.changePhoto":"📷 Mein Foto ändern","sto.editText":"✏️ Meine Geschichte bearbeiten",
+  "sto.changePhoto":"📷 Mein Foto ändern","sto.changeBg":"🖼️ Hintergrundbild","sto.editText":"✏️ Meine Geschichte bearbeiten",
   "sto.sendApproval":"Zur Freigabe senden ✦","sto.cancel":"Abbrechen",
   "sto.ownerNote":"Jeder Fan wählt und lädt sein eigenes Omar-Foto hoch und kann es oder seine Geschichte jederzeit ändern (mit Freigabe der Moderatorin).",
   "prj.eyebrow":"Gemeinsam gestalten","prj.title":"Projekte der Community",
@@ -1930,7 +1930,7 @@ pt:{
   "sto.quote":"Porque atrás de cada fã existe uma história que merece ser contada.",
   "sto.tellBtn":"Contar minha história ✦",
   "sto.readMore":"Ler a história completa →","sto.collapse":"Recolher ↑","sto.since":"fã desde","sto.yo":"anos",
-  "sto.changePhoto":"📷 Mudar minha foto","sto.editText":"✏️ Editar minha história",
+  "sto.changePhoto":"📷 Mudar minha foto","sto.changeBg":"🖼️ Foto de fundo","sto.editText":"✏️ Editar minha história",
   "sto.sendApproval":"Enviar para aprovação ✦","sto.cancel":"Cancelar",
   "sto.ownerNote":"Cada fã escolhe e envia sua própria foto do Omar, e pode mudá-la ou editar sua história a qualquer momento (com aprovação da moderadora).",
   "prj.eyebrow":"Vamos criar juntos","prj.title":"Projetos da comunidade",
@@ -2884,6 +2884,7 @@ async function majFicheSupabase(champs){
       date_naissance: (reg&&reg.naissance&&reg.naissance.indexOf("-")!==-1)?reg.naissance:null,
       histoire: reg?(reg.histoire||null):null,
       photo:    reg?(reg.photo||null):null,
+      photo_histoire: reg?(reg.photoHistoire||null):null,
       chanson:  reg?(reg.chanson||null):null,
       insta:    reg?(reg.insta||null):null,
       annee:    reg?(reg.annee||null):null,
@@ -2958,6 +2959,7 @@ function integrerFan(fn){
                 (!!fn.fanId && typeof MOI!=="undefined"&&MOI&&MOI.fanId&&fn.fanId===MOI.fanId);
     HISTOIRES.push({prenom:fn.prenom,age:fn.age,pays:fn.drapeau,ville:fn.ville,annee:fn.annee,chanson:fn.chanson,
       langue:(LANG||"en").toUpperCase(),photo:HISTOIRES.length%PHOTOS.length,photoFan:fn.photo||null,
+      photoHistoire:fn.photoHistoire||null,
       texte:fn.histoire,likes:fn.likesHistoire||0,coms:0,
       estMoi:_estMoi, fanId:fn.fanId||(_estMoi&&typeof MOI!=="undefined"&&MOI?MOI.fanId:null)});
   }
@@ -3014,23 +3016,25 @@ function anniversairesAujourdhui(){
     return !isNaN(d)&&d.getDate()===auj.getDate()&&d.getMonth()===auj.getMonth();
   });
 }
-/* photo de profil : réduite à 320px pour tenir dans la sauvegarde */
-function lirePhotoFan(fichier){
+/* réduit une image à M px max et renvoie un base64 JPEG (léger pour la sauvegarde) */
+function lireImage(fichier, M, q){
   return new Promise(res=>{
     if(!fichier){res(null);return;}
     const img=new Image(), url=URL.createObjectURL(fichier);
     img.onload=()=>{
-      const M=320, r=Math.min(1,M/Math.max(img.width,img.height));
+      const r=Math.min(1,M/Math.max(img.width,img.height));
       const c=document.createElement("canvas");
       c.width=Math.round(img.width*r); c.height=Math.round(img.height*r);
       c.getContext("2d").drawImage(img,0,0,c.width,c.height);
       URL.revokeObjectURL(url);
-      res(c.toDataURL("image/jpeg",.82));
+      res(c.toDataURL("image/jpeg", q||.82));
     };
     img.onerror=()=>{URL.revokeObjectURL(url);res(null);};
     img.src=url;
   });
 }
+/* photo de profil (petit rond) : réduite à 320px */
+function lirePhotoFan(fichier){ return lireImage(fichier, 320, .82); }
 document.getElementById("formulaireFan").addEventListener("submit",async e=>{
   e.preventDefault();
   const prenom=document.getElementById("f-prenom").value.trim();
@@ -3126,7 +3130,7 @@ function rendreHistoires(){
   document.getElementById("listeHistoires").innerHTML=
     `<p class="note-proprio">✦ ${t("sto.ownerNote")}</p>`+
     HISTOIRES.map((h,i)=>`
-    <article class="carte-histoire-photo" id="carteH-${i}" style="background-image:url(${PHOTOS[h.photo]})">
+    <article class="carte-histoire-photo" id="carteH-${i}" style="background-image:url(${h.photoHistoire||PHOTOS[h.photo]})">
       <div class="voile">
         <div class="entete" style="display:flex;align-items:flex-end;gap:12px;margin-bottom:10px">
           ${h.photoFan?`<div class="avatar" style="background:url(${h.photoFan}) center/cover"></div>`:avatarHTML(h.prenom)}
@@ -3140,6 +3144,7 @@ function rendreHistoires(){
         <button class="lire-plus" id="btnLire-${i}" onclick="basculerHistoire(${i},this)">${t("sto.readMore")}</button>
         ${h.estMoi?`<div class="outils-histoire">
           <label>${t("sto.changePhoto")}<input type="file" accept="image/*" onchange="changerPhotoHistoire(event,${i})"></label>
+          <label>${t("sto.changeBg")}<input type="file" accept="image/*" onchange="changerFondHistoire(event,${i})"></label>
           <button onclick="basculerEdition(${i})">${t("sto.editText")}</button>
         </div>
         <div class="edition-histoire" id="edition-${i}">
@@ -3178,6 +3183,22 @@ function changerPhotoHistoire(e,i){
     if(window.sauverBD) sauverBD();
     /* envoie à la base → repasse en attente de validation */
     majFicheSupabase({photo:b64}).then(function(){ toast(t("toast.photoChanged")); });
+  });
+}
+/* change la GRANDE image de fond (une photo d'Omar choisie par le fan) */
+function changerFondHistoire(e,i){
+  const f=e.target.files[0];if(!f)return;
+  const h=HISTOIRES[i];
+  if(!h||!h.estMoi){ toast(t("toast.photoChanged")); return; }
+  lireImage(f,1000,.82).then(function(b64){
+    if(!b64) return;
+    h.photoHistoire=b64;
+    var card=document.getElementById("carteH-"+i);
+    if(card){ card.style.backgroundImage="url("+b64+")"; }
+    var reg=(window.REGISTRE_FANS||[]).find(function(x){return x.prenom===h.prenom;});
+    if(reg) reg.photoHistoire=b64;
+    if(window.sauverBD) sauverBD();
+    majFicheSupabase({photo_histoire:b64}).then(function(){ toast(t("toast.photoChanged")); });
   });
 }
 function basculerEdition(i,fermer){
@@ -6297,7 +6318,7 @@ async function chargerFansSupabase(){
   if(!window._sb) return;
   try{
     const rep=await window._sb.from("fans")
-      .select("pseudo,ville,pays,date_naissance,histoire,photo,chanson,insta,annee,concert,rencontre").eq("valide",true);
+      .select("pseudo,ville,pays,date_naissance,histoire,photo,photo_histoire,chanson,insta,annee,concert,rencontre").eq("valide",true);
     if(rep.error){ console.warn("Supabase lecture fans:",rep.error.message); return; }
     const data=rep.data||[];
     if(!data.length) return;
@@ -6307,11 +6328,11 @@ async function chargerFansSupabase(){
       const cle=((row.pseudo||"")+"|"+(row.ville||"")).toLowerCase();
       if(vus.has(cle)){
         /* fan déjà affiché localement → on complète sa photo/histoire depuis la base VALIDÉE */
-        if(row.photo || row.histoire){
+        if(row.photo || row.histoire || row.photo_histoire){
           var fx=(window.REGISTRE_FANS||[]).find(function(x){return ((x.prenom||"")+"|"+(x.ville||"")).toLowerCase()===cle;});
-          if(fx){ if(row.photo && !fx.photo) fx.photo=row.photo; if(row.histoire && !fx.histoire) fx.histoire=row.histoire; }
+          if(fx){ if(row.photo && !fx.photo) fx.photo=row.photo; if(row.histoire && !fx.histoire) fx.histoire=row.histoire; if(row.photo_histoire && !fx.photoHistoire) fx.photoHistoire=row.photo_histoire; }
           var hx=(typeof HISTOIRES!=="undefined"?HISTOIRES:[]).find(function(x){return ((x.prenom||"")+"|"+(x.ville||"")).toLowerCase()===cle;});
-          if(hx){ if(row.photo) hx.photoFan=row.photo; if(row.histoire) hx.texte=row.histoire; }
+          if(hx){ if(row.photo) hx.photoFan=row.photo; if(row.histoire) hx.texte=row.histoire; if(row.photo_histoire) hx.photoHistoire=row.photo_histoire; }
         }
         return;
       }
@@ -6324,7 +6345,7 @@ async function chargerFansSupabase(){
         annee:row.annee||(new Date()).getFullYear(),
         chanson:row.chanson||"", insta:row.insta||"", concert:row.concert||"",
         rencontre:!!row.rencontre, histoire:row.histoire||"",
-        photo:row.photo||null, tampons:0, inscritLe:(new Date()).toISOString() });
+        photo:row.photo||null, photoHistoire:row.photo_histoire||null, tampons:0, inscritLe:(new Date()).toISOString() });
     });
     toutMettreAJour(true);
     if(window.rendreHistoires) rendreHistoires();
