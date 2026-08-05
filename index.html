@@ -2842,6 +2842,8 @@ function diag(msg, ok){
     }
     d.style.background = ok ? "#0f5132" : "#7d1f1f";
     document.getElementById("__diagtxt").textContent=msg;
+    try{ if(window.__diagT) clearTimeout(window.__diagT); }catch(_){}
+    window.__diagT=setTimeout(function(){ var x=document.getElementById("__diag"); if(x) x.remove(); }, 6000);
   }catch(e){ try{ alert(msg); }catch(_){} }
 }
 /* Retrouve l'identifiant Supabase de MA fiche : mémorisé, sinon retrouvé par pseudo+ville. */
@@ -2866,14 +2868,13 @@ function maFicheLocale(id){
    Utilise "upsert" : si ma fiche existe déjà elle est mise à jour, sinon elle est créée.
    Ainsi même une inscription faite AVANT cette nouveauté peut être enregistrée. */
 async function majFicheSupabase(champs){
-  if(!window._sb){ diag("❌ Base NON connectée.\n\nLe fichier supabase/config.js n'est pas lu ou pas rempli sur le site en ligne.", false); return false; }
+  if(!window._sb){ diag("La base n'est pas disponible pour le moment. Réessaie dans un instant ✦", false); return false; }
   var id=(typeof MOI!=="undefined"&&MOI&&MOI.fanId)?MOI.fanId:await monFanId();
   if(!id){
     if(typeof MOI!=="undefined"&&MOI){ id=nouvelIdFan(); MOI.fanId=id; if(window.sauverBD) sauverBD(); }
-    else { diag("❌ Impossible de t'identifier (profil manquant).", false); return false; }
+    else { diag("Impossible de retrouver ton profil sur cet appareil ✦", false); return false; }
   }
   var reg=maFicheLocale(id);
-  diag("⏳ Envoi en cours…\n\nid : "+String(id).slice(0,8)+"…\nfiche locale trouvée : "+(reg?"oui":"non")+"\nchamp modifié : "+Object.keys(champs).join(", "), true);
   try{
     var ligne=Object.assign({
       id:id,
@@ -2897,13 +2898,13 @@ async function majFicheSupabase(champs){
       r=await window._sb.from("fans").update(patch).eq("id",id);
     }
     if(r&&r.error){
-      diag("❌ Erreur Supabase (modif) :\n\n"+r.error.message+"\n\ncode : "+(r.error.code||"?")+"\n\n(Fais une capture d'écran de ce message et envoie-la moi.)", false);
+      diag("Oups, l'enregistrement n'a pas fonctionné. Réessaie dans un instant ✦", false);
       console.warn("Supabase modif fiche:",r.error); return false;
     }
-    diag("✅ Modification ENVOYÉE à Supabase !\n\nTa fiche (id "+String(id).slice(0,8)+"…) est en attente de validation.\nVa dans Table Editor → fans → colonne « valide » → true.", true);
+    diag("✅ C'est envoyé ! Ta modification sera visible après validation. Merci ✦", true);
     return true;
   }catch(e){
-    diag("❌ Erreur réseau (modif) :\n\n"+((e&&e.message)||e)+"\n\n(Fais une capture d'écran et envoie-la moi.)", false);
+    diag("Oups, l'envoi a échoué (connexion). Réessaie dans un instant ✦", false);
     console.warn("Supabase modif fiche:",e); return false;
   }
 }
@@ -3125,7 +3126,7 @@ function rendreHistoires(){
   document.getElementById("listeHistoires").innerHTML=
     `<p class="note-proprio">✦ ${t("sto.ownerNote")}</p>`+
     HISTOIRES.map((h,i)=>`
-    <article class="carte-histoire-photo" id="carteH-${i}" style="background-image:url(${h.photoFan||PHOTOS[h.photo]})">
+    <article class="carte-histoire-photo" id="carteH-${i}" style="background-image:url(${PHOTOS[h.photo]})">
       <div class="voile">
         <div class="entete" style="display:flex;align-items:flex-end;gap:12px;margin-bottom:10px">
           ${h.photoFan?`<div class="avatar" style="background:url(${h.photoFan}) center/cover"></div>`:avatarHTML(h.prenom)}
@@ -3169,8 +3170,8 @@ function changerPhotoHistoire(e,i){
     if(!b64) return;
     h.photoFan=b64;
     var card=document.getElementById("carteH-"+i);
-    if(card){ card.style.backgroundImage="url("+b64+")";
-      try{ var av=card.querySelector(".avatar"); if(av){ av.style.background="url("+b64+") center/cover"; av.textContent=""; } }catch(e2){} }
+    /* on met à jour SEULEMENT le petit rond (avatar), pas le grand fond (photo d'Omar) */
+    if(card){ try{ var av=card.querySelector(".avatar"); if(av){ av.style.background="url("+b64+") center/cover"; av.textContent=""; } }catch(e2){} }
     /* mémorise dans CE navigateur */
     var reg=(window.REGISTRE_FANS||[]).find(function(x){return x.prenom===h.prenom;});
     if(reg) reg.photo=b64;
