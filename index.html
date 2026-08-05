@@ -2827,6 +2827,23 @@ function nouvelIdFan(){
   return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g,function(c){
     var r=Math.random()*16|0, v=(c==="x")?r:((r&0x3)|0x8); return v.toString(16); });
 }
+/* Bandeau de diagnostic (reste affiché → facile à prendre en photo). */
+function diag(msg, ok){
+  try{
+    var d=document.getElementById("__diag");
+    if(!d){
+      d=document.createElement("div"); d.id="__diag";
+      d.style.cssText="position:fixed;left:8px;right:8px;bottom:8px;z-index:99999;padding:14px 34px 14px 16px;border-radius:12px;font:14px/1.45 -apple-system,Segoe UI,Roboto,sans-serif;box-shadow:0 6px 22px rgba(0,0,0,.4);white-space:pre-wrap;word-break:break-word;max-height:62vh;overflow:auto;color:#fff";
+      var b=document.createElement("button"); b.textContent="✕";
+      b.style.cssText="position:absolute;top:6px;right:8px;background:transparent;border:0;color:#fff;font-size:17px;cursor:pointer;line-height:1";
+      b.onclick=function(){ d.remove(); };
+      var p=document.createElement("div"); p.id="__diagtxt";
+      document.body.appendChild(d); d.appendChild(p); d.appendChild(b);
+    }
+    d.style.background = ok ? "#0f5132" : "#7d1f1f";
+    document.getElementById("__diagtxt").textContent=msg;
+  }catch(e){ try{ alert(msg); }catch(_){} }
+}
 /* Retrouve l'identifiant Supabase de MA fiche : mémorisé, sinon retrouvé par pseudo+ville. */
 async function monFanId(){
   if(typeof MOI!=="undefined" && MOI && MOI.fanId) return MOI.fanId;
@@ -2849,13 +2866,14 @@ function maFicheLocale(id){
    Utilise "upsert" : si ma fiche existe déjà elle est mise à jour, sinon elle est créée.
    Ainsi même une inscription faite AVANT cette nouveauté peut être enregistrée. */
 async function majFicheSupabase(champs){
-  if(!window._sb) return false;
+  if(!window._sb){ diag("❌ Base NON connectée.\n\nLe fichier supabase/config.js n'est pas lu ou pas rempli sur le site en ligne.", false); return false; }
   var id=(typeof MOI!=="undefined"&&MOI&&MOI.fanId)?MOI.fanId:await monFanId();
   if(!id){
     if(typeof MOI!=="undefined"&&MOI){ id=nouvelIdFan(); MOI.fanId=id; if(window.sauverBD) sauverBD(); }
-    else return false;
+    else { diag("❌ Impossible de t'identifier (profil manquant).", false); return false; }
   }
   var reg=maFicheLocale(id);
+  diag("⏳ Envoi en cours…\n\nid : "+String(id).slice(0,8)+"…\nfiche locale trouvée : "+(reg?"oui":"non")+"\nchamp modifié : "+Object.keys(champs).join(", "), true);
   try{
     var ligne=Object.assign({
       id:id,
@@ -2873,13 +2891,13 @@ async function majFicheSupabase(champs){
     }, champs, {valide:false});
     var r=await window._sb.from("fans").upsert(ligne, {onConflict:"id"});
     if(r&&r.error){
-      alert("❌ Erreur Supabase (modif) :\n\n"+r.error.message+"\n\ncode : "+(r.error.code||"?"));
+      diag("❌ Erreur Supabase (modif) :\n\n"+r.error.message+"\n\ncode : "+(r.error.code||"?")+"\n\n(Fais une capture d'écran de ce message et envoie-la moi.)", false);
       console.warn("Supabase modif fiche:",r.error); return false;
     }
-    alert("✅ Modification envoyée à Supabase !\n\nTa fiche (id "+String(id).slice(0,8)+"…) est en attente de validation.\nVa dans Table Editor → fans → colonne valide → true.");
+    diag("✅ Modification ENVOYÉE à Supabase !\n\nTa fiche (id "+String(id).slice(0,8)+"…) est en attente de validation.\nVa dans Table Editor → fans → colonne « valide » → true.", true);
     return true;
   }catch(e){
-    alert("❌ Erreur réseau (modif) :\n\n"+((e&&e.message)||e));
+    diag("❌ Erreur réseau (modif) :\n\n"+((e&&e.message)||e)+"\n\n(Fais une capture d'écran et envoie-la moi.)", false);
     console.warn("Supabase modif fiche:",e); return false;
   }
 }
