@@ -2838,14 +2838,40 @@ async function monFanId(){
   }catch(e){ console.warn("monFanId:",e); }
   return null;
 }
-/* Envoie une modification de MA fiche vers la base (et la remet "en attente de validation"). */
+/* Retrouve MA fiche locale complète (pour reconstruire la ligne si besoin). */
+function maFicheLocale(id){
+  var R=window.REGISTRE_FANS||[];
+  return R.find(function(x){return x.fanId&&x.fanId===id;})
+      || R.find(function(x){return (typeof MOI!=="undefined"&&MOI)&&x.prenom===MOI.prenom&&x.ville===MOI.ville;})
+      || null;
+}
+/* Envoie une modification de MA fiche vers la base (et la remet "en attente de validation").
+   Utilise "upsert" : si ma fiche existe déjà elle est mise à jour, sinon elle est créée.
+   Ainsi même une inscription faite AVANT cette nouveauté peut être enregistrée. */
 async function majFicheSupabase(champs){
   if(!window._sb) return false;
-  var id=await monFanId();
-  if(!id) return false;
+  var id=(typeof MOI!=="undefined"&&MOI&&MOI.fanId)?MOI.fanId:await monFanId();
+  if(!id){
+    if(typeof MOI!=="undefined"&&MOI){ id=nouvelIdFan(); MOI.fanId=id; if(window.sauverBD) sauverBD(); }
+    else return false;
+  }
+  var reg=maFicheLocale(id);
   try{
-    var patch=Object.assign({}, champs, {valide:false});
-    var r=await window._sb.from("fans").update(patch).eq("id",id);
+    var ligne=Object.assign({
+      id:id,
+      pseudo: reg?reg.prenom:((typeof MOI!=="undefined"&&MOI&&MOI.prenom)||"Fan"),
+      ville:  reg?reg.ville:((typeof MOI!=="undefined"&&MOI&&MOI.ville)||""),
+      pays:   reg?reg.code:null,
+      date_naissance: (reg&&reg.naissance&&reg.naissance.indexOf("-")!==-1)?reg.naissance:null,
+      histoire: reg?(reg.histoire||null):null,
+      photo:    reg?(reg.photo||null):null,
+      chanson:  reg?(reg.chanson||null):null,
+      insta:    reg?(reg.insta||null):null,
+      annee:    reg?(reg.annee||null):null,
+      concert:  reg?(reg.concert||null):null,
+      rencontre: reg?!!reg.rencontre:false
+    }, champs, {valide:false});
+    var r=await window._sb.from("fans").upsert(ligne);
     if(r&&r.error){ console.warn("Supabase modif fiche:",r.error.message); return false; }
     return true;
   }catch(e){ console.warn("Supabase modif fiche:",e); return false; }
@@ -6217,9 +6243,19 @@ for(const etape of [traduirePage,rendreProgression,rendreExtension,majLecteur]){
     if(bd.moi) MOI=bd.moi;
     PASSEPORT = bd.passeport||[];
     AWARDS_BD = bd.awards||{cands:{},votes:{}};
+    /* Rattache mon identité à mon inscription existante (fans inscrits AVANT cette mise à jour)
+       → mon histoire redevient modifiable et mes modifs partent bien vers Supabase. */
+    if(MOI && !MOI.fanId && Array.isArray(bd.fans) && bd.fans.length){
+      var _moiFan = (MOI.depuis && bd.fans.find(function(f){return f.inscritLe===MOI.depuis;})) || bd.fans[0];
+      if(_moiFan){
+        if(!_moiFan.fanId) _moiFan.fanId=nouvelIdFan();
+        MOI.fanId=_moiFan.fanId; MOI.prenom=_moiFan.prenom; MOI.ville=_moiFan.ville; _moiFan.estMoi=true;
+      }
+    }
     for(const k of Object.keys(VOTES_PROJETS)){ if(FAN_PROJETS[k]) FAN_PROJETS[k].votes++; }
     for(const fn of (bd.fans||[])) integrerFan(fn);
     toutMettreAJour(false);
+    if(window.sauverBD) sauverBD();  /* mémorise mon identité rattachée */
     if(window.rendreExtension) rendreExtension();  /* re-rendre profil, passeport, awards… avec les données restaurées */
   }catch(err){ console.warn("Restauration de la sauvegarde impossible :", err); }
 })();
