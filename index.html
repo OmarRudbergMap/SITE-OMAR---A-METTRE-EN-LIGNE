@@ -2816,6 +2816,41 @@ window.reinitialiserTest=reinitialiserTest;
 /* Ouvre l'Instagram de la communauté (groupes, hôtels, covoiturage s'y organisent) */
 function ouvrirInstagram(){ try{ window.open("https://www.instagram.com/omarrudberg_world/","_blank","noopener"); }catch(e){} }
 window.ouvrirInstagram=ouvrirInstagram;
+/* ============ IDENTITÉ DU FAN (pour modifier UNIQUEMENT sa propre fiche) ============
+   · À l'inscription, on fabrique un identifiant unique (fanId) qu'on mémorise
+     dans CE navigateur. Il permet, plus tard, de modifier SA propre fiche
+     (photo, histoire) — et personne d'autre ne peut modifier celle des autres.
+   · Toute modification repasse en "non validé" : elle réapparaît pour les autres
+     seulement après TA validation dans Supabase. */
+function nouvelIdFan(){
+  try{ if(window.crypto&&crypto.randomUUID) return crypto.randomUUID(); }catch(e){}
+  return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g,function(c){
+    var r=Math.random()*16|0, v=(c==="x")?r:((r&0x3)|0x8); return v.toString(16); });
+}
+/* Retrouve l'identifiant Supabase de MA fiche : mémorisé, sinon retrouvé par pseudo+ville. */
+async function monFanId(){
+  if(typeof MOI!=="undefined" && MOI && MOI.fanId) return MOI.fanId;
+  if(!window._sb || typeof MOI==="undefined" || !MOI || !MOI.prenom || !MOI.ville) return null;
+  try{
+    var r=await window._sb.from("fans").select("id")
+      .eq("pseudo",MOI.prenom).eq("ville",MOI.ville).eq("valide",true).limit(1);
+    if(r&&r.data&&r.data[0]){ MOI.fanId=r.data[0].id; if(window.sauverBD) sauverBD(); return MOI.fanId; }
+  }catch(e){ console.warn("monFanId:",e); }
+  return null;
+}
+/* Envoie une modification de MA fiche vers la base (et la remet "en attente de validation"). */
+async function majFicheSupabase(champs){
+  if(!window._sb) return false;
+  var id=await monFanId();
+  if(!id) return false;
+  try{
+    var patch=Object.assign({}, champs, {valide:false});
+    var r=await window._sb.from("fans").update(patch).eq("id",id);
+    if(r&&r.error){ console.warn("Supabase modif fiche:",r.error.message); return false; }
+    return true;
+  }catch(e){ console.warn("Supabase modif fiche:",e); return false; }
+}
+window.monFanId=monFanId; window.majFicheSupabase=majFicheSupabase; window.nouvelIdFan=nouvelIdFan;
 let _memBD=null;
 function chargerBD(){
   try{ const b=localStorage.getItem(STOCK_CLE); if(b) return JSON.parse(b); }catch(e){}
@@ -2860,9 +2895,13 @@ function integrerFan(fn){
     depuis:fn.depuis||fn.annee,chanson:fn.chanson,photoData:fn.photo||null,histoire:fn.histoire||"✦"};
   /* 3 · histoire dans Fan Stories */
   if(fn.histoire){
+    var _memeVille=(typeof MOI!=="undefined"&&MOI&&MOI.ville&&fn.ville&&MOI.ville.toLowerCase()===fn.ville.toLowerCase());
+    var _estMoi=!!fn.estMoi || (typeof MOI!=="undefined"&&MOI&&MOI.prenom&&fn.prenom===MOI.prenom&&_memeVille) ||
+                (!!fn.fanId && typeof MOI!=="undefined"&&MOI&&MOI.fanId&&fn.fanId===MOI.fanId);
     HISTOIRES.push({prenom:fn.prenom,age:fn.age,pays:fn.drapeau,annee:fn.annee,chanson:fn.chanson,
       langue:(LANG||"en").toUpperCase(),photo:HISTOIRES.length%PHOTOS.length,photoFan:fn.photo||null,
-      texte:fn.histoire,likes:fn.likesHistoire||0,coms:0});
+      texte:fn.histoire,likes:fn.likesHistoire||0,coms:0,
+      estMoi:_estMoi, fanId:fn.fanId||(_estMoi&&typeof MOI!=="undefined"&&MOI?MOI.fanId:null)});
   }
 }
 /* recalcule classement + hall of fame + stats + barres + carte */
@@ -2948,8 +2987,9 @@ document.getElementById("formulaireFan").addEventListener("submit",async e=>{
   const anMatch=depuis.match(/(19|20)\d{2}/);
   const photo=await lirePhotoFan(document.getElementById("f-photo").files[0]);
   const nbTampons=window.tamponsDepuisFormulaire?tamponsDepuisFormulaire():0;
+  const fanId=nouvelIdFan();
   const fn={
-    id:Date.now(), prenom, code, drapeau:drapeauISO(code), ville, age:+age, naissance,
+    id:Date.now(), fanId, estMoi:true, prenom, code, drapeau:drapeauISO(code), ville, age:+age, naissance,
     insta:document.getElementById("f-insta").value.trim(),
     depuis, annee:anMatch?+anMatch[0]:new Date().getFullYear(),
     chanson, concert:document.getElementById("f-concert").value.trim(),
@@ -2958,17 +2998,26 @@ document.getElementById("formulaireFan").addEventListener("submit",async e=>{
     photo, tampons:nbTampons, inscritLe:new Date().toISOString()
   };
   integrerFan(fn);
+  /* mémorise QUI je suis dans ce navigateur (pour modifier ma fiche plus tard) */
+  MOI.fanId=fanId; MOI.prenom=prenom; MOI.ville=ville;
   /* --- Enregistrement dans la base partagée Supabase (n'empêche jamais le site de fonctionner) --- */
   if(!window._sb){
     alert("⚠️ Base non connectée.\n\nLe fichier supabase/config.js n'est pas lu ou pas rempli.");
   } else {
     try{
       window._sb.from("fans").insert({
+        id: fanId,
         pseudo: prenom,
         ville: ville,
         pays: code,
         date_naissance: (naissance && naissance.indexOf("-")!==-1) ? naissance : null,
         histoire: fn.histoire || null,
+        photo: fn.photo || null,
+        chanson: fn.chanson || null,
+        insta: fn.insta || null,
+        annee: fn.annee || null,
+        concert: fn.concert || null,
+        rencontre: !!fn.rencontre,
         accord_parental: accordParental,
         valide: false
       }).then(function(r){
@@ -3019,7 +3068,7 @@ function rendreHistoires(){
   document.getElementById("listeHistoires").innerHTML=
     `<p class="note-proprio">✦ ${t("sto.ownerNote")}</p>`+
     HISTOIRES.map((h,i)=>`
-    <article class="carte-histoire-photo" id="carteH-${i}" style="background-image:url(${PHOTOS[h.photo]})">
+    <article class="carte-histoire-photo" id="carteH-${i}" style="background-image:url(${h.photoFan||PHOTOS[h.photo]})">
       <div class="voile">
         <div class="entete" style="display:flex;align-items:flex-end;gap:12px;margin-bottom:10px">
           ${h.photoFan?`<div class="avatar" style="background:url(${h.photoFan}) center/cover"></div>`:avatarHTML(h.prenom)}
@@ -3031,7 +3080,7 @@ function rendreHistoires(){
         </div>
         <p class="texte-histoire replie" id="histoire-${i}">${h.texte}</p>
         <button class="lire-plus" id="btnLire-${i}" onclick="basculerHistoire(${i},this)">${t("sto.readMore")}</button>
-        <div class="outils-histoire">
+        ${h.estMoi?`<div class="outils-histoire">
           <label>${t("sto.changePhoto")}<input type="file" accept="image/*" onchange="changerPhotoHistoire(event,${i})"></label>
           <button onclick="basculerEdition(${i})">${t("sto.editText")}</button>
         </div>
@@ -3041,7 +3090,7 @@ function rendreHistoires(){
             <button class="btn" style="font-size:.9rem;padding:9px 18px" onclick="envoyerEdition(${i})">${t("sto.sendApproval")}</button>
             <button class="btn fantome" style="font-size:.9rem;padding:9px 18px" onclick="basculerEdition(${i},true)">${t("sto.cancel")}</button>
           </div>
-        </div>
+        </div>`:``}
         <div class="actions-sociales">
           <button onclick="aimer(this)"><span class="coeur">♡</span> <span class="nb-likes">${h.likes||0}</span></button>
           <button onclick="toast(t('toast.demoComments'))">💬 ${h.coms||0}</button>
@@ -3057,19 +3106,38 @@ function basculerHistoire(i,btn){
 }
 function changerPhotoHistoire(e,i){
   const f=e.target.files[0];if(!f)return;
-  const lecteur=new FileReader();
-  lecteur.onload=()=>{document.getElementById("carteH-"+i).style.backgroundImage=`url(${lecteur.result})`;toast(t("toast.photoChanged"));};
-  lecteur.readAsDataURL(f);
+  const h=HISTOIRES[i];
+  if(!h||!h.estMoi){ toast(t("toast.photoChanged")); return; }
+  lirePhotoFan(f).then(function(b64){
+    if(!b64) return;
+    h.photoFan=b64;
+    var card=document.getElementById("carteH-"+i);
+    if(card){ card.style.backgroundImage="url("+b64+")";
+      try{ var av=card.querySelector(".avatar"); if(av){ av.style.background="url("+b64+") center/cover"; av.textContent=""; } }catch(e2){} }
+    /* mémorise dans CE navigateur */
+    var reg=(window.REGISTRE_FANS||[]).find(function(x){return x.prenom===h.prenom;});
+    if(reg) reg.photo=b64;
+    if(window.sauverBD) sauverBD();
+    /* envoie à la base → repasse en attente de validation */
+    majFicheSupabase({photo:b64}).then(function(){ toast(t("toast.photoChanged")); });
+  });
 }
 function basculerEdition(i,fermer){
   const z=document.getElementById("edition-"+i);
   z.classList.toggle("visible",fermer?false:!z.classList.contains("visible"));
 }
 function envoyerEdition(i){
-  HISTOIRES[i].texte=document.getElementById("texteEdit-"+i).value;
-  document.getElementById("histoire-"+i).textContent=HISTOIRES[i].texte;
+  const h=HISTOIRES[i];
+  const nouveau=document.getElementById("texteEdit-"+i).value;
+  h.texte=nouveau;
+  const zone=document.getElementById("histoire-"+i);
+  if(zone) zone.textContent=nouveau;
   basculerEdition(i,true);
-  toast(t("toast.editSent"));
+  var reg=(window.REGISTRE_FANS||[]).find(function(x){return x.prenom===h.prenom;});
+  if(reg) reg.histoire=nouveau;
+  if(window.sauverBD) sauverBD();
+  if(h.estMoi){ majFicheSupabase({histoire:nouveau}).then(function(){ toast(t("toast.editSent")); }); }
+  else { toast(t("toast.editSent")); }
 }
 function aimer(btn){
   const deja=btn.classList.toggle("aime");
@@ -6161,7 +6229,7 @@ async function chargerFansSupabase(){
   if(!window._sb) return;
   try{
     const rep=await window._sb.from("fans")
-      .select("pseudo,ville,pays,date_naissance,histoire").eq("valide",true);
+      .select("pseudo,ville,pays,date_naissance,histoire,photo,chanson,insta,annee,concert,rencontre").eq("valide",true);
     if(rep.error){ console.warn("Supabase lecture fans:",rep.error.message); return; }
     const data=rep.data||[];
     if(!data.length) return;
@@ -6175,9 +6243,11 @@ async function chargerFansSupabase(){
       if(row.date_naissance){ const dn=new Date(row.date_naissance);
         if(!isNaN(dn.getTime())) age=Math.max(0,Math.floor((Date.now()-dn.getTime())/(365.25*864e5))); }
       integrerFan({ prenom:row.pseudo||"Fan", code:code, ville:row.ville||"",
-        drapeau:drapeauISO(code), age:age, depuis:"", annee:(new Date()).getFullYear(),
-        chanson:"", concert:"", rencontre:false, histoire:row.histoire||"",
-        photo:null, tampons:0, inscritLe:(new Date()).toISOString() });
+        drapeau:drapeauISO(code), age:age, depuis:(row.annee?String(row.annee):""),
+        annee:row.annee||(new Date()).getFullYear(),
+        chanson:row.chanson||"", insta:row.insta||"", concert:row.concert||"",
+        rencontre:!!row.rencontre, histoire:row.histoire||"",
+        photo:row.photo||null, tampons:0, inscritLe:(new Date()).toISOString() });
     });
     toutMettreAJour(true);
     if(window.rendreHistoires) rendreHistoires();
