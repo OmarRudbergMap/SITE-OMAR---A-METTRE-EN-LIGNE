@@ -2889,7 +2889,13 @@ async function majFicheSupabase(champs){
       concert:  reg?(reg.concert||null):null,
       rencontre: reg?!!reg.rencontre:false
     }, champs, {valide:false});
-    var r=await window._sb.from("fans").upsert(ligne, {onConflict:"id"});
+    /* 1) on essaie de CRÉER la fiche (fonctionne pour une nouvelle fiche) */
+    var r=await window._sb.from("fans").insert(ligne);
+    /* 2) si elle existe déjà (même id) → simple MISE À JOUR des champs modifiés */
+    if(r&&r.error && (String(r.error.code)==="23505" || /duplicate|exists/i.test(r.error.message||""))){
+      var patch=Object.assign({}, champs, {valide:false});
+      r=await window._sb.from("fans").update(patch).eq("id",id);
+    }
     if(r&&r.error){
       diag("❌ Erreur Supabase (modif) :\n\n"+r.error.message+"\n\ncode : "+(r.error.code||"?")+"\n\n(Fais une capture d'écran de ce message et envoie-la moi.)", false);
       console.warn("Supabase modif fiche:",r.error); return false;
