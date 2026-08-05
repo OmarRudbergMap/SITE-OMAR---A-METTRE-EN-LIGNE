@@ -2871,10 +2871,17 @@ async function majFicheSupabase(champs){
       concert:  reg?(reg.concert||null):null,
       rencontre: reg?!!reg.rencontre:false
     }, champs, {valide:false});
-    var r=await window._sb.from("fans").upsert(ligne);
-    if(r&&r.error){ console.warn("Supabase modif fiche:",r.error.message); return false; }
+    var r=await window._sb.from("fans").upsert(ligne, {onConflict:"id"});
+    if(r&&r.error){
+      alert("❌ Erreur Supabase (modif) :\n\n"+r.error.message+"\n\ncode : "+(r.error.code||"?"));
+      console.warn("Supabase modif fiche:",r.error); return false;
+    }
+    alert("✅ Modification envoyée à Supabase !\n\nTa fiche (id "+String(id).slice(0,8)+"…) est en attente de validation.\nVa dans Table Editor → fans → colonne valide → true.");
     return true;
-  }catch(e){ console.warn("Supabase modif fiche:",e); return false; }
+  }catch(e){
+    alert("❌ Erreur réseau (modif) :\n\n"+((e&&e.message)||e));
+    console.warn("Supabase modif fiche:",e); return false;
+  }
 }
 window.monFanId=monFanId; window.majFicheSupabase=majFicheSupabase; window.nouvelIdFan=nouvelIdFan;
 let _memBD=null;
