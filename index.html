@@ -535,6 +535,10 @@ footer .marque{font-family:'Bebas Neue';font-size:1.1rem;letter-spacing:.15em;co
         <button type="button" class="btn fantome" onclick="seDeconnecter()" data-i18n="acc.logout">Log out</button>
       </div>
     </div>
+    <div class="verre" id="dejaFiche" style="display:none;margin-bottom:16px">
+      <h3 class="accent" data-i18n="acc.haveCard">Your card is created ✓</h3>
+      <p class="note-modo" data-i18n="acc.haveCardTxt">Find it in the Stories tab to view and edit it (photo, background, song, Instagram, story).</p>
+    </div>
     <div class="verre">
       <h3 class="accent" data-i18n="form.title">Create your profile</h3>
       <p class="note-modo" style="margin-top:4px" data-i18n="form.note">* required · everything else is optional, but precious for the community.</p>
@@ -1127,6 +1131,7 @@ en:{
   "toast.editSent":"Your story has been updated — it's now online ✦",
   "toast.photoChanged":"Photo updated — it's now online ✦",
   "sto.readMore":"Read the full story →","sto.collapse":"Collapse ↑",
+  "acc.needLogin":"Log in (top of the Fan Space tab) to create or edit your card ✦","acc.haveCard":"Your card is created ✓","acc.haveCardTxt":"Find it in the Stories tab to view and edit it.",
   "sto.since":"fan since","sto.yo":"yo","sto.changePhoto":"📷 Change my photo","sto.changeBg":"🖼️ Background photo","sto.changeInsta":"✏️ My Instagram","sto.instaPrompt":"Your Instagram (e.g. @yourhandle):","sto.changeSong":"🎵 My song","sto.songPrompt":"Your favorite Omar song:","sto.editText":"✏️ Edit my story",
   "sto.sendApproval":"Send for approval ✦","sto.cancel":"Cancel",
   "sto.ownerNote":"Each fan chooses and uploads their own Omar photo, and can change it or edit their story at any time (with moderator approval).",
@@ -1237,7 +1242,7 @@ fr:{
   "join.p3":"En vous inscrivant, vous ne faites pas qu'ajouter un simple point sur une carte : vous devenez un membre visible d'une communauté mondiale qui partage la même passion. Vous contribuez à une carte vivante, qui montre la présence des fans à travers les cinq continents et où la communauté est la plus active.",
   "join.quote":"Un jour, lorsque des milliers de fans auront rejoint la carte, nous pourrons regarder ensemble le chemin parcouru.",
   "join.p4":"Nous verrons où tout a commencé, comment la communauté a grandi et comment des personnes venues des quatre coins du monde se sont réunies autour d'un même artiste. <b style=\"color:var(--blanc);font-weight:500\">Chaque inscription raconte une histoire. La vôtre mérite d'en faire partie.</b>",
-  "acc.title":"Mon compte","acc.intro":"Crée un compte (ou connecte-toi) pour gérer ta fiche depuis n'importe quel appareil.","acc.signup":"Créer mon compte","acc.login":"Se connecter","acc.connected":"Connecté :","acc.logout":"Se déconnecter",
+  "acc.title":"Mon compte","acc.intro":"Crée un compte (ou connecte-toi) pour gérer ta fiche depuis n'importe quel appareil.","acc.signup":"Créer mon compte","acc.login":"Se connecter","acc.connected":"Connecté :","acc.logout":"Se déconnecter","acc.needLogin":"Connecte-toi (en haut de l'onglet Espace Fan) pour créer ou modifier ta fiche ✦","acc.haveCard":"Ta fiche est créée ✓","acc.haveCardTxt":"Retrouve-la dans l'onglet Histoires pour la voir et la modifier (photo, fond, chanson, Instagram, histoire).",
   "form.title":"Crée ton profil","form.firstName":"Prénom *","form.firstNamePh":"Ton prénom",
   "form.country":"Pays * <span style=\"text-transform:none;letter-spacing:0;color:var(--beige)\">(détermine ton continent)</span>",
   "form.city":"Ville *","form.cityPh":"Ta ville","form.age":"Âge *",
@@ -2891,40 +2896,16 @@ function maFicheLocale(id){
       || R.find(function(x){return (typeof MOI!=="undefined"&&MOI)&&x.prenom===MOI.prenom&&x.ville===MOI.ville;})
       || null;
 }
-/* Envoie une modification de MA fiche vers la base (et la remet "en attente de validation").
-   Utilise "upsert" : si ma fiche existe déjà elle est mise à jour, sinon elle est créée.
-   Ainsi même une inscription faite AVANT cette nouveauté peut être enregistrée. */
+/* Enregistre une modification de MA fiche (celle de MON compte connecté).
+   La sécurité Supabase (RLS) garantit qu'on ne peut modifier QUE sa propre fiche.
+   Modification directe : une fiche déjà validée reste visible tout de suite. */
 async function majFicheSupabase(champs){
   if(!window._sb){ diag("La base n'est pas disponible pour le moment. Réessaie dans un instant ✦", false); return false; }
-  var id=(typeof MOI!=="undefined"&&MOI&&MOI.fanId)?MOI.fanId:await monFanId();
-  if(!id){
-    if(typeof MOI!=="undefined"&&MOI){ id=nouvelIdFan(); MOI.fanId=id; if(window.sauverBD) sauverBD(); }
-    else { diag("Impossible de retrouver ton profil sur cet appareil ✦", false); return false; }
-  }
-  var reg=maFicheLocale(id);
+  if(!window.MON_USER){ diag("Connecte-toi (en haut de l'onglet Espace Fan) pour modifier ta fiche ✦", false); return false; }
+  var id=window.MON_PROFIL_ID;
+  if(!id){ diag("Crée d'abord ta fiche dans l'onglet Espace Fan ✦", false); return false; }
   try{
-    var ligne=Object.assign({
-      id:id,
-      pseudo: reg?reg.prenom:((typeof MOI!=="undefined"&&MOI&&MOI.prenom)||"Fan"),
-      ville:  reg?reg.ville:((typeof MOI!=="undefined"&&MOI&&MOI.ville)||""),
-      pays:   reg?reg.code:null,
-      date_naissance: (reg&&reg.naissance&&reg.naissance.indexOf("-")!==-1)?reg.naissance:null,
-      histoire: reg?(reg.histoire||null):null,
-      photo:    reg?(reg.photo||null):null,
-      photo_histoire: reg?(reg.photoHistoire||null):null,
-      chanson:  reg?(reg.chanson||null):null,
-      insta:    reg?(reg.insta||null):null,
-      annee:    reg?(reg.annee||null):null,
-      concert:  reg?(reg.concert||null):null,
-      rencontre: reg?!!reg.rencontre:false
-    }, champs, {valide:false});
-    /* 1) on essaie de CRÉER la fiche (fonctionne pour une nouvelle fiche) */
-    var r=await window._sb.from("fans").insert(ligne);
-    /* 2) si elle existe déjà (même id) → MISE À JOUR DIRECTE des champs modifiés
-          (on ne touche pas à "valide" : une fiche déjà validée reste visible tout de suite) */
-    if(r&&r.error && (String(r.error.code)==="23505" || /duplicate|exists/i.test(r.error.message||""))){
-      r=await window._sb.from("fans").update(champs).eq("id",id);
-    }
+    var r=await window._sb.from("fans").update(champs).eq("id",id);
     if(r&&r.error){
       diag("Oups, l'enregistrement n'a pas fonctionné. Réessaie dans un instant ✦", false);
       console.warn("Supabase modif fiche:",r.error); return false;
@@ -2936,7 +2917,10 @@ async function majFicheSupabase(champs){
     console.warn("Supabase modif fiche:",e); return false;
   }
 }
-window.monFanId=monFanId; window.majFicheSupabase=majFicheSupabase; window.nouvelIdFan=nouvelIdFan;
+window.majFicheSupabase=majFicheSupabase; window.nouvelIdFan=nouvelIdFan; window.MON_PROFIL_ID=null;
+/* Est-ce que CETTE histoire est la mienne ? (= la fiche de mon compte connecté) */
+function estMaHistoire(h){ return !!(h && h.fanId && window.MON_PROFIL_ID && h.fanId===window.MON_PROFIL_ID); }
+window.estMaHistoire=estMaHistoire;
 let _memBD=null;
 function chargerBD(){
   try{ const b=localStorage.getItem(STOCK_CLE); if(b) return JSON.parse(b); }catch(e){}
@@ -3064,6 +3048,7 @@ function lireImage(fichier, M, q){
 function lirePhotoFan(fichier){ return lireImage(fichier, 320, .82); }
 document.getElementById("formulaireFan").addEventListener("submit",async e=>{
   e.preventDefault();
+  if(!window.MON_USER){ toast(t("acc.needLogin")); allerA("inscription"); var cf=document.getElementById("compteFan"); if(cf) cf.scrollIntoView({behavior:"smooth"}); return; }
   const prenom=document.getElementById("f-prenom").value.trim();
   const code=selPays.value,ville=document.getElementById("f-ville").value.trim();
   const age=document.getElementById("f-age").value;
@@ -3089,8 +3074,8 @@ document.getElementById("formulaireFan").addEventListener("submit",async e=>{
     photo, photoHistoire:photoFond, tampons:nbTampons, inscritLe:new Date().toISOString()
   };
   integrerFan(fn);
-  /* mémorise QUI je suis dans ce navigateur (pour modifier ma fiche plus tard) */
-  MOI.fanId=fanId; MOI.prenom=prenom; MOI.ville=ville;
+  /* mémorise QUI je suis (compte + fiche) */
+  MOI.fanId=fanId; MOI.prenom=prenom; MOI.ville=ville; window.MON_PROFIL_ID=fanId;
   /* --- Enregistrement dans la base partagée Supabase (n'empêche jamais le site de fonctionner) --- */
   if(!window._sb){
     alert("⚠️ Base non connectée.\n\nLe fichier supabase/config.js n'est pas lu ou pas rempli.");
@@ -3098,6 +3083,7 @@ document.getElementById("formulaireFan").addEventListener("submit",async e=>{
     try{
       window._sb.from("fans").insert({
         id: fanId,
+        user_id: window.MON_USER ? window.MON_USER.id : null,
         pseudo: prenom,
         ville: ville,
         pays: code,
@@ -3172,7 +3158,7 @@ function rendreHistoires(){
         </div>
         <p class="texte-histoire replie" id="histoire-${i}">${h.texte}</p>
         <button class="lire-plus" id="btnLire-${i}" onclick="basculerHistoire(${i},this)">${t("sto.readMore")}</button>
-        ${h.estMoi?`<div class="outils-histoire">
+        ${estMaHistoire(h)?`<div class="outils-histoire">
           <label>${t("sto.changePhoto")}<input type="file" accept="image/*" onchange="changerPhotoHistoire(event,${i})"></label>
           <label>${t("sto.changeBg")}<input type="file" accept="image/*" onchange="changerFondHistoire(event,${i})"></label>
           <button onclick="basculerEdition(${i})">${t("sto.editText")}</button>
@@ -3202,7 +3188,7 @@ function basculerHistoire(i,btn){
 function changerPhotoHistoire(e,i){
   const f=e.target.files[0];if(!f)return;
   const h=HISTOIRES[i];
-  if(!h||!h.estMoi){ toast(t("toast.photoChanged")); return; }
+  if(!h||!estMaHistoire(h)){ toast(t("acc.needLogin")); return; }
   lirePhotoFan(f).then(function(b64){
     if(!b64) return;
     h.photoFan=b64;
@@ -3221,7 +3207,7 @@ function changerPhotoHistoire(e,i){
 function changerFondHistoire(e,i){
   const f=e.target.files[0];if(!f)return;
   const h=HISTOIRES[i];
-  if(!h||!h.estMoi){ toast(t("toast.photoChanged")); return; }
+  if(!h||!estMaHistoire(h)){ toast(t("acc.needLogin")); return; }
   lireImage(f,1000,.82).then(function(b64){
     if(!b64) return;
     h.photoHistoire=b64;
@@ -3235,7 +3221,7 @@ function changerFondHistoire(e,i){
 }
 /* modifier son Instagram (les fans changent parfois de compte) */
 function changerInstaHistoire(i){
-  var h=HISTOIRES[i]; if(!h||!h.estMoi) return;
+  var h=HISTOIRES[i]; if(!h||!estMaHistoire(h)) return;
   var v=prompt(t("sto.instaPrompt")||"Ton Instagram (ex : @tonpseudo) :", h.insta||"");
   if(v===null) return;
   v=(""+v).trim();
@@ -3247,7 +3233,7 @@ function changerInstaHistoire(i){
 }
 /* modifier sa chanson préférée (les goûts changent, de nouveaux titres sortent) */
 function changerChansonHistoire(i){
-  var h=HISTOIRES[i]; if(!h||!h.estMoi) return;
+  var h=HISTOIRES[i]; if(!h||!estMaHistoire(h)) return;
   var v=prompt(t("sto.songPrompt")||"Ta chanson préférée d'Omar :", h.chanson||"");
   if(v===null) return;
   v=(""+v).trim(); if(!v) return;
@@ -3272,7 +3258,7 @@ function envoyerEdition(i){
   var reg=(window.REGISTRE_FANS||[]).find(function(x){return x.prenom===h.prenom;});
   if(reg) reg.histoire=nouveau;
   if(window.sauverBD) sauverBD();
-  if(h.estMoi){ majFicheSupabase({histoire:nouveau}).then(function(){ toast(t("toast.editSent")); }); }
+  if(estMaHistoire(h)){ majFicheSupabase({histoire:nouveau}).then(function(){ toast(t("toast.editSent")); }); }
   else { toast(t("toast.editSent")); }
 }
 function aimer(btn){
@@ -6378,7 +6364,7 @@ async function chargerFansSupabase(){
   if(!window._sb) return;
   try{
     const rep=await window._sb.from("fans")
-      .select("pseudo,ville,pays,date_naissance,histoire,photo,photo_histoire,chanson,insta,annee,concert,rencontre").eq("valide",true);
+      .select("id,user_id,pseudo,ville,pays,date_naissance,histoire,photo,photo_histoire,chanson,insta,annee,concert,rencontre").eq("valide",true);
     if(rep.error){ console.warn("Supabase lecture fans:",rep.error.message); return; }
     const data=rep.data||[];
     if(!data.length) return;
@@ -6400,7 +6386,7 @@ async function chargerFansSupabase(){
       let age=0;
       if(row.date_naissance){ const dn=new Date(row.date_naissance);
         if(!isNaN(dn.getTime())) age=Math.max(0,Math.floor((Date.now()-dn.getTime())/(365.25*864e5))); }
-      integrerFan({ prenom:row.pseudo||"Fan", code:code, ville:row.ville||"",
+      integrerFan({ prenom:row.pseudo||"Fan", code:code, ville:row.ville||"", fanId:row.id,
         drapeau:drapeauISO(code), age:age, depuis:(row.annee?String(row.annee):""),
         annee:row.annee||(new Date()).getFullYear(),
         chanson:row.chanson||"", insta:row.insta||"", concert:row.concert||"",
@@ -6451,19 +6437,71 @@ async function seConnecter(){
 }
 async function seDeconnecter(){ try{ if(window._sb) await window._sb.auth.signOut(); }catch(e){} }
 window.creerCompte=creerCompte; window.seConnecter=seConnecter; window.seDeconnecter=seDeconnecter;
+/* Montre/cache le formulaire selon l'état : formulaire visible seulement si connecté ET pas encore de fiche */
+function majFormulaireVisibilite(){
+  var form=document.getElementById("formulaireFan");
+  var wrap=form?form.closest(".verre"):null;
+  var note=document.getElementById("dejaFiche");
+  var connecte=!!window.MON_USER, aFiche=!!window.MON_PROFIL_ID;
+  if(wrap) wrap.style.display=(connecte && !aFiche) ? "" : "none";
+  if(note) note.style.display=(connecte && aFiche) ? "" : "none";
+}
+/* Charge MA fiche (celle de mon compte) et l'affiche avec les boutons de modif */
+async function chargerMonProfil(){
+  if(!window._sb || !window.MON_USER){ return; }
+  try{
+    var r=await window._sb.from("fans")
+      .select("id,user_id,pseudo,ville,pays,date_naissance,histoire,photo,photo_histoire,chanson,insta,annee,concert,rencontre")
+      .eq("user_id", window.MON_USER.id).limit(1);
+    if(r.error){ console.warn("mon profil:",r.error.message); return; }
+    var row=(r.data&&r.data[0])||null;
+    if(!row){ window.MON_PROFIL_ID=null; majFormulaireVisibilite(); return; }
+    window.MON_PROFIL_ID=row.id;
+    var cle=((row.pseudo||"")+"|"+(row.ville||"")).toLowerCase();
+    var existe=(window.REGISTRE_FANS||[]).find(function(x){return ((x.prenom||"")+"|"+(x.ville||"")).toLowerCase()===cle;});
+    if(existe){
+      existe.fanId=row.id;
+      if(row.photo) existe.photo=row.photo;
+      if(row.photo_histoire) existe.photoHistoire=row.photo_histoire;
+      /* mettre à jour aussi l'entrée d'histoire (pour que les boutons de modif s'affichent) */
+      var hx=(typeof HISTOIRES!=="undefined"?HISTOIRES:[]).find(function(x){return ((x.prenom||"")+"|"+(x.ville||"")).toLowerCase()===cle;});
+      if(hx){ hx.fanId=row.id;
+        if(row.photo) hx.photoFan=row.photo;
+        if(row.photo_histoire) hx.photoHistoire=row.photo_histoire;
+        if(row.histoire) hx.texte=row.histoire;
+        if(row.chanson) hx.chanson=row.chanson;
+        hx.insta=row.insta||hx.insta||""; }
+    } else {
+      var code=String(row.pays||"XX").toUpperCase(); var age=0;
+      if(row.date_naissance){ var dn=new Date(row.date_naissance); if(!isNaN(dn.getTime())) age=Math.max(0,Math.floor((Date.now()-dn.getTime())/(365.25*864e5))); }
+      integrerFan({ prenom:row.pseudo||"Fan", code:code, ville:row.ville||"", fanId:row.id,
+        drapeau:drapeauISO(code), age:age, depuis:(row.annee?String(row.annee):""), annee:row.annee||(new Date()).getFullYear(),
+        chanson:row.chanson||"", insta:row.insta||"", concert:row.concert||"", rencontre:!!row.rencontre,
+        histoire:row.histoire||"", photo:row.photo||null, photoHistoire:row.photo_histoire||null, tampons:0, inscritLe:(new Date()).toISOString() });
+    }
+    if(typeof MOI!=="undefined"&&MOI){ MOI.fanId=row.id; MOI.prenom=row.pseudo; MOI.ville=row.ville; if(window.sauverBD) sauverBD(); }
+    if(window.toutMettreAJour) toutMettreAJour(true);
+    if(window.rendreHistoires) rendreHistoires();
+    if(window.rendreExtension) rendreExtension();
+    majFormulaireVisibilite();
+  }catch(e){ console.warn("mon profil:",e); }
+}
 function majPanneauCompte(session){
   var d=document.getElementById("compteDeconnecte"), c=document.getElementById("compteConnecte");
-  if(!d||!c) return;
   if(session && session.user){
     window.MON_USER=session.user;
-    d.style.display="none"; c.style.display="";
+    if(d) d.style.display="none"; if(c) c.style.display="";
     var q=document.getElementById("auth-qui"); if(q) q.textContent=session.user.email||"toi";
+    chargerMonProfil();
   } else {
-    window.MON_USER=null;
-    d.style.display=""; c.style.display="none";
+    window.MON_USER=null; window.MON_PROFIL_ID=null;
+    if(d) d.style.display=""; if(c) c.style.display="none";
+    if(window.rendreHistoires) rendreHistoires();
   }
+  majFormulaireVisibilite();
 }
-window.majPanneauCompte=majPanneauCompte;
+window.majPanneauCompte=majPanneauCompte; window.chargerMonProfil=chargerMonProfil; window.majFormulaireVisibilite=majFormulaireVisibilite;
+majFormulaireVisibilite();
 if(window._sb && window._sb.auth){
   try{
     window._sb.auth.getSession().then(function(r){ majPanneauCompte(r&&r.data?r.data.session:null); });
