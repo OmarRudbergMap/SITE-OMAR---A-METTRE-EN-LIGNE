@@ -585,6 +585,13 @@ footer .marque{font-family:'Bebas Neue';font-size:1.1rem;letter-spacing:.15em;co
           <input type="file" id="f-photo" accept="image/*" style="margin-top:12px;color:var(--beige);font-size:.72rem;width:100%">
         </div>
 
+        <label for="f-photo-fond" data-i18n="form.uploadBg">Background photo for your story (a photo of Omar) — optional</label>
+        <div class="zone-photo" id="zonePhotoFond">
+          <strong data-i18n="form.addBg">＋ Add a background photo</strong>
+          <span data-i18n="form.bgHint">Choose an Omar photo for your story's background. If you skip it, one is added automatically.</span>
+          <input type="file" id="f-photo-fond" accept="image/*" style="margin-top:12px;color:var(--beige);font-size:.72rem;width:100%">
+        </div>
+
         <label for="f-histoire" data-i18n="form.story">Tell your story</label>
         <textarea class="immense" id="f-histoire" data-i18n-ph="form.storyPh" placeholder="How did you discover Omar? What his music or Young Royals means to you, your best memories… Write in your own language, no length limit."></textarea>
         <p class="note-modo" data-i18n="form.modNote">✦ Every story is reviewed by the moderator before publication. It may be slightly edited, translated into English for reading, or not published if the content is not appropriate.</p>
@@ -1100,10 +1107,10 @@ en:{
   "toast.vote":"Thank you for your vote! (demo · 1 vote per category)",
   "cls.empty":"The ranking starts with the very first registrations ✦",
   "sto.emptyQuote":"The first fan stories will appear here. Yours can be the very first one ✦",
-  "toast.editSent":"Your new version was sent to the moderator for approval ✦",
-  "toast.photoChanged":"New photo applied! It will be reviewed by the moderator before publication ✦",
+  "toast.editSent":"Your story has been updated — it's now online ✦",
+  "toast.photoChanged":"Photo updated — it's now online ✦",
   "sto.readMore":"Read the full story →","sto.collapse":"Collapse ↑",
-  "sto.since":"fan since","sto.yo":"yo","sto.changePhoto":"📷 Change my photo","sto.changeBg":"🖼️ Background photo","sto.editText":"✏️ Edit my story",
+  "sto.since":"fan since","sto.yo":"yo","sto.changePhoto":"📷 Change my photo","sto.changeBg":"🖼️ Background photo","sto.changeInsta":"✏️ My Instagram","sto.instaPrompt":"Your Instagram (e.g. @yourhandle):","sto.editText":"✏️ Edit my story",
   "sto.sendApproval":"Send for approval ✦","sto.cancel":"Cancel",
   "sto.ownerNote":"Each fan chooses and uploads their own Omar photo, and can change it or edit their story at any time (with moderator approval).",
   "map.eyebrow":"Explore","map.title":"The flat map of all fans","map.hint":"Tap a glowing dot to open that fan's profile and story.",
@@ -1221,6 +1228,8 @@ fr:{
   "form.favConcert":"Concert préféré ?","form.favConcertPh":"Ville / date / festival…",
   "form.met":"As-tu déjà rencontré Omar ?","form.upload":"Télécharge TA photo (toi, le fan, pas Omar !)","form.addPhoto":"＋ Ajouter une photo",
   "form.photoHint":"C'est ta photo de profil : elle apparaîtra sur ta fiche et sur la carte.",
+  "form.uploadBg":"Photo de fond de ton histoire (une photo d'Omar) — optionnel","form.addBg":"＋ Ajouter une photo de fond",
+  "form.bgHint":"Choisis une photo d'Omar pour le fond de ton histoire. Si tu n'en mets pas, une photo est ajoutée automatiquement.",
   "form.story":"Raconte ton histoire",
   "form.storyPh":"Comment as-tu découvert Omar ? Ce que sa musique ou Young Royals représente pour toi, tes plus beaux souvenirs… Écris dans ta langue, sans limite de longueur.",
   "form.modNote":"✦ Chaque histoire est relue par la modératrice avant publication. Elle pourra être légèrement ajustée, traduite en anglais pour la lecture, ou ne pas être publiée si le contenu n'est pas adéquat.",
@@ -1249,7 +1258,7 @@ fr:{
   "sto.quote":"Parce que derrière chaque fan se cache une histoire qui mérite d'être racontée.",
   "sto.tellBtn":"Raconter mon histoire ✦",
   "sto.readMore":"Lire l'histoire complète →","sto.collapse":"Replier ↑","sto.since":"fan depuis","sto.yo":"ans",
-  "sto.changePhoto":"📷 Changer ma photo","sto.changeBg":"🖼️ Photo de fond","sto.editText":"✏️ Modifier mon histoire",
+  "sto.changePhoto":"📷 Changer ma photo","sto.changeBg":"🖼️ Photo de fond","sto.changeInsta":"✏️ Mon Instagram","sto.instaPrompt":"Ton Instagram (ex : @tonpseudo) :","sto.editText":"✏️ Modifier mon histoire",
   "sto.sendApproval":"Envoyer pour validation ✦","sto.cancel":"Annuler",
   "sto.ownerNote":"Chaque fan choisit et télécharge lui-même sa photo d'Omar, et peut la changer ou modifier son histoire à tout moment (avec validation de la modératrice).",
   "prj.eyebrow":"Créons ensemble","prj.title":"Projets de la communauté",
@@ -1289,8 +1298,8 @@ fr:{
   "cls.empty":"Le classement démarre avec les premières inscriptions ✦",
   "sto.emptyQuote":"Les premières histoires de fans apparaîtront ici. La tienne peut être la toute première ✦",
   "toast.vote":"Merci pour ton vote ! (démo · 1 vote par catégorie)",
-  "toast.editSent":"Ta nouvelle version a été envoyée à la modératrice pour validation ✦",
-  "toast.photoChanged":"Nouvelle photo appliquée ! Elle sera validée par la modératrice avant publication ✦",
+  "toast.editSent":"Ton histoire est mise à jour — c'est en ligne ✦",
+  "toast.photoChanged":"Photo mise à jour — c'est en ligne ✦",
   "map.eyebrow":"Explorer","map.title":"Les fans d'Omar Rudberg à travers le monde","map.hint":"Survolez la carte pour agrandir un pays et voir ses fans · appuyez sur un point pour ouvrir sa fiche et son histoire.",
   "map.close":"✕ Fermer","map.since":"Fan depuis","map.song":"Chanson préférée","map.readStory":"Lire son histoire complète →",
   "map.anon":(v)=>`Un fan brille à ${v}`,"map.anonSub":"Sa fiche apparaîtra ici une fois complétée. Peut-être vous ?",
@@ -1458,8 +1467,8 @@ es:{
   "toast.demoSong":(s)=>`Demo: un fragmento de « ${s} » sonará en la versión en línea ♪`,
   "toast.demoComments":"Demo: los comentarios se activarán con la versión en línea ✦",
   "toast.vote":"¡Gracias por tu voto! (demo · 1 voto por categoría)",
-  "toast.editSent":"Tu nueva versión fue enviada a la moderadora para su aprobación ✦",
-  "toast.photoChanged":"¡Nueva foto aplicada! Será revisada por la moderadora antes de publicarse ✦",
+  "toast.editSent":"Tu historia se actualizó — ¡ya está en línea! ✦",
+  "toast.photoChanged":"Foto actualizada — ¡ya está en línea! ✦",
   "map.eyebrow":"Explorar","map.title":"Los fans de Omar Rudberg por el mundo",
   "map.hint":"Pasa el dedo por el mapa para ampliar un país y ver a sus fans · toca un punto para abrir su perfil y su historia.",
   "map.close":"✕ Cerrar","map.since":"Fan desde","map.song":"Canción favorita","map.readStory":"Leer su historia completa →",
@@ -1628,8 +1637,8 @@ sv:{
   "toast.demoSong":(s)=>`Demo: ett utdrag ur « ${s} » spelas i onlineversionen ♪`,
   "toast.demoComments":"Demo: kommentarer aktiveras i onlineversionen ✦",
   "toast.vote":"Tack för din röst! (demo · 1 röst per kategori)",
-  "toast.editSent":"Din nya version skickades till moderatorn för godkännande ✦",
-  "toast.photoChanged":"Ny bild tillagd! Den granskas av moderatorn före publicering ✦",
+  "toast.editSent":"Din berättelse är uppdaterad — den är online nu ✦",
+  "toast.photoChanged":"Bilden är uppdaterad — den är online nu ✦",
   "map.eyebrow":"Utforska","map.title":"Omar Rudbergs fans runt om i världen",
   "map.hint":"Svep över kartan för att förstora ett land och se dess fans · tryck på en punkt för att öppna profilen och historien.",
   "map.close":"✕ Stäng","map.since":"Fan sedan","map.song":"Favoritlåt","map.readStory":"Läs hela historien →",
@@ -1798,8 +1807,8 @@ de:{
   "toast.demoSong":(s)=>`Demo: ein Ausschnitt aus « ${s} » spielt in der Online-Version ♪`,
   "toast.demoComments":"Demo: Kommentare werden mit der Online-Version aktiviert ✦",
   "toast.vote":"Danke für deine Stimme! (Demo · 1 Stimme pro Kategorie)",
-  "toast.editSent":"Deine neue Version wurde der Moderatorin zur Freigabe gesendet ✦",
-  "toast.photoChanged":"Neues Foto übernommen! Es wird vor der Veröffentlichung von der Moderatorin geprüft ✦",
+  "toast.editSent":"Deine Geschichte ist aktualisiert — jetzt online ✦",
+  "toast.photoChanged":"Foto aktualisiert — jetzt online ✦",
   "map.eyebrow":"Entdecken","map.title":"Die Fans von Omar Rudberg auf der ganzen Welt",
   "map.hint":"Fahre über die Karte, um ein Land zu vergrößern und seine Fans zu sehen · tippe auf einen Punkt, um Profil und Geschichte zu öffnen.",
   "map.close":"✕ Schließen","map.since":"Fan seit","map.song":"Lieblingssong","map.readStory":"Die ganze Geschichte lesen →",
@@ -1968,8 +1977,8 @@ pt:{
   "toast.demoSong":(s)=>`Demo: um trecho de « ${s} » tocará na versão online ♪`,
   "toast.demoComments":"Demo: os comentários serão ativados na versão online ✦",
   "toast.vote":"Obrigada pelo seu voto! (demo · 1 voto por categoria)",
-  "toast.editSent":"Sua nova versão foi enviada à moderadora para aprovação ✦",
-  "toast.photoChanged":"Nova foto aplicada! Ela será revisada pela moderadora antes da publicação ✦",
+  "toast.editSent":"Sua história foi atualizada — já está online ✦",
+  "toast.photoChanged":"Foto atualizada — já está online ✦",
   "map.eyebrow":"Explorar","map.title":"Os fãs de Omar Rudberg pelo mundo",
   "map.hint":"Passe o dedo pelo mapa para ampliar um país e ver seus fãs · toque em um ponto para abrir o perfil e a história.",
   "map.close":"✕ Fechar","map.since":"Fã desde","map.song":"Música favorita","map.readStory":"Ler a história completa →",
@@ -2893,16 +2902,16 @@ async function majFicheSupabase(champs){
     }, champs, {valide:false});
     /* 1) on essaie de CRÉER la fiche (fonctionne pour une nouvelle fiche) */
     var r=await window._sb.from("fans").insert(ligne);
-    /* 2) si elle existe déjà (même id) → simple MISE À JOUR des champs modifiés */
+    /* 2) si elle existe déjà (même id) → MISE À JOUR DIRECTE des champs modifiés
+          (on ne touche pas à "valide" : une fiche déjà validée reste visible tout de suite) */
     if(r&&r.error && (String(r.error.code)==="23505" || /duplicate|exists/i.test(r.error.message||""))){
-      var patch=Object.assign({}, champs, {valide:false});
-      r=await window._sb.from("fans").update(patch).eq("id",id);
+      r=await window._sb.from("fans").update(champs).eq("id",id);
     }
     if(r&&r.error){
       diag("Oups, l'enregistrement n'a pas fonctionné. Réessaie dans un instant ✦", false);
       console.warn("Supabase modif fiche:",r.error); return false;
     }
-    diag("✅ C'est envoyé ! Ta modification sera visible après validation. Merci ✦", true);
+    diag("✅ C'est enregistré ! Ta modification est en ligne. Merci ✦", true);
     return true;
   }catch(e){
     diag("Oups, l'envoi a échoué (connexion). Réessaie dans un instant ✦", false);
@@ -2959,7 +2968,7 @@ function integrerFan(fn){
                 (!!fn.fanId && typeof MOI!=="undefined"&&MOI&&MOI.fanId&&fn.fanId===MOI.fanId);
     HISTOIRES.push({prenom:fn.prenom,age:fn.age,pays:fn.drapeau,ville:fn.ville,annee:fn.annee,chanson:fn.chanson,
       langue:(LANG||"en").toUpperCase(),photo:HISTOIRES.length%PHOTOS.length,photoFan:fn.photo||null,
-      photoHistoire:fn.photoHistoire||null,
+      photoHistoire:fn.photoHistoire||null,insta:fn.insta||"",
       texte:fn.histoire,likes:fn.likesHistoire||0,coms:0,
       estMoi:_estMoi, fanId:fn.fanId||(_estMoi&&typeof MOI!=="undefined"&&MOI?MOI.fanId:null)});
   }
@@ -3048,6 +3057,8 @@ document.getElementById("formulaireFan").addEventListener("submit",async e=>{
   const depuis=document.getElementById("f-depuis").value.trim();
   const anMatch=depuis.match(/(19|20)\d{2}/);
   const photo=await lirePhotoFan(document.getElementById("f-photo").files[0]);
+  const fondEl=document.getElementById("f-photo-fond");
+  const photoFond=(fondEl&&fondEl.files[0])?await lireImage(fondEl.files[0],1000,.82):null;
   const nbTampons=window.tamponsDepuisFormulaire?tamponsDepuisFormulaire():0;
   const fanId=nouvelIdFan();
   const fn={
@@ -3057,7 +3068,7 @@ document.getElementById("formulaireFan").addEventListener("submit",async e=>{
     chanson, concert:document.getElementById("f-concert").value.trim(),
     rencontre:(document.querySelector('input[name="rencontre"]:checked')||{}).value==="oui",
     histoire:document.getElementById("f-histoire").value.trim(),
-    photo, tampons:nbTampons, inscritLe:new Date().toISOString()
+    photo, photoHistoire:photoFond, tampons:nbTampons, inscritLe:new Date().toISOString()
   };
   integrerFan(fn);
   /* mémorise QUI je suis dans ce navigateur (pour modifier ma fiche plus tard) */
@@ -3075,6 +3086,7 @@ document.getElementById("formulaireFan").addEventListener("submit",async e=>{
         date_naissance: (naissance && naissance.indexOf("-")!==-1) ? naissance : null,
         histoire: fn.histoire || null,
         photo: fn.photo || null,
+        photo_histoire: fn.photoHistoire || null,
         chanson: fn.chanson || null,
         insta: fn.insta || null,
         annee: fn.annee || null,
@@ -3146,6 +3158,7 @@ function rendreHistoires(){
           <label>${t("sto.changePhoto")}<input type="file" accept="image/*" onchange="changerPhotoHistoire(event,${i})"></label>
           <label>${t("sto.changeBg")}<input type="file" accept="image/*" onchange="changerFondHistoire(event,${i})"></label>
           <button onclick="basculerEdition(${i})">${t("sto.editText")}</button>
+          <button onclick="changerInstaHistoire(${i})">${t("sto.changeInsta")}</button>
         </div>
         <div class="edition-histoire" id="edition-${i}">
           <textarea id="texteEdit-${i}">${h.texte}</textarea>
@@ -3200,6 +3213,18 @@ function changerFondHistoire(e,i){
     if(window.sauverBD) sauverBD();
     majFicheSupabase({photo_histoire:b64}).then(function(){ toast(t("toast.photoChanged")); });
   });
+}
+/* modifier son Instagram (les fans changent parfois de compte) */
+function changerInstaHistoire(i){
+  var h=HISTOIRES[i]; if(!h||!h.estMoi) return;
+  var v=prompt(t("sto.instaPrompt")||"Ton Instagram (ex : @tonpseudo) :", h.insta||"");
+  if(v===null) return;
+  v=(""+v).trim();
+  h.insta=v;
+  var reg=(window.REGISTRE_FANS||[]).find(function(x){return x.prenom===h.prenom;});
+  if(reg) reg.insta=v;
+  if(window.sauverBD) sauverBD();
+  majFicheSupabase({insta:v}).then(function(){ toast(t("toast.editSent")); });
 }
 function basculerEdition(i,fermer){
   const z=document.getElementById("edition-"+i);
@@ -6287,6 +6312,9 @@ for(const etape of [traduirePage,rendreProgression,rendreExtension,majLecteur]){
 /* --- RESTAURATION de la sauvegarde locale (inscriptions, likes, votes…) --- */
 (function restaurerBD(){
   try{
+    /* Remise à zéro locale : ouvrir le site avec ?reset efface les données de CE navigateur
+       (utile pour recommencer son profil proprement). N'affecte pas la base Supabase. */
+    if(/[?&]reset\b/i.test(location.search)){ try{ localStorage.removeItem(STOCK_CLE); }catch(e){} }
     const bd=chargerBD();
     Object.assign(INTERACTIONS, bd.inter||{});
     Object.assign(CHATS, bd.chats||{});
