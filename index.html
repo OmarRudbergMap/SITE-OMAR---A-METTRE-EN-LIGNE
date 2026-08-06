@@ -518,6 +518,23 @@ footer .marque{font-family:'Bebas Neue';font-size:1.1rem;letter-spacing:.15em;co
 <!-- ==================== PAGE 2 : JOIN ==================== -->
 <div class="page" id="page-inscription">
   <section>
+    <div class="verre" id="compteFan" style="margin-bottom:16px">
+      <h3 class="accent" data-i18n="acc.title">My account</h3>
+      <div id="compteDeconnecte">
+        <p class="note-modo" style="margin-top:4px" data-i18n="acc.intro">Create an account (or log in) to manage your card from any device.</p>
+        <input type="email" id="auth-email" placeholder="Email" autocomplete="email" style="width:100%;margin:6px 0">
+        <input type="password" id="auth-pass" placeholder="Password (min. 6 characters)" autocomplete="current-password" style="width:100%;margin:6px 0">
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:6px">
+          <button type="button" class="btn" onclick="creerCompte()" data-i18n="acc.signup">Create my account</button>
+          <button type="button" class="btn fantome" onclick="seConnecter()" data-i18n="acc.login">Log in</button>
+        </div>
+        <p id="auth-msg" style="margin-top:8px;font-size:.85rem;min-height:1.1em"></p>
+      </div>
+      <div id="compteConnecte" style="display:none">
+        <p style="margin:4px 0"><span data-i18n="acc.connected">Connected:</span> <b id="auth-qui"></b></p>
+        <button type="button" class="btn fantome" onclick="seDeconnecter()" data-i18n="acc.logout">Log out</button>
+      </div>
+    </div>
     <div class="verre">
       <h3 class="accent" data-i18n="form.title">Create your profile</h3>
       <p class="note-modo" style="margin-top:4px" data-i18n="form.note">* required · everything else is optional, but precious for the community.</p>
@@ -1220,6 +1237,7 @@ fr:{
   "join.p3":"En vous inscrivant, vous ne faites pas qu'ajouter un simple point sur une carte : vous devenez un membre visible d'une communauté mondiale qui partage la même passion. Vous contribuez à une carte vivante, qui montre la présence des fans à travers les cinq continents et où la communauté est la plus active.",
   "join.quote":"Un jour, lorsque des milliers de fans auront rejoint la carte, nous pourrons regarder ensemble le chemin parcouru.",
   "join.p4":"Nous verrons où tout a commencé, comment la communauté a grandi et comment des personnes venues des quatre coins du monde se sont réunies autour d'un même artiste. <b style=\"color:var(--blanc);font-weight:500\">Chaque inscription raconte une histoire. La vôtre mérite d'en faire partie.</b>",
+  "acc.title":"Mon compte","acc.intro":"Crée un compte (ou connecte-toi) pour gérer ta fiche depuis n'importe quel appareil.","acc.signup":"Créer mon compte","acc.login":"Se connecter","acc.connected":"Connecté :","acc.logout":"Se déconnecter",
   "form.title":"Crée ton profil","form.firstName":"Prénom *","form.firstNamePh":"Ton prénom",
   "form.country":"Pays * <span style=\"text-transform:none;letter-spacing:0;color:var(--beige)\">(détermine ton continent)</span>",
   "form.city":"Ville *","form.cityPh":"Ta ville","form.age":"Âge *",
@@ -6397,6 +6415,61 @@ async function chargerFansSupabase(){
 }
 window.chargerFansSupabase=chargerFansSupabase;
 chargerFansSupabase();
+
+/* ================= COMPTES FANS (connexion email + mot de passe) =================
+   Étape 1 : créer un compte / se connecter / se déconnecter.
+   La session est mémorisée par Supabase (on reste connecté même en revenant). */
+async function creerCompte(){
+  var msg=document.getElementById("auth-msg");
+  if(!window._sb){ if(msg) msg.textContent="La base n'est pas connectée."; return; }
+  var email=((document.getElementById("auth-email")||{}).value||"").trim();
+  var pass=(document.getElementById("auth-pass")||{}).value||"";
+  if(!email || pass.length<6){ if(msg) msg.textContent="Entre un email et un mot de passe d'au moins 6 caractères."; return; }
+  if(msg) msg.textContent="Création du compte…";
+  try{
+    var r=await window._sb.auth.signUp({email:email, password:pass});
+    if(r.error){ if(msg) msg.textContent="⚠️ "+r.error.message; return; }
+    if(!r.data || !r.data.session){
+      /* pas de session directe → soit connexion possible, soit confirmation email demandée */
+      var r2=await window._sb.auth.signInWithPassword({email:email, password:pass});
+      if(r2.error){ if(msg) msg.textContent="Compte créé ✓ — vérifie ton email pour le confirmer, puis connecte-toi."; return; }
+    }
+    if(msg) msg.textContent="Compte créé et connecté ✓";
+  }catch(e){ if(msg) msg.textContent="⚠️ "+((e&&e.message)||e); }
+}
+async function seConnecter(){
+  var msg=document.getElementById("auth-msg");
+  if(!window._sb){ if(msg) msg.textContent="La base n'est pas connectée."; return; }
+  var email=((document.getElementById("auth-email")||{}).value||"").trim();
+  var pass=(document.getElementById("auth-pass")||{}).value||"";
+  if(msg) msg.textContent="Connexion…";
+  try{
+    var r=await window._sb.auth.signInWithPassword({email:email, password:pass});
+    if(r.error){ if(msg) msg.textContent="⚠️ "+r.error.message; return; }
+    if(msg) msg.textContent="Connecté ✓";
+  }catch(e){ if(msg) msg.textContent="⚠️ "+((e&&e.message)||e); }
+}
+async function seDeconnecter(){ try{ if(window._sb) await window._sb.auth.signOut(); }catch(e){} }
+window.creerCompte=creerCompte; window.seConnecter=seConnecter; window.seDeconnecter=seDeconnecter;
+function majPanneauCompte(session){
+  var d=document.getElementById("compteDeconnecte"), c=document.getElementById("compteConnecte");
+  if(!d||!c) return;
+  if(session && session.user){
+    window.MON_USER=session.user;
+    d.style.display="none"; c.style.display="";
+    var q=document.getElementById("auth-qui"); if(q) q.textContent=session.user.email||"toi";
+  } else {
+    window.MON_USER=null;
+    d.style.display=""; c.style.display="none";
+  }
+}
+window.majPanneauCompte=majPanneauCompte;
+if(window._sb && window._sb.auth){
+  try{
+    window._sb.auth.getSession().then(function(r){ majPanneauCompte(r&&r.data?r.data.session:null); });
+    window._sb.auth.onAuthStateChange(function(_e, session){ majPanneauCompte(session); });
+  }catch(e){ console.warn("auth init:",e); }
+}
 
 allerA(location.hash.slice(1)||"accueil");
 
