@@ -534,6 +534,7 @@ footer .marque{font-family:'Bebas Neue';font-size:1.1rem;letter-spacing:.15em;co
         <p style="margin:4px 0"><span data-i18n="acc.connected">Connected:</span> <b id="auth-qui"></b></p>
         <button type="button" class="btn fantome" onclick="seDeconnecter()" data-i18n="acc.logout">Log out</button>
       </div>
+      <div style="font-size:.66rem;opacity:.5;margin-top:8px">version : COMPTES-2</div>
     </div>
     <div class="verre" id="dejaFiche" style="display:none;margin-bottom:16px">
       <h3 class="accent" data-i18n="acc.haveCard">Your card is created ✓</h3>
@@ -3048,6 +3049,8 @@ function lireImage(fichier, M, q){
 function lirePhotoFan(fichier){ return lireImage(fichier, 320, .82); }
 document.getElementById("formulaireFan").addEventListener("submit",async e=>{
   e.preventDefault();
+  /* on récupère le compte connecté "frais" (garantit que la requête est bien authentifiée) */
+  try{ if(window._sb&&window._sb.auth){ var _gu=await window._sb.auth.getUser(); if(_gu&&_gu.data&&_gu.data.user) window.MON_USER=_gu.data.user; } }catch(_e){}
   if(!window.MON_USER){ toast(t("acc.needLogin")); allerA("inscription"); var cf=document.getElementById("compteFan"); if(cf) cf.scrollIntoView({behavior:"smooth"}); return; }
   const prenom=document.getElementById("f-prenom").value.trim();
   const code=selPays.value,ville=document.getElementById("f-ville").value.trim();
