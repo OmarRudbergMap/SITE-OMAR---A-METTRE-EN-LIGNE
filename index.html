@@ -534,7 +534,7 @@ footer .marque{font-family:'Bebas Neue';font-size:1.1rem;letter-spacing:.15em;co
         <p style="margin:4px 0"><span data-i18n="acc.connected">Connected:</span> <b id="auth-qui"></b></p>
         <button type="button" class="btn fantome" onclick="seDeconnecter()" data-i18n="acc.logout">Log out</button>
       </div>
-      <div style="font-size:.66rem;opacity:.5;margin-top:8px">version : COMPTES-2</div>
+      <div style="font-size:.66rem;opacity:.5;margin-top:8px">version : COMPTES-3</div>
     </div>
     <div class="verre" id="dejaFiche" style="display:none;margin-bottom:16px">
       <h3 class="accent" data-i18n="acc.haveCard">Your card is created ✓</h3>
@@ -1082,7 +1082,7 @@ en:{
   "x.cmEyebrow":"Community","x.cmTitle":"Fan Finder","x.ffFind":"Search",
   "x.ffFriend":"Friend request","x.ffGroup":"Create a group","x.ffMeet":"Organise a meetup","x.ffPrep":"Prepare a concert",
   "x.bdayTitle":"🎂 Fan birthdays","x.bdayToday":(n)=>`Today, ${n} fans celebrate their birthday.`,"x.bdayMsg":"Leave them a message",
-  "x.prEyebrow":"My space","x.prTitle":"My story with Omar","x.prSince":"days as a fan","x.prSinceLbl":"Fan since",
+  "x.prEyebrow":"My space","x.prTitle":"My story with Omar","x.prSince":"days as a fan","x.prSinceLbl":"Fan since","x.myCard":"My card","x.noPhoto":"No photo yet","x.storyInStories":"Your story (text and background photo) is edited in the Stories tab.",
   "x.prConcerts":"concerts","x.prPhotos":"photos","x.prVideos":"videos","x.prBadges":"badges","x.prProjects":"projects","x.prDons":"donations",
   "x.ppTitle":"🛂 Fan Passport","x.ppNote":"Each concert becomes a stamp · your passport fills in automatically, like a real one.",
   "x.collTitle":"🃏 Badge collection","x.collNote":"Collectible badges to hunt down · a bit like trading cards.",
@@ -1182,7 +1182,7 @@ fr:{
   "x.cmEyebrow":"Communauté","x.cmTitle":"Fan Finder","x.ffFind":"Rechercher",
   "x.ffFriend":"Demande d'amitié","x.ffGroup":"Créer un groupe","x.ffMeet":"Organiser une rencontre","x.ffPrep":"Préparer un concert",
   "x.bdayTitle":"🎂 Anniversaires des fans","x.bdayToday":(n)=>`Aujourd'hui, ${n} fans fêtent leur anniversaire.`,"x.bdayMsg":"Leur laisser un message",
-  "x.prEyebrow":"Mon espace","x.prTitle":"Mon histoire avec Omar","x.prSince":"jours en tant que fan","x.prSinceLbl":"Fan depuis le",
+  "x.prEyebrow":"Mon espace","x.prTitle":"Mon histoire avec Omar","x.prSince":"jours en tant que fan","x.prSinceLbl":"Fan depuis","x.myCard":"Ma fiche","x.noPhoto":"Pas encore de photo","x.storyInStories":"Ton histoire (le texte et la photo de fond) se modifie dans l'onglet Histoires.",
   "x.prConcerts":"concerts","x.prPhotos":"photos","x.prVideos":"vidéos","x.prBadges":"badges","x.prProjects":"projets","x.prDons":"dons",
   "x.ppTitle":"🛂 Fan Passport","x.ppNote":"Chaque concert devient un tampon · ton passeport se remplit automatiquement, comme un vrai.",
   "x.collTitle":"🃏 Collection de badges","x.collNote":"Des badges à collectionner · un peu comme des cartes Pokémon.",
@@ -3109,6 +3109,7 @@ document.getElementById("formulaireFan").addEventListener("submit",async e=>{
   }
   /* mon profil : première inscription sur cet appareil = moi */
   if(!MOI.depuis){ MOI.depuis=fn.inscritLe; MOI.concerts=nbTampons; }
+  MOI.fanDepuisAnnee=fn.annee;
   sauverBD();
   toutMettreAJour(true);
   e.target.reset();document.getElementById("continentDetecte").textContent="";
@@ -3162,11 +3163,8 @@ function rendreHistoires(){
         <p class="texte-histoire replie" id="histoire-${i}">${h.texte}</p>
         <button class="lire-plus" id="btnLire-${i}" onclick="basculerHistoire(${i},this)">${t("sto.readMore")}</button>
         ${estMaHistoire(h)?`<div class="outils-histoire">
-          <label>${t("sto.changePhoto")}<input type="file" accept="image/*" onchange="changerPhotoHistoire(event,${i})"></label>
           <label>${t("sto.changeBg")}<input type="file" accept="image/*" onchange="changerFondHistoire(event,${i})"></label>
           <button onclick="basculerEdition(${i})">${t("sto.editText")}</button>
-          <button onclick="changerChansonHistoire(${i})">${t("sto.changeSong")}</button>
-          <button onclick="changerInstaHistoire(${i})">${t("sto.changeInsta")}</button>
         </div>
         <div class="edition-histoire" id="edition-${i}">
           <textarea id="texteEdit-${i}">${h.texte}</textarea>
@@ -3202,7 +3200,7 @@ function changerPhotoHistoire(e,i){
     var reg=(window.REGISTRE_FANS||[]).find(function(x){return x.prenom===h.prenom;});
     if(reg) reg.photo=b64;
     if(window.sauverBD) sauverBD();
-    /* envoie à la base → repasse en attente de validation */
+    if(window.rendreProfil) rendreProfil();
     majFicheSupabase({photo:b64}).then(function(){ toast(t("toast.photoChanged")); });
   });
 }
@@ -3232,6 +3230,7 @@ function changerInstaHistoire(i){
   var reg=(window.REGISTRE_FANS||[]).find(function(x){return x.prenom===h.prenom;});
   if(reg) reg.insta=v;
   if(window.sauverBD) sauverBD();
+  if(window.rendreProfil) rendreProfil();
   majFicheSupabase({insta:v}).then(function(){ toast(t("toast.editSent")); });
 }
 /* modifier sa chanson préférée (les goûts changent, de nouveaux titres sortent) */
@@ -3245,6 +3244,7 @@ function changerChansonHistoire(i){
   if(reg) reg.chanson=v;
   if(window.sauverBD) sauverBD();
   if(window.rendreHistoires) rendreHistoires();
+  if(window.rendreProfil) rendreProfil();
   majFicheSupabase({chanson:v}).then(function(){ toast(t("toast.editSent")); });
 }
 function basculerEdition(i,fermer){
@@ -5905,20 +5905,39 @@ const COLLECTION=[
  ["❤️","Dons","x.common"],
  ["🏆","Gagnant Jeu Concours · Association","x.legend",1],
 ];
+/* index de MON histoire dans la liste (celle de mon compte connecté), sinon -1 */
+function monIndexHistoire(){
+  for(var i=0;i<HISTOIRES.length;i++){ if(estMaHistoire(HISTOIRES[i])) return i; }
+  return -1;
+}
+window.monIndexHistoire=monIndexHistoire;
 function rendreProfil(){
   const s=document.getElementById("secProfil"); if(!s)return;
-  const jours=MOI.depuis?Math.max(0,Math.floor((Date.now()-new Date(MOI.depuis))/864e5)):0;
+  /* ancienneté de fan = calculée depuis l'ANNÉE où tu es devenue fan (pas depuis l'inscription) */
+  var debutFan = MOI.fanDepuisAnnee ? new Date(MOI.fanDepuisAnnee,0,1) : (MOI.depuis?new Date(MOI.depuis):null);
+  const jours = debutFan ? Math.max(0,Math.floor((Date.now()-debutFan)/864e5)) : 0;
+  const mi = monIndexHistoire();
   s.innerHTML=`<p class="eyebrow">${t("x.prEyebrow")}</p><h2>${t("x.prTitle")}</h2>
     <div class="verre" style="margin-top:12px;text-align:center">
       <div class="valeur" style="font-family:'Bebas Neue';font-size:2.6rem;color:var(--bordeaux);text-shadow:0 0 16px var(--lueur)">${jours.toLocaleString(LOCALES[LANG])}</div>
       <div style="font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--beige)">${t("x.prSince")}</div>
-      <p style="font-size:.7rem;color:var(--beige);margin-top:6px">${MOI.depuis?t("x.prSinceLbl")+" : "+new Date(MOI.depuis).toLocaleDateString(LOCALES[LANG]):"✦"}</p>
+      <p style="font-size:.7rem;color:var(--beige);margin-top:6px">${MOI.fanDepuisAnnee?t("x.prSinceLbl")+" "+MOI.fanDepuisAnnee:(MOI.depuis?t("x.prSinceLbl")+" "+new Date(MOI.depuis).getFullYear():"✦")}</p>
       <div class="compteurs-profil">
         ${[["🎤",MOI.concerts,"x.prConcerts"],["📸",MOI.photos,"x.prPhotos"],["🎬",MOI.videos,"x.prVideos"],
            ["🏅",MOI.badges,"x.prBadges"],["✨",MOI.projets,"x.prProjects"],["❤️",MOI.dons,"x.prDons"]]
           .map(([e,v,k])=>`<div class="stat verre" style="padding:12px 8px"><div class="valeur" style="font-size:1.5rem">${e} ${v}</div><div class="label">${t(k)}</div></div>`).join("")}
       </div>
     </div>
+    ${mi>=0?`<div class="verre" style="margin-top:14px;text-align:center">
+      <h3 style="color:var(--rose)">${t("x.myCard")}</h3>
+      ${HISTOIRES[mi].photoFan?`<div class="avatar" style="width:84px;height:84px;margin:6px auto 10px;background:url(${HISTOIRES[mi].photoFan}) center/cover;border-radius:50%;border:2px solid var(--rose)"></div>`:`<p style="font-size:.8rem;color:var(--beige)">${t("x.noPhoto")}</p>`}
+      <div class="outils-histoire" style="justify-content:center">
+        <label>${t("sto.changePhoto")}<input type="file" accept="image/*" onchange="changerPhotoHistoire(event,${mi})"></label>
+        <button onclick="changerChansonHistoire(${mi})">${t("sto.changeSong")}</button>
+        <button onclick="changerInstaHistoire(${mi})">${t("sto.changeInsta")}</button>
+      </div>
+      <p style="font-size:.72rem;color:var(--beige);margin-top:8px">${t("x.storyInStories")}</p>
+    </div>`:``}
     <div class="verre" style="margin-top:14px">
       <h3 style="color:var(--rose)">${t("x.ppTitle")}</h3>
       <p style="font-size:.78rem;color:var(--beige)">${t("x.ppNote")}</p>
@@ -6482,7 +6501,7 @@ async function chargerMonProfil(){
         chanson:row.chanson||"", insta:row.insta||"", concert:row.concert||"", rencontre:!!row.rencontre,
         histoire:row.histoire||"", photo:row.photo||null, photoHistoire:row.photo_histoire||null, tampons:0, inscritLe:(new Date()).toISOString() });
     }
-    if(typeof MOI!=="undefined"&&MOI){ MOI.fanId=row.id; MOI.prenom=row.pseudo; MOI.ville=row.ville; if(window.sauverBD) sauverBD(); }
+    if(typeof MOI!=="undefined"&&MOI){ MOI.fanId=row.id; MOI.prenom=row.pseudo; MOI.ville=row.ville; if(row.annee) MOI.fanDepuisAnnee=row.annee; if(window.sauverBD) sauverBD(); }
     if(window.toutMettreAJour) toutMettreAJour(true);
     if(window.rendreHistoires) rendreHistoires();
     if(window.rendreExtension) rendreExtension();
