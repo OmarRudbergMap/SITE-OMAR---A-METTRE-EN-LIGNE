@@ -1110,7 +1110,7 @@ en:{
   "toast.editSent":"Your story has been updated — it's now online ✦",
   "toast.photoChanged":"Photo updated — it's now online ✦",
   "sto.readMore":"Read the full story →","sto.collapse":"Collapse ↑",
-  "sto.since":"fan since","sto.yo":"yo","sto.changePhoto":"📷 Change my photo","sto.changeBg":"🖼️ Background photo","sto.changeInsta":"✏️ My Instagram","sto.instaPrompt":"Your Instagram (e.g. @yourhandle):","sto.editText":"✏️ Edit my story",
+  "sto.since":"fan since","sto.yo":"yo","sto.changePhoto":"📷 Change my photo","sto.changeBg":"🖼️ Background photo","sto.changeInsta":"✏️ My Instagram","sto.instaPrompt":"Your Instagram (e.g. @yourhandle):","sto.changeSong":"🎵 My song","sto.songPrompt":"Your favorite Omar song:","sto.editText":"✏️ Edit my story",
   "sto.sendApproval":"Send for approval ✦","sto.cancel":"Cancel",
   "sto.ownerNote":"Each fan chooses and uploads their own Omar photo, and can change it or edit their story at any time (with moderator approval).",
   "map.eyebrow":"Explore","map.title":"The flat map of all fans","map.hint":"Tap a glowing dot to open that fan's profile and story.",
@@ -1258,7 +1258,7 @@ fr:{
   "sto.quote":"Parce que derrière chaque fan se cache une histoire qui mérite d'être racontée.",
   "sto.tellBtn":"Raconter mon histoire ✦",
   "sto.readMore":"Lire l'histoire complète →","sto.collapse":"Replier ↑","sto.since":"fan depuis","sto.yo":"ans",
-  "sto.changePhoto":"📷 Changer ma photo","sto.changeBg":"🖼️ Photo de fond","sto.changeInsta":"✏️ Mon Instagram","sto.instaPrompt":"Ton Instagram (ex : @tonpseudo) :","sto.editText":"✏️ Modifier mon histoire",
+  "sto.changePhoto":"📷 Changer ma photo","sto.changeBg":"🖼️ Photo de fond","sto.changeInsta":"✏️ Mon Instagram","sto.instaPrompt":"Ton Instagram (ex : @tonpseudo) :","sto.changeSong":"🎵 Ma chanson","sto.songPrompt":"Ta chanson préférée d'Omar :","sto.editText":"✏️ Modifier mon histoire",
   "sto.sendApproval":"Envoyer pour validation ✦","sto.cancel":"Annuler",
   "sto.ownerNote":"Chaque fan choisit et télécharge lui-même sa photo d'Omar, et peut la changer ou modifier son histoire à tout moment (avec validation de la modératrice).",
   "prj.eyebrow":"Créons ensemble","prj.title":"Projets de la communauté",
@@ -3158,6 +3158,7 @@ function rendreHistoires(){
           <label>${t("sto.changePhoto")}<input type="file" accept="image/*" onchange="changerPhotoHistoire(event,${i})"></label>
           <label>${t("sto.changeBg")}<input type="file" accept="image/*" onchange="changerFondHistoire(event,${i})"></label>
           <button onclick="basculerEdition(${i})">${t("sto.editText")}</button>
+          <button onclick="changerChansonHistoire(${i})">${t("sto.changeSong")}</button>
           <button onclick="changerInstaHistoire(${i})">${t("sto.changeInsta")}</button>
         </div>
         <div class="edition-histoire" id="edition-${i}">
@@ -3225,6 +3226,19 @@ function changerInstaHistoire(i){
   if(reg) reg.insta=v;
   if(window.sauverBD) sauverBD();
   majFicheSupabase({insta:v}).then(function(){ toast(t("toast.editSent")); });
+}
+/* modifier sa chanson préférée (les goûts changent, de nouveaux titres sortent) */
+function changerChansonHistoire(i){
+  var h=HISTOIRES[i]; if(!h||!h.estMoi) return;
+  var v=prompt(t("sto.songPrompt")||"Ta chanson préférée d'Omar :", h.chanson||"");
+  if(v===null) return;
+  v=(""+v).trim(); if(!v) return;
+  h.chanson=v;
+  var reg=(window.REGISTRE_FANS||[]).find(function(x){return x.prenom===h.prenom;});
+  if(reg) reg.chanson=v;
+  if(window.sauverBD) sauverBD();
+  if(window.rendreHistoires) rendreHistoires();
+  majFicheSupabase({chanson:v}).then(function(){ toast(t("toast.editSent")); });
 }
 function basculerEdition(i,fermer){
   const z=document.getElementById("edition-"+i);
