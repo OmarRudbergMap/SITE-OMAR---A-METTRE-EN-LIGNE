@@ -534,7 +534,7 @@ footer .marque{font-family:'Bebas Neue';font-size:1.1rem;letter-spacing:.15em;co
         <p style="margin:4px 0"><span data-i18n="acc.connected">Connected:</span> <b id="auth-qui"></b></p>
         <button type="button" class="btn fantome" onclick="seDeconnecter()" data-i18n="acc.logout">Log out</button>
       </div>
-      <div style="font-size:.66rem;opacity:.5;margin-top:8px">version : COMPTES-4</div>
+      <div style="font-size:.66rem;opacity:.5;margin-top:8px">version : COMPTES-5</div>
     </div>
     <div class="verre" id="dejaFiche" style="display:none;margin-bottom:16px">
       <h3 class="accent" data-i18n="acc.haveCard">Your card is created ✓</h3>
@@ -929,6 +929,7 @@ const PH_DYING="photos/PH_DYING.webp"
 const PH_GABRIELA="photos/PH_GABRIELA.webp"
 const PH_GIRLFRIEND="photos/PH_GIRLFRIEND.webp"
 const PH_HAPPIER="photos/PH_HAPPIER.webp"
+const PH_HAPPIER_REMIX="photos/PH_HAPPIER_REMIX.webp"
 const PH_NOTABOY="photos/PH_NOTABOY.webp"
 const PH_EXCITED="photos/PH_EXCITED.webp"
 const PH_SUNRISE="photos/PH_SUNRISE.webp"
@@ -971,10 +972,23 @@ const PHOTOS_CHANSONS={
   "Call Me By Your Name":PH_CMBYN,
   "Coast Side (Carousel Remix)":PH_CAROUSEL,
   "Dum":PH_DUM,
+  "Dum (Singback version)":PH_DUM,
   "Dying":PH_DYING,
   "Gabriela (Spotify Singles)":PH_GABRIELA,
   "Girlfriend":PH_GIRLFRIEND,
   "Happier":PH_HAPPIER,
+  "Happier (After Midnight xxx / In The Club Remix)":PH_HAPPIER_REMIX,
+  "Happier (House/Club Remix)":PH_HAPPIER_REMIX,
+  "Happier (Jungle Mood Remix)":PH_HAPPIER_REMIX,
+  "Happier (Indiefeels Remix)":PH_HAPPIER_REMIX,
+  "Happier (Move Your Body / Rhythm & Dance Remix)":PH_HAPPIER_REMIX,
+  "Happier (Steerner Remix)":PH_HAPPIER_REMIX,
+  "Happier (On The Beat Remix)":PH_HAPPIER_REMIX,
+  "Happier (Floor Remix)":PH_HAPPIER_REMIX,
+  "Happier (Just Dance Remix)":PH_HAPPIER_REMIX,
+  "Happier (SlowNspeed Remix)":PH_HAPPIER_REMIX,
+  "Happier (Either Way Remix)":PH_HAPPIER_REMIX,
+  "Happier (Mystic Remix)":PH_HAPPIER_REMIX,
   "I'm Not a Boy":PH_NOTABOY,
   "I'm So Excited (club version)":PH_EXCITED,
   "In The Sunrise":PH_SUNRISE,
@@ -1128,6 +1142,12 @@ en:{
   "toast.demoComments":"Demo: comments will be enabled with the online version ✦",
   "toast.vote":"Thank you for your vote! (demo · 1 vote per category)",
   "cls.empty":"The ranking starts with the very first registrations ✦",
+  "pt.title":"Your points","pt.total":"points","pt.detail":"How your points are calculated",
+  "pt.profil":"Profile created","pt.histoire":"Fan story shared","pt.photo":"Profile photo","pt.fond":"Background photo",
+  "pt.concerts":"Concerts attended","pt.lieuYR":"Young Royals filming location","pt.fidelite":"Loyalty bonus","pt.badges":"Badges earned","pt.engagement":"Likes & comments",
+  "pt.perYear":"yr","pt.each":"each",
+  "cc.title":"My concerts","cc.intro":"Tick the concerts you attended — they earn points and fill your passport.","cc.save":"Save my concerts","cc.saved":"Your concerts have been saved ✦","cc.edit":"Edit my concerts",
+  "cs.title":"My ranking of Omar's songs","cs.intro":"Rank Omar's songs your way — it's saved on the site and printable in your passport.","cs.edit":"Rank my songs","cs.save":"Save my ranking","cs.saved":"Your song ranking has been saved ✦","cs.top":"Move to top","cs.mine":"My top","cs.communityTitle":"Fans' favourite songs","cs.communityIntro":"The community ranking, built from every fan's own ranking.","cs.pts":"pts","cs.none":"No ranking yet — be the first to rank Omar's songs ✦",
   "sto.emptyQuote":"The first fan stories will appear here. Yours can be the very first one ✦",
   "toast.editSent":"Your story has been updated — it's now online ✦",
   "toast.photoChanged":"Photo updated — it's now online ✦",
@@ -1320,6 +1340,11 @@ fr:{
   "toast.demoSong":(s)=>`Démo : un extrait de « ${s} » se lancera dans la version en ligne ♪`,
   "toast.demoComments":"Démo : les commentaires seront activés avec la version en ligne ✦",
   "cls.empty":"Le classement démarre avec les premières inscriptions ✦",
+  "pt.title":"Tes points","pt.total":"points","pt.detail":"Comment tes points sont calculés",
+  "pt.profil":"Profil créé","pt.histoire":"Histoire partagée","pt.photo":"Photo de profil","pt.fond":"Photo de fond",
+  "pt.concerts":"Concerts vus","pt.lieuYR":"Lieu de tournage Young Royals","pt.fidelite":"Bonus fidélité","pt.badges":"Badges gagnés","pt.engagement":"Likes & commentaires",
+  "pt.perYear":"an","pt.each":"chacun",
+  "cc.title":"Mes concerts","cc.intro":"Coche les concerts auxquels tu as assisté — ils rapportent des points et remplissent ton passeport.","cc.save":"Enregistrer mes concerts","cc.saved":"Tes concerts ont bien été enregistrés ✦","cc.edit":"Modifier mes concerts",
   "sto.emptyQuote":"Les premières histoires de fans apparaîtront ici. La tienne peut être la toute première ✦",
   "toast.vote":"Merci pour ton vote ! (démo · 1 vote par catégorie)",
   "toast.editSent":"Ton histoire est mise à jour — c'est en ligne ✦",
@@ -2941,8 +2966,31 @@ function drapeauISO(code){
   if(!code||code==="XX")return "✦";
   return String.fromCodePoint(...[...code.toUpperCase()].map(c=>0x1F1E6+c.charCodeAt(0)-65));
 }
-/* points : inscription 100 · histoire +50 · photo +25 · +10 par tampon concert */
-function pointsFan(fn){return 100+(fn.histoire?50:0)+(fn.photo?25:0)+(fn.tampons||0)*10;}
+/* ---------- BARÈME DE POINTS (validé) ----------
+   profil créé +50 · histoire +30 · photo profil +15 · photo de fond +10
+   chaque concert +5 · lieu Young Royals +20 · bonus fidélité +50 / année de fan
+   engagement (likes/commentaires) et badges : ajoutés dans les phases suivantes. */
+function anneesFidelite(fn){
+  if(!fn||!fn.annee) return 0;
+  var a=(new Date()).getFullYear()-(+fn.annee);
+  return (a>0 && a<80) ? a : 0;              /* garde-fou contre une année aberrante */
+}
+function detailPoints(fn){
+  var d=[];
+  d.push(["🎫","pt.profil",50]);                                   /* profil créé */
+  if(fn.histoire) d.push(["📖","pt.histoire",30]);
+  if(fn.photo)    d.push(["📷","pt.photo",15]);
+  if(fn.photoHistoire) d.push(["🖼️","pt.fond",10]);
+  var nc=fn.tampons||0;
+  if(nc>0) d.push(["🎤","pt.concerts",nc*5, nc]);                  /* +5 par concert */
+  if(fn.lieuYR) d.push(["👑","pt.lieuYR",20]);
+  var an=anneesFidelite(fn);
+  if(an>0) d.push(["💙","pt.fidelite",an*50, an]);                 /* +50 par année de fan */
+  if(fn.badges) d.push(["🏅","pt.badges",fn.badges*10, fn.badges]);/* +10 par badge (phase 3) */
+  if(fn.pointsEngagement) d.push(["💬","pt.engagement",fn.pointsEngagement]); /* likes/coms (phase 2) */
+  return d;
+}
+function pointsFan(fn){ return detailPoints(fn).reduce(function(s,l){return s+l[2];},0); }
 
 /* intègre UNE inscription dans toutes les vues du site */
 function integrerFan(fn){
@@ -3066,6 +3114,7 @@ document.getElementById("formulaireFan").addEventListener("submit",async e=>{
   const fondEl=document.getElementById("f-photo-fond");
   const photoFond=(fondEl&&fondEl.files[0])?await lireImage(fondEl.files[0],1000,.82):null;
   const nbTampons=window.tamponsDepuisFormulaire?tamponsDepuisFormulaire():0;
+  const clesConcerts=window.MES_CONCERTS_VUS||[];
   const fanId=nouvelIdFan();
   const fn={
     id:Date.now(), fanId, estMoi:true, prenom, code, drapeau:drapeauISO(code), ville, age:+age, naissance,
@@ -3074,7 +3123,7 @@ document.getElementById("formulaireFan").addEventListener("submit",async e=>{
     chanson, concert:document.getElementById("f-concert").value.trim(),
     rencontre:(document.querySelector('input[name="rencontre"]:checked')||{}).value==="oui",
     histoire:document.getElementById("f-histoire").value.trim(),
-    photo, photoHistoire:photoFond, tampons:nbTampons, inscritLe:new Date().toISOString()
+    photo, photoHistoire:photoFond, tampons:nbTampons, lieuYR:aLieuYR(clesConcerts), concertsVus:clesConcerts, inscritLe:new Date().toISOString()
   };
   integrerFan(fn);
   /* mémorise QUI je suis (compte + fiche) */
@@ -3098,6 +3147,7 @@ document.getElementById("formulaireFan").addEventListener("submit",async e=>{
         insta: fn.insta || null,
         annee: fn.annee || null,
         concert: fn.concert || null,
+        concerts_vus: clesConcerts,
         rencontre: !!fn.rencontre,
         accord_parental: accordParental,
         valide: false
@@ -3590,60 +3640,77 @@ const DISCO=[
  /* s = streams Spotify exacts fournis par le site (relevés des 17-18.07.2026, t0)
     r = streams/seconde · rythmes quotidiens réels Kworb (relevé du 19.04.2026) pour les titres suivis ; estimations pour les autres. RECALAGE HEBDOMADAIRE : la modératrice fournit les chiffres exacts ~1x/semaine → mettre à jour s et t0.
     d = date de sortie officielle (tableau du 17.07.2026) */
- {n:"Careless", d:"2026-07-03", s:1017738, r:0.50, t0:"2026-08-04"},
- {n:"Siren (feat. Felix Jaehn)", d:"2026-06-19", s:948304, r:0.33, t0:"2026-08-04"},
- {n:"A World Like This", d:"2026-05-29", s:1105146, r:0.23, t0:"2026-08-04"},
- {n:"Gabriela (Spotify Singles)", d:"2025-12-12", s:1712468, r:0.05397, t0:"2026-08-04"},
- {n:"Bebezinho (feat. Omar Rudberg)", d:"2025-11-28", s:461309, r:0.01535, t0:"2026-08-04"},
- {n:"Malandro", d:"2025-10-31", s:4255505, r:0.08284, t0:"2026-08-04"},
- {n:"Dying", d:"2025-09-05", s:2746554, r:0.03628, t0:"2026-08-04"},
- {n:"No Soy un Hombre", d:"2025-02-20", s:670300, r:0.007, t0:"2026-08-04"},
- {n:"I'm Not a Boy", d:"2025-01-30", s:3264218, r:0.02282, t0:"2026-07-18"},
- {n:"Girlfriend", d:"2024-10-18", s:3522172, r:0.03549, t0:"2026-08-04"},
- {n:"Lose Me", d:"2024-10-18", s:2786137, r:0.0277, t0:"2026-08-04"},
- {n:"Wrong", d:"2024-10-18", s:2533242, r:0.02456, t0:"2026-08-04"},
- {n:"Luz Roja (Bonus)", d:"2024-10-18", s:940583, r:0.00796, t0:"2026-08-04"},
- {n:"Sabotage", d:"2024-09-20", s:4501526, r:0.0311, t0:"2026-08-04"},
- {n:"Talk", d:"2024-06-28", s:5082170, r:0.03075, t0:"2026-08-04"},
- {n:"Bye Bye", d:"2024-06-28", s:3777134, r:0.02686, t0:"2026-08-04"},
- {n:"Red Light", d:"2024-05-17", s:4801665, r:0.02176, t0:"2026-08-04"},
- {n:"Om du inte fanns (Don't Wait)", d:"2023-12-10", s:2756455, r:0.01066, t0:"2026-08-04"},
- {n:"Höj ett glas (Fanfar)", d:"2023-12-10", s:2146198, r:0.00946, t0:"2026-08-04"},
- {n:"Min Första (I Will Always Be Your Soldier)", d:"2023-12-10", s:1908152, r:0.00855, t0:"2026-08-04"},
- {n:"Off My Mind (feat. Jubël)", d:"2023-10-20", s:2892314, r:0.01334, t0:"2026-08-04"},
- {n:"Happier", d:"2023-06-30", s:3390629, r:0.01634, t0:"2026-08-04"},
- {n:"All In My Head (feat. Omar Rudberg)", d:"2023-06-29", s:2495474, r:0.010, t0:"2026-08-04"}, /* single FDVM feat. Omar · date et streams fournis le 20.07.2026 · rythme estimé */
- {n:"She Fell In Love In The Summer", d:"2023-04-27", s:4164424, r:0.01899, t0:"2026-08-04"},
- {n:"I'm So Excited (club version)", d:"2023-03-09", s:1772228, r:0.00671, t0:"2026-08-04"},
- {n:"Call Me By Your Name", d:"2023-01-06", s:5108240, r:0.017, t0:"2026-08-04"},
- {n:"Simon's Song", d:"2022-11-01", s:15838557, r:0.05096, t0:"2026-08-04"},
- {n:"Todo De Ti (All That She Wants)", d:"2022-07-01", s:5006744, r:0.010, t0:"2026-08-04"},
- {n:"Nakna", d:"2022-06-03", s:5523737, r:0.012, t0:"2026-08-04"},
- {n:"In The Sunrise", d:"2022-05-27", s:3454851, r:0.01387, t0:"2026-08-04"},
- {n:"Coast Side", d:"2022-05-27", s:3335906, r:0.01398, t0:"2026-08-04"},
- {n:"Coast Side (Carousel Remix)", d:"2022-08-26", s:455617, r:0.00289, t0:"2026-08-04"}, /* chiffre exact fourni le 18.07.2026 · ≈ 210/jour · date de sortie à préciser */
- {n:"Pull Up", d:"2022-05-27", s:2786527, r:0.01368, t0:"2026-08-04"},
- {n:"Que Puedo Hacer?", d:"2022-05-27", s:2032298, r:0.00878, t0:"2026-08-04"},
- {n:"Como Ayer", d:"2022-05-27", s:2071730, r:0.01134, t0:"2026-08-04"},
- {n:"Breathe", d:"2022-05-27", s:2748370, r:0.00921, t0:"2026-08-04"},
- {n:"Mama", d:"2022-05-27", s:1710454, r:0.0061, t0:"2026-08-04"},
- {n:"La Incondicional", d:"2022-05-27", s:1135869, r:0.00361, t0:"2026-08-04"},
- {n:"La Incondicional (live from Benjamin's)", d:"2022-04-19", s:2292212, r:0.00652, t0:"2026-08-04"},
- {n:"Moving Like That", d:"2022-02-05", s:11628097, r:0.02588, t0:"2026-08-04"},
- {n:"Mi Casa Su Casa", d:"2022-01-07", s:25269768, r:0.09324, t0:"2026-08-04"},
- {n:"Yo Dije OUFF", d:"2021-07-21", s:9998313, r:0.012, t0:"2026-08-04"},
- {n:"Symphony", d:"2021-07-09", s:7781109, r:0.016, t0:"2026-08-04"},
- {n:"Remember", d:"2021-07-09", s:5133347, r:0.012, t0:"2026-08-04"},
- {n:"It Takes A Fool To Remain Sane", d:"2021-07-02", s:14798755, r:0.017, t0:"2026-08-04"},
- {n:"Alla Ba OUFF", d:"2021-05-07", s:4293907, r:0.010, t0:"2026-08-04"},
- {n:"Läppar", d:"2020-07-17", s:2791860, r:0.006, t0:"2026-08-04"},
- {n:"Jag e nån annan", d:"2020-05-15", s:3020776, r:0.008, t0:"2026-08-04"},
- {n:"Dale Bye", d:"2020-04-17", s:486599, r:0.002, t0:"2026-08-04"}, /* date et streams fournis le 20.07.2026 · rythme estimé */
- {n:"Dum", d:"2020-01-24", s:15055427, r:0.010, t0:"2026-08-04"},
- {n:"På min telephone toda la noche", d:"2019-08-02", s:2556098, r:0.006, t0:"2026-08-04"},
- {n:"Om om och om igen", d:"2019-02-16", s:13324308, r:0.010, t0:"2026-08-04"},
- {n:"La Mesa (feat. Elias Hurtig)", d:"2018-08-17", s:3297405, r:0.009, t0:"2026-08-04"},
- {n:"Que Pasa (feat. Lamix)", d:"2018-02-23", s:7434766, r:0.008, t0:"2026-08-04"},
+ {n:"Careless", d:"2026-07-03", s:1065128, r:0.50, t0:"2026-08-07"},
+ {n:"Siren (feat. Felix Jaehn)", d:"2026-06-19", s:965689, r:0.33, t0:"2026-08-07"},
+ {n:"A World Like This", d:"2026-05-29", s:1120972, r:0.23, t0:"2026-08-07"},
+ {n:"Gabriela (Spotify Singles)", d:"2025-12-12", s:1717350, r:0.05397, t0:"2026-08-07"},
+ {n:"Bebezinho (feat. Omar Rudberg)", d:"2025-11-28", s:463667, r:0.01535, t0:"2026-08-07"},
+ {n:"Malandro", d:"2025-10-31", s:4265636, r:0.08284, t0:"2026-08-07"},
+ {n:"Dying", d:"2025-09-05", s:2752768, r:0.03628, t0:"2026-08-07"},
+ {n:"No Soy un Hombre", d:"2025-02-20", s:672280, r:0.007, t0:"2026-08-07"},
+ {n:"I'm Not a Boy", d:"2025-01-30", s:3264234, r:0.02282, t0:"2026-08-07"},
+ {n:"Girlfriend", d:"2024-10-18", s:3528806, r:0.03549, t0:"2026-08-07"},
+ {n:"Lose Me", d:"2024-10-18", s:2791807, r:0.0277, t0:"2026-08-07"},
+ {n:"Wrong", d:"2024-10-18", s:2536799, r:0.02456, t0:"2026-08-07"},
+ {n:"Luz Roja (Bonus)", d:"2024-10-18", s:941793, r:0.00796, t0:"2026-08-07"},
+ {n:"Sabotage", d:"2024-09-20", s:4507141, r:0.0311, t0:"2026-08-07"},
+ {n:"Talk", d:"2024-06-28", s:5087500, r:0.03075, t0:"2026-08-07"},
+ {n:"Bye Bye", d:"2024-06-28", s:3781626, r:0.02686, t0:"2026-08-07"},
+ {n:"Red Light", d:"2024-05-17", s:4805399, r:0.02176, t0:"2026-08-07"},
+ {n:"Om du inte fanns (Don't Wait)", d:"2023-12-10", s:2758538, r:0.01066, t0:"2026-08-07"},
+ {n:"Höj ett glas (Fanfar)", d:"2023-12-10", s:2148189, r:0.00946, t0:"2026-08-07"},
+ {n:"Min Första (I Will Always Be Your Soldier)", d:"2023-12-10", s:1909794, r:0.00855, t0:"2026-08-07"},
+ {n:"Off My Mind (feat. Jubël)", d:"2023-10-20", s:2895396, r:0.01334, t0:"2026-08-07"},
+ {n:"Happier (After Midnight xxx / In The Club Remix)", d:"2023-10-31", s:124758, r:0.0008, t0:"2026-08-07"},
+ {n:"Happier (House/Club Remix)", d:"2023-10-31", s:129953, r:0.0008, t0:"2026-08-07"},
+ {n:"Happier (Jungle Mood Remix)", d:"2023-10-31", s:100734, r:0.0007, t0:"2026-08-07"},
+ {n:"Happier (Indiefeels Remix)", d:"2023-10-31", s:96841, r:0.0007, t0:"2026-08-07"},
+ {n:"Happier (Move Your Body / Rhythm & Dance Remix)", d:"2023-10-31", s:87580, r:0.0006, t0:"2026-08-07"},
+ {n:"Happier (Steerner Remix)", d:"2023-10-31", s:79805, r:0.0006, t0:"2026-08-07"},
+ {n:"Happier (On The Beat Remix)", d:"2023-10-31", s:63881, r:0.0005, t0:"2026-08-07"},
+ {n:"Happier (Floor Remix)", d:"2023-10-31", s:47435, r:0.0004, t0:"2026-08-07"},
+ {n:"Happier (Just Dance Remix)", d:"2023-10-31", s:41344, r:0.0004, t0:"2026-08-07"},
+ {n:"Happier (SlowNspeed Remix)", d:"2023-10-31", s:40804, r:0.0004, t0:"2026-08-07"},
+ {n:"Happier (Either Way Remix)", d:"2023-10-31", s:34133, r:0.0003, t0:"2026-08-07"},
+ {n:"Happier (Mystic Remix)", d:"2023-10-31", s:32187, r:0.0003, t0:"2026-08-07"},
+ {n:"Happier", d:"2023-06-30", s:3393879, r:0.01634, t0:"2026-08-07"},
+ {n:"All In My Head (feat. Omar Rudberg)", d:"2023-06-29", s:2497027, r:0.010, t0:"2026-08-07"}, /* single FDVM feat. Omar · date et streams fournis le 20.07.2026 · rythme estimé */
+ {n:"She Fell In Love In The Summer", d:"2023-04-27", s:4164424, r:0.01899, t0:"2026-08-07"},
+ {n:"She Fell In Love In The Summer (acoustic)", d:"2023-04-27", s:646699, r:0.0015, t0:"2026-08-07"},
+ {n:"I'm So Excited (club version)", d:"2023-03-09", s:1773605, r:0.00671, t0:"2026-08-07"},
+ {n:"I'm So Excited (Live at QX Gala)", d:"2023-03-09", s:444559, r:0.0015, t0:"2026-08-07"},
+ {n:"I'm So Excited (additional version)", d:"2023-03-09", s:607063, r:0.0015, t0:"2026-08-07"},
+ {n:"Call Me By Your Name", d:"2023-01-06", s:5110980, r:0.017, t0:"2026-08-07"},
+ {n:"Simon's Song", d:"2022-11-01", s:15850061, r:0.05096, t0:"2026-08-07"},
+ {n:"Todo De Ti (All That She Wants)", d:"2022-07-01", s:5009667, r:0.010, t0:"2026-08-07"},
+ {n:"Nakna", d:"2022-06-03", s:5525480, r:0.012, t0:"2026-08-07"},
+ {n:"In The Sunrise", d:"2022-05-27", s:3457788, r:0.01387, t0:"2026-08-07"},
+ {n:"Coast Side", d:"2022-05-27", s:3338484, r:0.01398, t0:"2026-08-07"},
+ {n:"Coast Side (Carousel Remix)", d:"2022-08-26", s:456083, r:0.00289, t0:"2026-08-07"}, /* chiffre exact fourni le 18.07.2026 · ≈ 210/jour · date de sortie à préciser */
+ {n:"Pull Up", d:"2022-05-27", s:2789122, r:0.01368, t0:"2026-08-07"},
+ {n:"Que Puedo Hacer?", d:"2022-05-27", s:2034278, r:0.00878, t0:"2026-08-07"},
+ {n:"Como Ayer", d:"2022-05-27", s:2073881, r:0.01134, t0:"2026-08-07"},
+ {n:"Breathe", d:"2022-05-27", s:2750098, r:0.00921, t0:"2026-08-07"},
+ {n:"Mama", d:"2022-05-27", s:1711569, r:0.0061, t0:"2026-08-07"},
+ {n:"La Incondicional", d:"2022-05-27", s:1136490, r:0.00361, t0:"2026-08-07"},
+ {n:"La Incondicional (live from Benjamin's)", d:"2022-04-19", s:2293435, r:0.00652, t0:"2026-08-07"},
+ {n:"Moving Like That", d:"2022-02-05", s:11633488, r:0.02588, t0:"2026-08-07"},
+ {n:"Mi Casa Su Casa", d:"2022-01-07", s:25287666, r:0.09324, t0:"2026-08-07"},
+ {n:"Yo Dije OUFF", d:"2021-07-21", s:10003022, r:0.012, t0:"2026-08-07"},
+ {n:"Symphony", d:"2021-07-09", s:7783599, r:0.016, t0:"2026-08-07"},
+ {n:"Remember", d:"2021-07-09", s:5136103, r:0.012, t0:"2026-08-07"},
+ {n:"It Takes A Fool To Remain Sane", d:"2021-07-02", s:14806397, r:0.017, t0:"2026-08-07"},
+ {n:"Alla Ba OUFF", d:"2021-05-07", s:4295747, r:0.010, t0:"2026-08-07"},
+ {n:"Läppar", d:"2020-07-17", s:2793677, r:0.006, t0:"2026-08-07"},
+ {n:"Jag e nån annan", d:"2020-05-15", s:3022528, r:0.008, t0:"2026-08-07"},
+ {n:"Dale Bye", d:"2020-04-17", s:487110, r:0.002, t0:"2026-08-07"}, /* date et streams fournis le 20.07.2026 · rythme estimé */
+ {n:"Dum", d:"2020-01-24", s:15060058, r:0.010, t0:"2026-08-07"},
+ {n:"Dum (Singback version)", d:"2020-01-24", s:570370, r:0.001, t0:"2026-08-07"},
+ {n:"På min telephone toda la noche", d:"2019-08-02", s:2557487, r:0.006, t0:"2026-08-07"},
+ {n:"Om om och om igen", d:"2019-02-16", s:13327060, r:0.010, t0:"2026-08-07"},
+ {n:"La Mesa (feat. Elias Hurtig)", d:"2018-08-17", s:3299207, r:0.009, t0:"2026-08-07"},
+ {n:"Que Pasa (feat. Lamix)", d:"2018-02-23", s:7434766, r:0.008, t0:"2026-08-07"},
+ {n:"Sorry (reprise de Madonna)", d:"2024-06-18", yt:true, vues:252972, s:252972, r:0, t0:"2026-08-07"},
 ];
 const BIO = {
  fr:[
@@ -3767,16 +3834,20 @@ function rendreTimeline(){
     <p style="font-size:.68rem;color:var(--beige);margin-bottom:8px">✦ ${t("x.omStreamNote")}</p>
     <div class="verre" style="margin-top:10px;padding:10px 18px">
     ${(()=>{let anC="";return DISCO.map(m=>{
-      const y=m.d.slice(0,4);
-      const tete = y!==anC ? `<div class="tl-an" style="font-size:1.25rem;margin-top:${anC?"16":"4"}px">${(anC=y,y)}</div>` : "";
-      const t0m=m.t0 ? new Date(m.t0+"T00:00:00Z").getTime() : Math.max(new Date(m.d+"T00:00:00Z").getTime(),T0_STREAMS);
+      const y=m.d?m.d.slice(0,4):"";
+      const tete = (y && y!==anC) ? `<div class="tl-an" style="font-size:1.25rem;margin-top:${anC?"16":"4"}px">${(anC=y,y)}</div>` : "";
+      const t0m=m.t0 ? new Date(m.t0+"T00:00:00Z").getTime() : Math.max(new Date((m.d||"2026-01-01")+"T00:00:00Z").getTime(),T0_STREAMS);
       const vg=PHOTOS_CHANSONS[m.n];
+      const sousTitre = m.d ? new Date(m.d).toLocaleDateString(LOCALES[LANG],{day:"numeric",month:"short",year:"numeric"}) : (m.yt?"YouTube":"");
+      const compteur = m.yt
+        ? `<span class="pt">▶ ${(m.vues||m.s||0).toLocaleString(LOCALES[LANG])}</span>`
+        : `<span class="pt" data-live data-s="${m.s}" data-r="${m.r}" data-t0="${t0m}"></span>`;
       return tete+`
         <div class="rangp" style="grid-template-columns:26px ${vg?"52px ":""}1fr auto">
           <button class="lecture" style="width:22px;height:22px;border-radius:50%;border:none;background:var(--degrade);color:#fff;font-size:.55rem" onclick="ecouterChanson('${m.n.replace(/\(.*\)/,"").trim().replace(/'/g,"\\'")}')">▶</button>
           ${vg?`<img class="vig" src="${vg}" alt="" loading="lazy">`:""}
-          <span style="font-size:.82rem">${m.n}<small style="display:block;color:var(--beige);font-size:.6rem">${new Date(m.d).toLocaleDateString(LOCALES[LANG],{day:"numeric",month:"short",year:"numeric"})}</small></span>
-          <span class="pt" data-live data-s="${m.s}" data-r="${m.r}" data-t0="${t0m}"></span>
+          <span style="font-size:.82rem">${m.n}<small style="display:block;color:var(--beige);font-size:.6rem">${sousTitre}</small></span>
+          ${compteur}
         </div>`;}).join("");})()}
     </div>
   `;
@@ -5808,21 +5879,164 @@ function rendreFormConcerts(){
       <label><input type="radio" name="lieuYR" value="non" checked><span>NO</span></label>
     </div>`;
 }
-function tamponsDepuisFormulaire(){
-  let ajoutes=0;
-  document.querySelectorAll(".cb-concert:checked").forEach(cb=>{
-    const tr=TOURNEES.find(x=>x.id===cb.dataset.tour), d=tr.dates[+cb.dataset.i];
-    PASSEPORT.push({flag:d.f, ville:d.v, date:d.d, tour:lgOm(tr.nom)});
-    ajoutes++;
-  });
-  const yr=document.querySelector('input[name="lieuYR"]:checked');
-  if(yr && yr.value==="oui"){
-    PASSEPORT.push({flag:"👑", ville:"Young Royals", date:"Hillerska", tour:"Filming locations"});
-    ajoutes++;
-  }
-  if(ajoutes>0){ rendreProfil(); }
-  return ajoutes;
+/* clé unique d'un concert = idTournée#index ; "YR" = lieu de tournage Young Royals.
+   On stocke cette liste de clés dans Supabase (colonne concerts_vus) → même passeport
+   et mêmes points sur tous les appareils, pour tout le monde. */
+function concertsVusCoches(sel){
+  var cles=[];
+  document.querySelectorAll((sel||".cb-concert")+":checked").forEach(function(cb){ cles.push(cb.dataset.tour+"#"+cb.dataset.i); });
+  var yr=document.querySelector('input[name="'+(sel?"lieuYRedit":"lieuYR")+'"]:checked');
+  if(yr && yr.value==="oui") cles.push("YR");
+  return cles;
 }
+function passeportDepuisCles(cles){
+  var pp=[];
+  (cles||[]).forEach(function(cle){
+    if(cle==="YR"){ pp.push({flag:"👑", ville:"Young Royals", date:"Hillerska", tour:"Filming locations"}); return; }
+    var parts=String(cle).split("#"), tr=TOURNEES.find(function(x){return x.id===parts[0];}); if(!tr)return;
+    var d=tr.dates[+parts[1]]; if(!d)return;
+    pp.push({flag:d.f, ville:d.v, date:d.d, tour:lgOm(tr.nom)});
+  });
+  return pp;
+}
+function nbConcerts(cles){ return (cles||[]).filter(function(c){return c!=="YR";}).length; }
+function aLieuYR(cles){ return (cles||[]).indexOf("YR")!==-1; }
+function tamponsDepuisFormulaire(){
+  var cles=concertsVusCoches();
+  PASSEPORT = passeportDepuisCles(cles);      /* remplace (jamais de doublon) */
+  window.MES_CONCERTS_VUS = cles;
+  if(cles.length>0){ rendreProfil(); }
+  return nbConcerts(cles);
+}
+window.concertsVusCoches=concertsVusCoches; window.passeportDepuisCles=passeportDepuisCles;
+window.nbConcerts=nbConcerts; window.aLieuYR=aLieuYR;
+/* Éditeur « Mes concerts » : un fan connecté coche/décoche ses concerts après coup.
+   Enregistrement direct dans Supabase (concerts_vus), recalcul des points et du classement. */
+function ouvrirEditeurConcerts(){
+  var box=document.getElementById("editeurConcerts"); if(!box)return;
+  var cles=window.MES_CONCERTS_VUS||[];
+  var estCoche=function(k){return cles.indexOf(k)!==-1;};
+  var html=`<p class="note-modo" style="margin:0 0 8px">✦ ${t("form.stampNote")}</p>`;
+  TOURNEES.filter(function(tr){return !tr.tbc;}).forEach(function(tr){
+    var ouvert=tr.dates.some(function(d,i){return estCoche(tr.id+"#"+i);})?"open":"";
+    html+=`<details class="pays" style="margin-top:8px" ${ouvert}>
+      <summary style="font-size:.92rem">${lgOm(tr.nom)} <span style="font-family:'Poppins';font-size:.6rem;color:var(--beige)">· ${tr.periode}</span></summary>
+      <div style="display:grid;grid-template-columns:1fr;gap:2px;margin:8px 0 4px">`;
+    tr.dates.forEach(function(d,i){
+      html+=`<label style="display:flex;align-items:center;gap:10px;margin:0;text-transform:none;letter-spacing:0;font-size:.8rem;color:var(--blanc);font-weight:300">
+        <input type="checkbox" class="cb-concert-edit" data-tour="${tr.id}" data-i="${i}" ${estCoche(tr.id+"#"+i)?"checked":""} style="accent-color:var(--bordeaux);width:16px;height:16px">
+        ${d.f} ${d.v} <span style="color:var(--beige);font-size:.66rem">${d.d}${d.lieu?" · "+d.lieu:""}</span></label>`;
+    });
+    html+=`</div></details>`;
+  });
+  html+=`<label style="margin-top:18px;display:block">${t("form.yr")}</label>
+    <div class="ouinon">
+      <label><input type="radio" name="lieuYRedit" value="oui" ${estCoche("YR")?"checked":""}><span>YES 👑</span></label>
+      <label><input type="radio" name="lieuYRedit" value="non" ${estCoche("YR")?"":"checked"}><span>NO</span></label>
+    </div>
+    <button class="btn btn-large" style="margin-top:14px" onclick="enregistrerMesConcerts()">💾 ${t("cc.save")}</button>`;
+  box.innerHTML=html; box.style.display="";
+  box.scrollIntoView({behavior:"smooth",block:"start"});
+}
+async function enregistrerMesConcerts(){
+  var cles=concertsVusCoches(".cb-concert-edit");
+  var ok=await majFicheSupabase({concerts_vus:cles});
+  if(ok===false) return;                         /* le message d'erreur est déjà affiché */
+  window.MES_CONCERTS_VUS=cles;
+  PASSEPORT=passeportDepuisCles(cles);
+  if(typeof MOI!=="undefined"&&MOI) MOI.concerts=nbConcerts(cles);
+  var mf=(window.REGISTRE_FANS||[]).find(function(f){return f.fanId===window.MON_PROFIL_ID;});
+  if(mf){ mf.tampons=nbConcerts(cles); mf.lieuYR=aLieuYR(cles); mf.concertsVus=cles; }
+  var box=document.getElementById("editeurConcerts"); if(box) box.style.display="none";
+  toast(t("cc.saved"));
+  if(window.toutMettreAJour) toutMettreAJour(false);
+}
+window.ouvrirEditeurConcerts=ouvrirEditeurConcerts; window.enregistrerMesConcerts=enregistrerMesConcerts;
+/* ---------- CLASSEMENT DES CHANSONS (perso + cumul communauté) ----------
+   Le fan classe toutes les chansons d'Omar (liste DISCO, avec pochettes).
+   Son ordre est enregistré (Supabase, colonne classement_chansons) et sert
+   à un classement cumulé de toute la communauté. */
+function ordreChansonsDefaut(){
+  return (typeof DISCO!=="undefined"?DISCO:[]).slice().sort(function(a,b){return (b.s||0)-(a.s||0);}).map(function(m){return m.n;});
+}
+/* mon classement, complété : toutes les chansons présentes, dans mon ordre, le reste par défaut à la suite */
+function monClassementComplet(){
+  var noms=(typeof DISCO!=="undefined"?DISCO:[]).map(function(m){return m.n;});
+  var c=(window.MON_CLASSEMENT_CHANSONS||[]).filter(function(n){return noms.indexOf(n)!==-1;});
+  ordreChansonsDefaut().forEach(function(n){ if(c.indexOf(n)===-1) c.push(n); });
+  return c;
+}
+function ouvrirEditeurChansons(){
+  window.EDIT_CLASSEMENT = monClassementComplet();
+  var box=document.getElementById("editeurChansons"); if(!box)return;
+  box.style.display=""; rendreEditeurChansons();
+  box.scrollIntoView({behavior:"smooth",block:"start"});
+}
+function rendreEditeurChansons(){
+  var box=document.getElementById("editeurChansons"); if(!box)return;
+  var c=window.EDIT_CLASSEMENT||[];
+  box.innerHTML = c.map(function(n,i){
+    var vg=PHOTOS_CHANSONS[n];
+    return '<div class="rang-chanson">'
+      +'<span class="rc-num">'+(i+1)+'</span>'
+      +(vg?'<img class="vig" src="'+vg+'" alt="" loading="lazy">':'<span class="vig-vide"></span>')
+      +'<span class="rc-nom">'+n+'</span>'
+      +'<span class="rc-btns">'
+      +'<button onclick="bougerChanson('+i+',\'top\')" title="'+t("cs.top")+'" '+(i===0?'disabled':'')+'>⤒</button>'
+      +'<button onclick="bougerChanson('+i+',-1)" '+(i===0?'disabled':'')+'>▲</button>'
+      +'<button onclick="bougerChanson('+i+',1)" '+(i===c.length-1?'disabled':'')+'>▼</button>'
+      +'</span></div>';
+  }).join("")
+  + '<button class="btn btn-large" style="margin-top:14px" onclick="enregistrerClassementChansons()">💾 '+t("cs.save")+'</button>';
+}
+function bougerChanson(i,dir){
+  var c=window.EDIT_CLASSEMENT; if(!c)return;
+  if(dir==='top'){ if(i<=0)return; var it=c.splice(i,1)[0]; c.unshift(it); }
+  else { var j=i+dir; if(j<0||j>=c.length)return; var tmp=c[i]; c[i]=c[j]; c[j]=tmp; }
+  rendreEditeurChansons();
+}
+async function enregistrerClassementChansons(){
+  var c=window.EDIT_CLASSEMENT||[];
+  var ok=await majFicheSupabase({classement_chansons:c});
+  if(ok===false) return;
+  window.MON_CLASSEMENT_CHANSONS=c.slice();
+  var mf=(window.REGISTRE_FANS||[]).find(function(f){return f.fanId===window.MON_PROFIL_ID;});
+  if(mf) mf.classementChansons=c.slice();
+  var box=document.getElementById("editeurChansons"); if(box) box.style.display="none";
+  toast(t("cs.saved"));
+  if(window.rendreProfil) rendreProfil();
+  if(window.toutMettreAJour) toutMettreAJour(false);
+}
+/* cumul de tous les fans : chanson en position p (sur N) rapporte (N-p) points */
+function classementChansonsCommunaute(){
+  var scores={};
+  (window.REGISTRE_FANS||[]).forEach(function(fn){
+    var c=fn.classementChansons; if(!c||!c.length)return;
+    var N=c.length;
+    c.forEach(function(n,i){ scores[n]=(scores[n]||0)+(N-i); });
+  });
+  return Object.keys(scores).map(function(n){return [n,scores[n]];}).sort(function(a,b){return b[1]-a[1];});
+}
+window.ouvrirEditeurChansons=ouvrirEditeurChansons; window.rendreEditeurChansons=rendreEditeurChansons;
+window.bougerChanson=bougerChanson; window.enregistrerClassementChansons=enregistrerClassementChansons;
+window.classementChansonsCommunaute=classementChansonsCommunaute; window.monClassementComplet=monClassementComplet;
+(function(){var st=document.createElement("style");st.textContent=`
+.rang-chanson{display:flex;align-items:center;gap:10px;padding:6px 4px;border-bottom:1px solid rgba(255,255,255,.07)}
+.rang-chanson .rc-num{font-family:'Bebas Neue';font-size:1rem;color:var(--bordeaux);min-width:26px;text-align:center}
+.rang-chanson .vig,.rang-chanson .vig-vide{width:40px;height:40px;border-radius:6px;object-fit:cover;flex:0 0 auto}
+.rang-chanson .vig-vide{background:rgba(255,255,255,.08)}
+.rang-chanson .rc-nom{flex:1;font-size:.8rem;line-height:1.2}
+.rang-chanson .rc-btns{display:flex;gap:4px}
+.rang-chanson .rc-btns button{width:30px;height:30px;border-radius:8px;border:1px solid rgba(255,255,255,.18);background:rgba(255,255,255,.05);color:var(--beige);font-size:.8rem;cursor:pointer}
+.rang-chanson .rc-btns button:disabled{opacity:.3;cursor:default}
+#editeurChansons{max-height:60vh;overflow-y:auto;margin-top:10px;padding-right:6px}
+.chanson-com{display:flex;align-items:center;gap:10px;padding:5px 0}
+.chanson-com .cc-num{font-family:'Bebas Neue';font-size:1.1rem;color:var(--rose);min-width:24px;text-align:center}
+.chanson-com .vig,.chanson-com .vig-vide{width:34px;height:34px;border-radius:5px;object-fit:cover;flex:0 0 auto}
+.chanson-com .vig-vide{background:rgba(255,255,255,.08)}
+.chanson-com .cc-nom{flex:1;font-size:.78rem}
+.chanson-com .cc-pts{font-size:.66rem;color:var(--beige);white-space:nowrap}
+`;document.head.appendChild(st);})();
 
 /* ---------- FAN PROJECTS : propositions + votes ---------- */
 const FAN_PROJETS=[
@@ -5917,6 +6131,21 @@ function rendreProfil(){
   var debutFan = MOI.fanDepuisAnnee ? new Date(MOI.fanDepuisAnnee,0,1) : (MOI.depuis?new Date(MOI.depuis):null);
   const jours = debutFan ? Math.max(0,Math.floor((Date.now()-debutFan)/864e5)) : 0;
   const mi = monIndexHistoire();
+  /* mes points, calculés depuis MA fiche (celle de mon compte connecté) */
+  var monFan = (window.REGISTRE_FANS||[]).find(function(f){return f.fanId && window.MON_PROFIL_ID && f.fanId===window.MON_PROFIL_ID;});
+  var mesPoints = monFan ? pointsFan(monFan) : 0;
+  var monDetail = monFan ? detailPoints(monFan) : [];
+  var monClsChansons = (typeof monClassementComplet==="function") ? monClassementComplet() : [];
+  var clsCommunaute = (typeof classementChansonsCommunaute==="function") ? classementChansonsCommunaute() : [];
+  var carterPoints = monFan ? `<div class="verre" style="margin-top:14px">
+      <h3 style="color:var(--rose)">⭐ ${t("pt.title")}</h3>
+      <div style="font-family:'Bebas Neue';font-size:2.6rem;color:var(--bordeaux);text-shadow:0 0 14px var(--lueur);text-align:center;line-height:1">${mesPoints.toLocaleString(LOCALES[LANG])} <span style="font-size:.9rem;letter-spacing:.1em">${t("pt.total")}</span></div>
+      <p style="font-size:.66rem;letter-spacing:.16em;text-transform:uppercase;color:var(--beige);margin:14px 0 6px">${t("pt.detail")}</p>
+      ${monDetail.map(function(l){
+        var suff = (l[3]!==undefined) ? ` <span style="color:var(--beige);font-weight:300">×${l[3]}</span>` : "";
+        return `<div style="display:flex;justify-content:space-between;align-items:center;font-size:.84rem;padding:5px 0;border-bottom:1px solid rgba(255,255,255,.07)"><span>${l[0]} ${t(l[1])}${suff}</span><b style="color:var(--bordeaux);white-space:nowrap">+${l[2]}</b></div>`;
+      }).join("")}
+    </div>` : ``;
   s.innerHTML=`<p class="eyebrow">${t("x.prEyebrow")}</p><h2>${t("x.prTitle")}</h2>
     <div class="verre" style="margin-top:12px;text-align:center">
       <div class="valeur" style="font-family:'Bebas Neue';font-size:2.6rem;color:var(--bordeaux);text-shadow:0 0 16px var(--lueur)">${jours.toLocaleString(LOCALES[LANG])}</div>
@@ -5928,6 +6157,7 @@ function rendreProfil(){
           .map(([e,v,k])=>`<div class="stat verre" style="padding:12px 8px"><div class="valeur" style="font-size:1.5rem">${e} ${v}</div><div class="label">${t(k)}</div></div>`).join("")}
       </div>
     </div>
+    ${carterPoints}
     ${mi>=0?`<div class="verre" style="margin-top:14px;text-align:center">
       <h3 style="color:var(--rose)">${t("x.myCard")}</h3>
       ${HISTOIRES[mi].photoFan?`<div class="avatar" style="width:84px;height:84px;margin:6px auto 10px;background:url(${HISTOIRES[mi].photoFan}) center/cover;border-radius:50%;border:2px solid var(--rose)"></div>`:`<p style="font-size:.8rem;color:var(--beige)">${t("x.noPhoto")}</p>`}
@@ -5938,6 +6168,27 @@ function rendreProfil(){
       </div>
       <p style="font-size:.72rem;color:var(--beige);margin-top:8px">${t("x.storyInStories")}</p>
     </div>`:``}
+    ${window.MON_PROFIL_ID?`<div class="verre" style="margin-top:14px">
+      <h3 style="color:var(--rose)">🎤 ${t("cc.title")}</h3>
+      <p style="font-size:.78rem;color:var(--beige)">${t("cc.intro")}</p>
+      <button class="btn btn-large" style="margin-top:10px" onclick="ouvrirEditeurConcerts()">✏️ ${t("cc.edit")}</button>
+      <div id="editeurConcerts" style="display:none;margin-top:12px"></div>
+    </div>`:``}
+    ${window.MON_PROFIL_ID?`<div class="verre" style="margin-top:14px">
+      <h3 style="color:var(--rose)">🎵 ${t("cs.title")}</h3>
+      <p style="font-size:.78rem;color:var(--beige)">${t("cs.intro")}</p>
+      ${(window.MON_CLASSEMENT_CHANSONS&&window.MON_CLASSEMENT_CHANSONS.length)?`
+        <p style="font-size:.66rem;letter-spacing:.14em;text-transform:uppercase;color:var(--beige);margin:12px 0 4px">${t("cs.mine")}</p>
+        ${monClsChansons.slice(0,5).map(function(n,i){var vg=PHOTOS_CHANSONS[n];return '<div class="chanson-com"><span class="cc-num">'+(i+1)+'</span>'+(vg?'<img class="vig" src="'+vg+'" alt="" loading="lazy">':'<span class="vig-vide"></span>')+'<span class="cc-nom">'+n+'</span></div>';}).join("")}
+      `:``}
+      <button class="btn btn-large" style="margin-top:12px" onclick="ouvrirEditeurChansons()">✏️ ${t("cs.edit")}</button>
+      <div id="editeurChansons" style="display:none"></div>
+    </div>`:``}
+    <div class="verre" style="margin-top:14px">
+      <h3 style="color:var(--rose)">🏆 ${t("cs.communityTitle")}</h3>
+      <p style="font-size:.78rem;color:var(--beige)">${t("cs.communityIntro")}</p>
+      ${clsCommunaute.length?clsCommunaute.slice(0,15).map(function(e,i){var n=e[0],p=e[1],vg=PHOTOS_CHANSONS[n];return '<div class="chanson-com"><span class="cc-num">'+(i+1)+'</span>'+(vg?'<img class="vig" src="'+vg+'" alt="" loading="lazy">':'<span class="vig-vide"></span>')+'<span class="cc-nom">'+n+'</span><span class="cc-pts">'+p+' '+t("cs.pts")+'</span></div>';}).join(""):'<p style="font-size:.78rem;color:var(--beige);margin-top:8px">'+t("cs.none")+'</p>'}
+    </div>
     <div class="verre" style="margin-top:14px">
       <h3 style="color:var(--rose)">${t("x.ppTitle")}</h3>
       <p style="font-size:.78rem;color:var(--beige)">${t("x.ppNote")}</p>
@@ -6386,7 +6637,7 @@ async function chargerFansSupabase(){
   if(!window._sb) return;
   try{
     const rep=await window._sb.from("fans")
-      .select("id,user_id,pseudo,ville,pays,date_naissance,histoire,photo,photo_histoire,chanson,insta,annee,concert,rencontre").eq("valide",true);
+      .select("id,user_id,pseudo,ville,pays,date_naissance,histoire,photo,photo_histoire,chanson,insta,annee,concert,rencontre,concerts_vus,classement_chansons").eq("valide",true);
     if(rep.error){ console.warn("Supabase lecture fans:",rep.error.message); return; }
     const data=rep.data||[];
     if(!data.length) return;
@@ -6413,7 +6664,7 @@ async function chargerFansSupabase(){
         annee:row.annee||(new Date()).getFullYear(),
         chanson:row.chanson||"", insta:row.insta||"", concert:row.concert||"",
         rencontre:!!row.rencontre, histoire:row.histoire||"",
-        photo:row.photo||null, photoHistoire:row.photo_histoire||null, tampons:0, inscritLe:(new Date()).toISOString() });
+        photo:row.photo||null, photoHistoire:row.photo_histoire||null, tampons:nbConcerts(row.concerts_vus), lieuYR:aLieuYR(row.concerts_vus), concertsVus:row.concerts_vus||[], classementChansons:row.classement_chansons||[], inscritLe:(new Date()).toISOString() });
     });
     toutMettreAJour(true);
     if(window.rendreHistoires) rendreHistoires();
@@ -6473,7 +6724,7 @@ async function chargerMonProfil(){
   if(!window._sb || !window.MON_USER){ return; }
   try{
     var r=await window._sb.from("fans")
-      .select("id,user_id,pseudo,ville,pays,date_naissance,histoire,photo,photo_histoire,chanson,insta,annee,concert,rencontre")
+      .select("id,user_id,pseudo,ville,pays,date_naissance,histoire,photo,photo_histoire,chanson,insta,annee,concert,rencontre,concerts_vus,classement_chansons")
       .eq("user_id", window.MON_USER.id).limit(1);
     if(r.error){ console.warn("mon profil:",r.error.message); return; }
     var row=(r.data&&r.data[0])||null;
@@ -6485,6 +6736,8 @@ async function chargerMonProfil(){
       existe.fanId=row.id;
       if(row.photo) existe.photo=row.photo;
       if(row.photo_histoire) existe.photoHistoire=row.photo_histoire;
+      existe.tampons=nbConcerts(row.concerts_vus); existe.lieuYR=aLieuYR(row.concerts_vus); existe.concertsVus=row.concerts_vus||[];
+      existe.classementChansons=row.classement_chansons||[];
       /* mettre à jour aussi l'entrée d'histoire (pour que les boutons de modif s'affichent) */
       var hx=(typeof HISTOIRES!=="undefined"?HISTOIRES:[]).find(function(x){return ((x.prenom||"")+"|"+(x.ville||"")).toLowerCase()===cle;});
       if(hx){ hx.fanId=row.id;
@@ -6499,9 +6752,12 @@ async function chargerMonProfil(){
       integrerFan({ prenom:row.pseudo||"Fan", code:code, ville:row.ville||"", fanId:row.id,
         drapeau:drapeauISO(code), age:age, depuis:(row.annee?String(row.annee):""), annee:row.annee||(new Date()).getFullYear(),
         chanson:row.chanson||"", insta:row.insta||"", concert:row.concert||"", rencontre:!!row.rencontre,
-        histoire:row.histoire||"", photo:row.photo||null, photoHistoire:row.photo_histoire||null, tampons:0, inscritLe:(new Date()).toISOString() });
+        histoire:row.histoire||"", photo:row.photo||null, photoHistoire:row.photo_histoire||null, tampons:nbConcerts(row.concerts_vus), lieuYR:aLieuYR(row.concerts_vus), concertsVus:row.concerts_vus||[], classementChansons:row.classement_chansons||[], inscritLe:(new Date()).toISOString() });
     }
-    if(typeof MOI!=="undefined"&&MOI){ MOI.fanId=row.id; MOI.prenom=row.pseudo; MOI.ville=row.ville; if(row.annee) MOI.fanDepuisAnnee=row.annee; if(window.sauverBD) sauverBD(); }
+    window.MES_CONCERTS_VUS = row.concerts_vus||[];
+    window.MON_CLASSEMENT_CHANSONS = row.classement_chansons||[];
+    PASSEPORT = passeportDepuisCles(window.MES_CONCERTS_VUS);
+    if(typeof MOI!=="undefined"&&MOI){ MOI.fanId=row.id; MOI.prenom=row.pseudo; MOI.ville=row.ville; MOI.concerts=nbConcerts(window.MES_CONCERTS_VUS); if(row.annee) MOI.fanDepuisAnnee=row.annee; if(window.sauverBD) sauverBD(); }
     if(window.toutMettreAJour) toutMettreAJour(true);
     if(window.rendreHistoires) rendreHistoires();
     if(window.rendreExtension) rendreExtension();
