@@ -534,7 +534,7 @@ footer .marque{font-family:'Bebas Neue';font-size:1.1rem;letter-spacing:.15em;co
         <p style="margin:4px 0"><span data-i18n="acc.connected">Connected:</span> <b id="auth-qui"></b></p>
         <button type="button" class="btn fantome" onclick="seDeconnecter()" data-i18n="acc.logout">Log out</button>
       </div>
-      <div style="font-size:.66rem;opacity:.5;margin-top:8px">version : COMPTES-6</div>
+      <div style="font-size:.66rem;opacity:.5;margin-top:8px">version : COMPTES-7</div>
     </div>
     <div class="verre" id="dejaFiche" style="display:none;margin-bottom:16px">
       <h3 class="accent" data-i18n="acc.haveCard">Your card is created ✓</h3>
@@ -1119,6 +1119,7 @@ en:{
   "pg.a4":"Tell your story in the Collaborative Book","pg.a5":"Add a concert photo","pg.a6":"Add a photo with Omar",
   "pg.a7":"Invite a friend","pg.a8":"Enter a contest","pg.a9":"Go to an Omar concert","pg.a10":"Go to a festival",
   "pg.a11":"Join a fan meetup","pg.a12":"Share association news","pg.a13":"Make a donation","pg.a14":"Renew your membership","pg.a15":"Birthday bonus",
+  "pgb.1":"Create your profile","pgb.2":"Share your story","pgb.3":"Add your profile photo","pgb.4":"Add your background photo","pgb.5":"Each concert attended","pgb.6":"Visit a Young Royals filming location","pgb.7":"A like","pgb.8":"A comment","pgb.9":"A vote","pgb.10":"Pick a best moment","pgb.11":"Each Omar drawing","pgb.12":"A selfie with Omar (published)","pgb.13":"Loyalty bonus · per year as a fan","pgb.14":"Join the association","pgb.15":"Each donation to the association","pgb.16":"Enter a contest","pgb.17":"Attend a fan meet-up","pgb.18":"A DIY Omar clothing item","pgb.19":"Tour merch","pgb.20":"Each OMR Beauty product","pgb.21":"Each badge earned",
   "pg.badgesTitle":"🏅 Unlock badges",
   "pg.g1":"First steps","pg.g2":"Concerts","pg.g3":"Community","pg.g4":"Memories","pg.g5":"Loyalty","pg.g6":"International engagement","pg.g7":"Exclusive badges",
   "pg.bg1a":"Welcome to the community","pg.bg1b":"First member on the Fan Map","pg.bg1c":"First story published","pg.bg1d":"First photo shared","pg.bg1e":"First donation",
@@ -1223,6 +1224,7 @@ fr:{
   "pg.a4":"Raconter ton histoire dans le Livre Collaboratif","pg.a5":"Ajouter une photo de concert","pg.a6":"Ajouter une photo avec Omar",
   "pg.a7":"Inviter un ami","pg.a8":"Participer à un concours","pg.a9":"Aller à un concert d'Omar","pg.a10":"Aller à un festival",
   "pg.a11":"Participer à une rencontre de fans","pg.a12":"Partager une actualité de l'association","pg.a13":"Faire un don","pg.a14":"Renouveler ton adhésion","pg.a15":"Bonus anniversaire",
+  "pgb.1":"Créer ton profil","pgb.2":"Raconter ton histoire","pgb.3":"Ajouter ta photo de profil","pgb.4":"Ajouter ta photo de fond","pgb.5":"Chaque concert vu","pgb.6":"Visiter un lieu de tournage Young Royals","pgb.7":"Un like","pgb.8":"Un commentaire","pgb.9":"Un vote","pgb.10":"Élire un meilleur moment","pgb.11":"Chaque dessin d'Omar","pgb.12":"Un selfie avec Omar (publié)","pgb.13":"Bonus fidélité · par année de fan","pgb.14":"Adhérer à l'association","pgb.15":"Chaque don à l'association","pgb.16":"Participer à un jeu-concours","pgb.17":"Participer à une rencontre de fans","pgb.18":"Un vêtement DIY avec Omar","pgb.19":"Du merch de tournée","pgb.20":"Chaque produit OMR Beauty","pgb.21":"Chaque badge gagné",
   "pg.badgesTitle":"🏅 Débloque des badges",
   "pg.g1":"Premiers pas","pg.g2":"Concerts","pg.g3":"Communauté","pg.g4":"Souvenirs","pg.g5":"Fidélité","pg.g6":"Engagement international","pg.g7":"Badges exclusifs",
   "pg.bg1a":"Bienvenue dans la communauté","pg.bg1b":"Premier membre sur la Fan Map","pg.bg1c":"Première histoire publiée","pg.bg1d":"Première photo partagée","pg.bg1e":"Premier don",
@@ -3381,15 +3383,21 @@ stylePg.textContent=`
 `;
 document.head.appendChild(stylePg);
 
+/* Barème validé (identique à celui utilisé pour calculer les points réels) */
 const PG_ACTIONS=[
-  ["🎉","pg.a1",100],["👤","pg.a2",100],["📍","pg.a3",100],["📖","pg.a4",250],["📸","pg.a5",75],
-  ["❤️","pg.a6",150],["👥","pg.a7",200],["🎟️","pg.a8",50],["🎤","pg.a9",200],["🎶","pg.a10",200],
-  ["🤝","pg.a11",150],["📢","pg.a12",100],["❤️","pg.a13",500],["⭐","pg.a14",500],["🎂","pg.a15",100],
+  ["🎫","pgb.1",50],["📖","pgb.2",30],["📷","pgb.3",15],["🖼️","pgb.4",10],
+  ["🎤","pgb.5",5],["👑","pgb.6",20],
+  ["❤️","pgb.7",1],["💬","pgb.8",1],["🗳️","pgb.9",1],["🌟","pgb.10",3],
+  ["🎨","pgb.11",1],["🤳","pgb.12",10],
+  ["🎂","pgb.13",50],
+  ["⭐","pgb.14",30],["💝","pgb.15",20],["🎟️","pgb.16",15],["🤝","pgb.17",15],
+  ["👕","pgb.18",10],["🛍️","pgb.19",5],["💄","pgb.20",5],
+  ["🏅","pgb.21",10],
 ];
 const PG_NIVEAUX=[
-  ["🌱","New Fan",0],["⭐","Fan",500],["🎵","Super Fan",1000],["🌍","International Fan",2500],
-  ["🔥","Community Hero",5000],["💎","Elite Member",10000],["👑","Ambassador",20000],
-  ["🌟","Legend",50000],["🏆","Hall of Fame",100000],
+  ["🌱","New Fan",0],["⭐","Fan",100],["🎵","Super Fan",250],["🌍","International Fan",500],
+  ["🔥","Community Hero",1000],["💎","Elite Member",2000],["👑","Ambassador",3500],
+  ["🌟","Legend",5000],["🏆","Hall of Fame",8000],
 ];
 const PG_BADGES=[
   ["🌟","pg.g1",[["🥇","pg.bg1a"],["🌍","pg.bg1b"],["📖","pg.bg1c"],["📸","pg.bg1d"],["❤️","pg.bg1e"]]],
@@ -3440,10 +3448,10 @@ function rendreProgression(){
     <div class="verre">
       <h3>${t("pg.rewards")}</h3>
       <p class="intro-pg" style="margin-top:0">${t("pg.rewardsTxt")}</p>
-      ${[["⭐",(500).toLocaleString(LOCALES[LANG]),"pg.rw1"],
-         ["🎓",(1000).toLocaleString(LOCALES[LANG]),"pg.rw2"],
-         ["🖼️",(2500).toLocaleString(LOCALES[LANG]),"pg.rw3"],
-         ["🌟",(5000).toLocaleString(LOCALES[LANG]),"pg.rw4"],
+      ${[["⭐",(250).toLocaleString(LOCALES[LANG]),"pg.rw1"],
+         ["🎓",(500).toLocaleString(LOCALES[LANG]),"pg.rw2"],
+         ["🖼️",(1000).toLocaleString(LOCALES[LANG]),"pg.rw3"],
+         ["🌟",(2000).toLocaleString(LOCALES[LANG]),"pg.rw4"],
          ["🏆","Top 50","pg.rw5"],
          ["👑",t("pg.n1"),"pg.rw7"]]
         .map(([e,s,k])=>`<div class="rangp"><span class="emo-p">${e}</span><span>${t(k)}</span><span class="pt">${s}</span></div>`).join("")}
@@ -5960,8 +5968,15 @@ window.ouvrirEditeurConcerts=ouvrirEditeurConcerts; window.enregistrerMesConcert
    Le fan classe toutes les chansons d'Omar (liste DISCO, avec pochettes).
    Son ordre est enregistré (Supabase, colonne classement_chansons) et sert
    à un classement cumulé de toute la communauté. */
+/* ordre par défaut = de la plus récente à la plus ancienne (par date de sortie) */
 function ordreChansonsDefaut(){
-  return (typeof DISCO!=="undefined"?DISCO:[]).slice().sort(function(a,b){return (b.s||0)-(a.s||0);}).map(function(m){return m.n;});
+  return (typeof DISCO!=="undefined"?DISCO:[]).slice().sort(function(a,b){
+    var da=a.d||"", db=b.d||"";
+    if(da&&db) return db<da?-1:(db>da?1:0);   /* date décroissante */
+    if(da&&!db) return -1;                     /* les titres sans date à la fin */
+    if(!da&&db) return 1;
+    return 0;
+  }).map(function(m){return m.n;});
 }
 /* mon classement, complété : toutes les chansons présentes, dans mon ordre, le reste par défaut à la suite */
 function monClassementComplet(){
