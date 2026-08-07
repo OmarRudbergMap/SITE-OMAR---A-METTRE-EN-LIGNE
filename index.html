@@ -534,7 +534,7 @@ footer .marque{font-family:'Bebas Neue';font-size:1.1rem;letter-spacing:.15em;co
         <p style="margin:4px 0"><span data-i18n="acc.connected">Connected:</span> <b id="auth-qui"></b></p>
         <button type="button" class="btn fantome" onclick="seDeconnecter()" data-i18n="acc.logout">Log out</button>
       </div>
-      <div style="font-size:.66rem;opacity:.5;margin-top:8px">version : COMPTES-8</div>
+      <div style="font-size:.66rem;opacity:.5;margin-top:8px">version : COMPTES-9</div>
     </div>
     <div class="verre" id="dejaFiche" style="display:none;margin-bottom:16px">
       <h3 class="accent" data-i18n="acc.haveCard">Your card is created ✓</h3>
@@ -932,6 +932,7 @@ const PH_HAPPIER="photos/PH_HAPPIER.webp"
 const PH_HAPPIER_REMIX="photos/PH_HAPPIER_REMIX.webp"
 const PH_NOTABOY="photos/PH_NOTABOY.webp"
 const PH_EXCITED="photos/PH_EXCITED.webp"
+const PH_SORRY="photos/PH_SORRY.webp"
 const PH_SUNRISE="photos/PH_SUNRISE.webp"
 const PH_FOOL="photos/PH_FOOL.webp"
 const PH_JAGE="photos/PH_JAGE.webp"
@@ -993,6 +994,9 @@ const PHOTOS_CHANSONS={
   "Happier (Mystic Remix)":PH_HAPPIER_REMIX,
   "I'm Not a Boy":PH_NOTABOY,
   "I'm So Excited (club version)":PH_EXCITED,
+  "I'm So Excited (Live at QX Gala)":PH_EXCITED,
+  "I'm So Excited (additional version)":PH_EXCITED,
+  "Sorry (reprise de Madonna)":PH_SORRY,
   "In The Sunrise":PH_SUNRISE,
   "It Takes A Fool To Remain Sane":PH_FOOL,
   "Jag e nån annan":PH_JAGE,
@@ -6351,9 +6355,17 @@ function genererCarteConcerts(W,H,B){
 }
 function imprimerPasseport(){
   /* --- vraies cartes du site --- */
-  let imgMonde="", imgEU="";
+  let imgMonde="", imgEU="", imgGlobe="";
   try{ imgMonde=genererCarteConcerts(820,410,null).toDataURL("image/png"); }catch(e){}
   try{ imgEU=genererCarteConcerts(760,540,(typeof EU_CADRAGE!=="undefined"?EU_CADRAGE:null)).toDataURL("image/png"); }catch(e){}
+  /* Terre de la couverture : la mappemonde du site SANS les points lumineux */
+  try{
+    if(window.texCanvas){
+      var _cc=document.createElement("canvas"); _cc.width=820; _cc.height=410;
+      _cc.getContext("2d").drawImage(window.texCanvas,0,0,820,410);
+      imgGlobe=_cc.toDataURL("image/png");
+    } else { imgGlobe=imgMonde; }
+  }catch(e){ imgGlobe=imgMonde; }
   /* --- vraies infos du fan connecté --- */
   var moiFan=(window.REGISTRE_FANS||[]).find(function(f){return f.fanId&&window.MON_PROFIL_ID&&f.fanId===window.MON_PROFIL_ID;})||null;
   var M=(typeof MOI!=="undefined"&&MOI)?MOI:{};
@@ -6402,8 +6414,8 @@ function imprimerPasseport(){
     /* couverture façon page d'accueil (fond sombre + vraie Terre) */
     .couv{background:radial-gradient(circle at 50% 28%,#2a1030,#140a1a 62%,#0b0710);color:#fff;text-align:center;
           display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:78vh}
-    .couv .terre{width:230px;height:230px;border-radius:50%;object-fit:cover;margin:6px 0 18px;
-          box-shadow:0 0 0 5px rgba(255,255,255,.06),0 0 55px rgba(207,102,98,.6),0 0 100px rgba(230,120,155,.3)}
+    .couv .terre{width:min(92%,380px);height:min(92vw,380px);max-height:380px;border-radius:50%;object-fit:cover;margin:6px 0 22px;
+          box-shadow:0 0 0 6px rgba(255,255,255,.07),0 0 70px rgba(207,102,98,.65),0 0 120px rgba(230,120,155,.35)}
     .couv .eyebrow{font-family:Arial,Helvetica,sans-serif;font-size:11px;letter-spacing:.34em;text-transform:uppercase;color:#f0a24f}
     .couv h1{font-size:30px;letter-spacing:.16em;margin:10px 0 2px;color:#fff}
     .couv .marque{font-size:14px;letter-spacing:.26em;color:#ef8fb0}
@@ -6457,12 +6469,22 @@ function imprimerPasseport(){
     .num-page{position:absolute;bottom:12px;right:20px;font-size:10px;color:#c98ea6;letter-spacing:.1em}
     .np{text-align:center;margin:10px auto 26px}
     .np button{font-family:inherit;font-size:15px;padding:12px 26px;border:none;background:#b33533;color:#fff;border-radius:99px;cursor:pointer;box-shadow:0 4px 10px rgba(179,53,51,.3)}
-    @media print{.np{display:none} body{background:#fff;padding:0} .page{box-shadow:none;margin:0 auto;border-radius:0}}
+    @page{size:A4;margin:0}
+    @media print{
+      html,body{background:#fff;margin:0;padding:0}
+      .np{display:none}
+      .page{width:100%;max-width:none;min-height:296mm;margin:0;padding:17mm 16mm;border-radius:0;box-shadow:none;
+            page-break-after:always;overflow:visible}
+      .page:last-of-type{page-break-after:auto}
+      .page.couv{padding:0;overflow:hidden;justify-content:center}
+      .couv .terre{width:165mm;height:165mm;max-height:none;margin:0 0 16mm}
+      .grand-nombre .n{font-size:60px}
+    }
   </style></head><body>
   <p class="np"><button onclick="print()">🖨️ Imprimer / Enregistrer en PDF</button></p>
 
   <div class="page couv">
-    ${imgMonde?`<img class="terre" src="${imgMonde}" alt="">`:`<div class="terre" style="background:#0d3a56"></div>`}
+    ${imgGlobe?`<img class="terre" src="${imgGlobe}" alt="">`:`<div class="terre" style="background:#0d3a56"></div>`}
     <div class="eyebrow">Passeport officiel</div>
     <h1>OMAR RUDBERG</h1>
     <div class="marque">WORLD&nbsp;MAP&nbsp;·&nbsp;FANS</div>
