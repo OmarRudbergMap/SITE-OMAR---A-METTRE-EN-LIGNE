@@ -534,7 +534,7 @@ footer .marque{font-family:'Bebas Neue';font-size:1.1rem;letter-spacing:.15em;co
         <p style="margin:4px 0"><span data-i18n="acc.connected">Connected:</span> <b id="auth-qui"></b></p>
         <button type="button" class="btn fantome" onclick="seDeconnecter()" data-i18n="acc.logout">Log out</button>
       </div>
-      <div style="font-size:.66rem;opacity:.5;margin-top:8px">version : COMPTES-9</div>
+      <div style="font-size:.66rem;opacity:.5;margin-top:8px">version : COMPTES-10</div>
     </div>
     <div class="verre" id="dejaFiche" style="display:none;margin-bottom:16px">
       <h3 class="accent" data-i18n="acc.haveCard">Your card is created ✓</h3>
@@ -6471,14 +6471,15 @@ function imprimerPasseport(){
     .np button{font-family:inherit;font-size:15px;padding:12px 26px;border:none;background:#b33533;color:#fff;border-radius:99px;cursor:pointer;box-shadow:0 4px 10px rgba(179,53,51,.3)}
     @page{size:A4;margin:0}
     @media print{
-      html,body{background:#fff;margin:0;padding:0}
+      html,body{background:#fdeef3;margin:0;padding:0}
       .np{display:none}
-      .page{width:100%;max-width:none;min-height:296mm;margin:0;padding:17mm 16mm;border-radius:0;box-shadow:none;
-            page-break-after:always;overflow:visible}
+      .page{width:100%;max-width:none;min-height:297mm;margin:0;padding:26mm 16mm 20mm;border-radius:0;box-shadow:none;
+            background:#fdeef3;page-break-after:always;overflow:visible}
       .page:last-of-type{page-break-after:auto}
       .page.couv{padding:0;overflow:hidden;justify-content:center}
       .couv .terre{width:165mm;height:165mm;max-height:none;margin:0 0 16mm}
       .grand-nombre .n{font-size:60px}
+      .cc-tour{break-inside:avoid}
     }
   </style></head><body>
   <p class="np"><button onclick="print()">🖨️ Imprimer / Enregistrer en PDF</button></p>
