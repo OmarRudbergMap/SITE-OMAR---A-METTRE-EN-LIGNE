@@ -1,19 +1,21 @@
 -- ============================================================
---  MISE À JOUR · Engagement & badges
+--  MISE À JOUR · Engagement & badges (v2)
 --  À exécuter UNE FOIS dans Supabase : SQL Editor > New query > coller > Run.
+--  (Sans risque de le relancer : "if not exists" ignore ce qui existe déjà.)
 --
---  Colonnes remplies par LE FAN (dans son espace fan) :
---    vu_serie, projet_concert, omr_beauty, vetement_diy, merch_tournee
---  Colonnes que TU remplis toi-même (Table Editor), pour l'association :
---    asso_adherent, asso_dons (compteur), asso_concours (compteur),
---    asso_rencontre, radio_day (Omar Global Radio Day)
+--  Rempli par LE FAN (espace fan) :
+--    vu_serie, projet_concert, omr_produits (liste de produits OMR Beauty),
+--    vetement_diy, merch_tournee
+--  Rempli par TOI (Table Editor) pour l'association :
+--    asso_adherent, asso_dons, asso_concours, asso_rencontre, radio_day
 --
---  Sans risque : "if not exists" = si une colonne existe déjà, rien ne se passe.
+--  Note : l'ancienne colonne "omr_beauty" (un simple nombre) ne sert plus,
+--  elle est remplacée par "omr_produits". Tu peux l'ignorer ou la supprimer.
 -- ============================================================
 
 alter table fans add column if not exists vu_serie       boolean default false;
 alter table fans add column if not exists projet_concert boolean default false;
-alter table fans add column if not exists omr_beauty     integer default 0;
+alter table fans add column if not exists omr_produits    jsonb   default '[]'::jsonb;
 alter table fans add column if not exists vetement_diy   boolean default false;
 alter table fans add column if not exists merch_tournee  boolean default false;
 
