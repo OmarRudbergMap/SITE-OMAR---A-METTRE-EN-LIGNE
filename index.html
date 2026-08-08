@@ -448,6 +448,7 @@ footer .marque{font-family:'Bebas Neue';font-size:1.1rem;letter-spacing:.15em;co
 
 <!-- ==================== PAGE 1 : HOME ==================== -->
 <div class="page actif" id="page-accueil">
+  <div id="banniereAnniv" style="display:none"></div>
   <div class="hero">
     <p class="eyebrow">OMAR RUDBERG WORLD MAP</p>
     <h1 data-i18n-html="hero.title">THE WORLDWIDE MAP OF<br><span>OMAR RUDBERG'S</span><br>FANS</h1>
@@ -463,8 +464,6 @@ footer .marque{font-family:'Bebas Neue';font-size:1.1rem;letter-spacing:.15em;co
     </div>
     <p style="font-size:.68rem;color:var(--beige)" data-i18n="hero.hint">Drag the globe ✦ it spins on its own</p>
   </div>
-
-  <div id="banniereAnniv" style="display:none"></div>
 
   <section>
     <p class="eyebrow" data-i18n="stats.eyebrow">Total statistics</p>
@@ -536,7 +535,7 @@ footer .marque{font-family:'Bebas Neue';font-size:1.1rem;letter-spacing:.15em;co
         <p style="margin:4px 0"><span data-i18n="acc.connected">Connected:</span> <b id="auth-qui"></b></p>
         <button type="button" class="btn fantome" onclick="seDeconnecter()" data-i18n="acc.logout">Log out</button>
       </div>
-      <div style="font-size:.66rem;opacity:.5;margin-top:8px">version : COMPTES-18</div>
+      <div style="font-size:.66rem;opacity:.5;margin-top:8px">version : COMPTES-19</div>
     </div>
     <div class="verre" id="dejaFiche" style="display:none;margin-bottom:16px">
       <h3 class="accent" data-i18n="acc.haveCard">Your card is created ✓</h3>
@@ -3125,11 +3124,12 @@ function toutMettreAJour(anime){
 }
 /* anniversaires du jour, calculés depuis les vraies inscriptions */
 function anniversairesAujourdhui(){
-  const auj=new Date();
+  const auj=new Date(), jj=auj.getDate(), mm=auj.getMonth()+1;
   return (window.REGISTRE_FANS||[]).filter(fn=>{
     if(!fn.naissance)return false;
-    const d=new Date(fn.naissance);
-    return !isNaN(d)&&d.getDate()===auj.getDate()&&d.getMonth()===auj.getMonth();
+    var p=String(fn.naissance).slice(0,10).split("-"); /* "AAAA-MM-JJ" */
+    if(p.length<3)return false;
+    return (+p[1])===mm && (+p[2])===jj;
   });
 }
 /* Encart d'anniversaires du jour, mis en avant à l'ouverture du site (page d'accueil) */
@@ -3139,7 +3139,7 @@ function majBanniereAnniv(){
   if(!liste.length){ el.style.display="none"; el.innerHTML=""; return; }
   var noms=liste.map(function(fn){return (fn.prenom||"");}).join(" · ");
   el.style.display="";
-  el.innerHTML='<div class="banniere-anniv"><span class="ba-emo">🎂</span><div><b>'+t("x.bdayBanner")+'</b><span class="ba-noms">'+noms+'</span><span class="ba-fin">'+t("x.bdayBannerEnd")+'</span></div></div>';
+  el.innerHTML='<div class="banniere-anniv"><span class="ba-emo">🎂</span><div style="flex:1"><b>'+t("x.bdayBanner")+'</b><span class="ba-noms">'+noms+'</span><span class="ba-fin">'+t("x.bdayBannerEnd")+'</span><button class="btn fantome" style="margin-top:10px;font-size:.82rem;padding:8px 18px;border-color:rgba(255,255,255,.6);color:#fff" onclick="toast(t(\'x.demoAction\'))">💌 '+t("x.bdayMsg")+'</button></div></div>';
 }
 window.majBanniereAnniv=majBanniereAnniv;
 (function(){var st=document.createElement("style");st.textContent=`
@@ -6307,14 +6307,6 @@ function rendreCommunaute(){
       <input type="text" id="ffVille" placeholder="Paris…">
       <button class="btn btn-large" style="margin-top:14px" onclick="chercherFans()">🔎 ${t("x.ffFind")}</button>
       <div id="ffResultat" style="margin-top:14px"></div>
-    </div>
-    <div class="verre" style="margin-top:14px">
-      <h3 style="color:var(--rose)">${t("x.bdayTitle")}</h3>
-      <p style="font-size:.85rem;margin:6px 0 10px">${t("x.bdayToday",anniversairesAujourdhui().length)}</p>
-      <div class="chips">
-        ${anniversairesAujourdhui().map(fn=>`<span class="chip">🎂 ${fn.prenom} ${fn.drapeau}</span>`).join("")||`<span class="chip" style="color:var(--beige)">✦</span>`}
-      </div>
-      <button class="btn fantome btn-large" style="margin-top:12px" onclick="toast(t('x.demoAction'))">💌 ${t("x.bdayMsg")}</button>
     </div>`;
 }
 function chercherFans(){
@@ -7163,6 +7155,7 @@ async function chargerMonProfil(){
       existe.classementChansons=row.classement_chansons||[];
       existe.vuSerie=!!row.vu_serie; existe.projetConcert=!!row.projet_concert; existe.omrProduits=row.omr_produits||[]; existe.vetementDiy=!!row.vetement_diy; existe.merchTournees=row.merch_tournees||[];
       existe.assoAdherent=!!row.asso_adherent; existe.assoDons=row.asso_dons||0; existe.assoConcours=row.asso_concours||0; existe.assoRencontre=!!row.asso_rencontre; existe.radioDay=!!row.radio_day;
+      if(row.date_naissance) existe.naissance=row.date_naissance;
       /* mettre à jour aussi l'entrée d'histoire (pour que les boutons de modif s'affichent) */
       var hx=(typeof HISTOIRES!=="undefined"?HISTOIRES:[]).find(function(x){return ((x.prenom||"")+"|"+(x.ville||"")).toLowerCase()===cle;});
       if(hx){ hx.fanId=row.id;
