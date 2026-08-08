@@ -535,7 +535,7 @@ footer .marque{font-family:'Bebas Neue';font-size:1.1rem;letter-spacing:.15em;co
         <p style="margin:4px 0"><span data-i18n="acc.connected">Connected:</span> <b id="auth-qui"></b></p>
         <button type="button" class="btn fantome" onclick="seDeconnecter()" data-i18n="acc.logout">Log out</button>
       </div>
-      <div style="font-size:.66rem;opacity:.5;margin-top:8px">version : COMPTES-23</div>
+      <div style="font-size:.66rem;opacity:.5;margin-top:8px">version : COMPTES-24</div>
     </div>
     <div class="verre" id="dejaFiche" style="display:none;margin-bottom:16px">
       <h3 class="accent" data-i18n="acc.haveCard">Your card is created ✓</h3>
@@ -5682,8 +5682,8 @@ function carteTournee(tr){
       </div>
       ${passee?`<div id="photos-${tr.id}-${i}" style="display:${ouverte?"block":"none"};padding:8px 4px 12px">
         ${carrouselHTML(tr.id+"-"+i)}
-        ${galerieMediasConcert(tr.id+"-"+i)}
         <p style="font-size:.68rem;color:var(--beige);margin:10px 0 8px">${t("x.cPhotosHere")}</p>
+        ${galerieMediasConcert(tr.id+"-"+i)}
         ${carrouselFansHTML(tr.id+"-"+i)}
       </div>`:""}`;
     }).join("")}
@@ -5775,8 +5775,8 @@ function rendrePageConcertTour(s){
     </div>`:""}
     <div class="verre" style="margin-top:12px">
       ${carrouselHTML(cle)}
-      ${galerieMediasConcert(cle)}
       <p style="font-size:.68rem;color:var(--beige);margin:10px 0 8px">${t("x.cPhotosHere")}</p>
+      ${galerieMediasConcert(cle)}
       ${carrouselFansHTML(cle)}
     </div>`
     :`
@@ -6291,8 +6291,7 @@ window.assignerConcertMedia=assignerConcertMedia;
 function galerieMediasConcert(cle){
   var l=(window.MEDIAS_VALIDES||[]).filter(function(m){return m.concert===cle;});
   if(!l.length) return '';
-  return '<p style="font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;color:var(--rose);margin:12px 0 6px">📸 '+t("med.concertFans")+' ('+l.length+')</p>'
-    +'<div class="galerie-medias">'+l.map(function(m){return miniMedia(m,false);}).join('')+'</div>';
+  return '<div class="galerie-medias galerie-concert">'+l.map(function(m){return miniMedia(m,false);}).join('')+'</div>';
 }
 window.galerieMediasConcert=galerieMediasConcert;
 function appliquerCompteursMedias(){
@@ -6390,6 +6389,7 @@ function carteMonEnvoi(m){
 window.carteMonEnvoi=carteMonEnvoi;
 (function(){var st=document.createElement("style");st.textContent=`
 .galerie-medias{display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:10px;margin-top:8px}
+.galerie-concert{grid-template-columns:repeat(auto-fit,minmax(140px,180px));justify-content:start}
 .mm{position:relative;border-radius:10px;overflow:hidden;background:#2a1622;box-shadow:0 3px 10px rgba(0,0,0,.2)}
 .mm .mm-img{width:100%;aspect-ratio:1;background-size:cover;background-position:center}
 .mm .mm-video{display:flex;align-items:center;justify-content:center;aspect-ratio:1;font-size:1.6rem;text-decoration:none;background:linear-gradient(135deg,#7d1f3a,#c2456a);color:#fff}
