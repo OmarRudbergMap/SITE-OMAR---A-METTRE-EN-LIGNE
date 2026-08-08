@@ -536,7 +536,7 @@ footer .marque{font-family:'Bebas Neue';font-size:1.1rem;letter-spacing:.15em;co
         <p style="margin:4px 0"><span data-i18n="acc.connected">Connected:</span> <b id="auth-qui"></b></p>
         <button type="button" class="btn fantome" onclick="seDeconnecter()" data-i18n="acc.logout">Log out</button>
       </div>
-      <div style="font-size:.66rem;opacity:.5;margin-top:8px">version : COMPTES-16</div>
+      <div style="font-size:.66rem;opacity:.5;margin-top:8px">version : COMPTES-17</div>
     </div>
     <div class="verre" id="dejaFiche" style="display:none;margin-bottom:16px">
       <h3 class="accent" data-i18n="acc.haveCard">Your card is created ✓</h3>
@@ -3136,7 +3136,7 @@ function majBanniereAnniv(){
   var el=document.getElementById("banniereAnniv"); if(!el)return;
   var liste=(typeof anniversairesAujourdhui==="function")?anniversairesAujourdhui():[];
   if(!liste.length){ el.style.display="none"; el.innerHTML=""; return; }
-  var noms=liste.map(function(fn){return (fn.prenom||"")+" "+(fn.drapeau||"");}).join(" · ");
+  var noms=liste.map(function(fn){return (fn.prenom||"");}).join(" · ");
   el.style.display="";
   el.innerHTML='<div class="banniere-anniv"><span class="ba-emo">🎂</span><div><b>'+t("x.bdayBanner")+'</b><span class="ba-noms">'+noms+'</span><span class="ba-fin">'+t("x.bdayBannerEnd")+'</span></div></div>';
 }
@@ -6165,19 +6165,19 @@ function badgeVisuel(b, abs){
 }
 window.badgeVisuel=badgeVisuel;
 const CSS_BADGES=`
-.grille-badges2{display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:12px;margin-top:12px}
+.grille-badges2{display:grid;grid-template-columns:repeat(auto-fill,minmax(138px,1fr));gap:14px;margin-top:12px}
 .bdgv{position:relative;border-radius:16px;padding:16px 8px 12px;text-align:center;color:#fff;box-shadow:0 6px 16px rgba(0,0,0,.18);overflow:hidden;min-height:108px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px}
 .bdgv::before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 30% 22%,rgba(255,255,255,.42),transparent 55%)}
 .bdgv>span{position:relative}
 .bdgv .bdgv-anneau{position:absolute;inset:6px;border:2px dashed rgba(255,255,255,.5);border-radius:12px}
 .bdgv .bdgv-omr-lbl{font-weight:800;letter-spacing:2px;font-size:1.15rem;text-shadow:0 1px 4px rgba(0,0,0,.25)}
 .bdgv .bdgv-em{font-size:1.7rem;line-height:1}
-.bdgv .bdgv-nom{font-size:.72rem;font-weight:600;text-transform:uppercase;letter-spacing:.4px}
+.bdgv .bdgv-nom{font-size:.78rem;font-weight:600;text-transform:uppercase;letter-spacing:.4px}
 .bdgv .bdgv-t{font-size:.56rem;opacity:.85;text-transform:uppercase;letter-spacing:1px}
 .bdgv-photo{position:relative;border-radius:16px;overflow:hidden;min-height:158px;box-shadow:0 6px 16px rgba(0,0,0,.2);display:flex;flex-direction:column;justify-content:flex-end;background:#1a0e14}
 .bdgv-photo .bdgv-ph-bg{position:absolute;inset:0;background-size:cover;background-position:center;filter:blur(15px) brightness(.55);transform:scale(1.25)}
 .bdgv-photo .bdgv-ph-img{position:relative;width:100%;height:120px;object-fit:contain;margin-top:10px;filter:drop-shadow(0 4px 8px rgba(0,0,0,.45))}
-.bdgv-photo .bdgv-ph-lg{position:relative;background:linear-gradient(135deg,#7d1f3a,#e6789b);color:#fff;font-size:.6rem;font-weight:700;text-transform:uppercase;letter-spacing:.4px;padding:7px 6px;line-height:1.2}
+.bdgv-photo .bdgv-ph-lg{position:relative;background:linear-gradient(135deg,#7d1f3a,#e6789b);color:#fff;font-size:.66rem;font-weight:700;text-transform:uppercase;letter-spacing:.4px;padding:8px 6px;line-height:1.25}
 .bdgv-asso{background:#fff;border-radius:14px;padding:12px 8px;text-align:center;box-shadow:0 4px 12px rgba(106,75,189,.14);display:flex;flex-direction:column;justify-content:center;min-height:108px}
 .bdgv-asso .bdgv-asso-logo{height:74px;background-size:contain;background-position:center;background-repeat:no-repeat}
 .bdgv-asso .bdgv-asso-lbl{margin-top:6px;color:#6a4bbd;font-weight:700;font-size:.7rem}
