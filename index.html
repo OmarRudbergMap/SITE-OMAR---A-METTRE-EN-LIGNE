@@ -536,7 +536,7 @@ footer .marque{font-family:'Bebas Neue';font-size:1.1rem;letter-spacing:.15em;co
         <p style="margin:4px 0"><span data-i18n="acc.connected">Connected:</span> <b id="auth-qui"></b></p>
         <button type="button" class="btn fantome" onclick="seDeconnecter()" data-i18n="acc.logout">Log out</button>
       </div>
-      <div style="font-size:.66rem;opacity:.5;margin-top:8px">version : COMPTES-13</div>
+      <div style="font-size:.66rem;opacity:.5;margin-top:8px">version : COMPTES-14</div>
     </div>
     <div class="verre" id="dejaFiche" style="display:none;margin-bottom:16px">
       <h3 class="accent" data-i18n="acc.haveCard">Your card is created ✓</h3>
@@ -6122,6 +6122,42 @@ window.classementChansonsCommunaute=classementChansonsCommunaute; window.monClas
 /* Liste des produits OMR Beauty (chaque produit possédé = +5 pts et son propre badge) */
 const OMR_PRODUITS=["Copper","Intro","Duo","Fluid","Brunch","Lunch","Dinner","Copper Candle","Hoodie"];
 window.OMR_PRODUITS=OMR_PRODUITS;
+/* Couleurs officielles des produits OMR Beauty (identiques à notre design de badges) */
+const OMR_COULEURS={"Copper":"#13251b","Intro":"#7d3f9c","Duo":"#ef8a34","Fluid":"#ec6ea6","Brunch":"#a95f2c","Lunch":"#ffffff","Dinner":"#7d1f3a","Copper Candle":"#13251b","Hoodie":"linear-gradient(120deg,#d9c9b0 0 33%,#8f8f8f 33% 66%,#1e1e1e 66% 100%)"};
+window.OMR_COULEURS=OMR_COULEURS;
+/* Styles des badges (couleurs de notre design) */
+const BADGE_STYLE={
+  "bdg.histoire":{bg:"#7d1f3a",em:"✍️"},"bdg.concert1":{bg:"#c2456a",em:"🎤"},"bdg.concert5":{bg:"#b34468",em:"🎶"},"bdg.concert10":{bg:"#7d1f3a",em:"🏆"},
+  "bdg.lieuYR":{bg:"#2a8f9e",em:"📍"},"bdg.serie":{bg:"linear-gradient(135deg,#7d1f3a,#e6789b)",em:"📺"},"bdg.projet":{bg:"#c2456a",em:"🎉"},
+  "bdg.diy":{bg:"linear-gradient(135deg,#f0a35a,#d95f85)",em:"👕"},"bdg.merch":{bg:"#b34468",em:"🛍️"},"bdg.anniv":{bg:"linear-gradient(135deg,#e79bb0,#7d1f3a)",em:"🎂"},
+  "bdg.adherent":{bg:"#6a4bbd",em:"🫶"},"bdg.donateur":{bg:"#c2456a",em:"❤️"},"bdg.concours":{bg:"#e0a66a",em:"🎯"},"bdg.rencontre":{bg:"#3f7bbd",em:"🤝"},"bdg.radioDay":{bg:"linear-gradient(135deg,#f0d27a,#c8962f)",em:"📻"}
+};
+window.BADGE_STYLE=BADGE_STYLE;
+/* HTML d'un badge (b = [emoji, clé]) — beau rendu façon notre design */
+function badgeVisuel(b){
+  var key=b[1];
+  if(key.indexOf("OMR Beauty · ")===0){
+    var prod=key.slice(13);
+    var col=OMR_COULEURS[prod]||"#7d1f3a";
+    var dark=(prod==="Lunch");
+    return '<div class="bdgv bdgv-omr" style="background:'+col+';color:'+(dark?"#2a2226":"#fff")+'"><span class="bdgv-anneau" style="border-color:'+(dark?"rgba(0,0,0,.25)":"rgba(255,255,255,.55)")+'"></span><span class="bdgv-omr-lbl">OMR</span><span class="bdgv-nom" translate="no">'+prod+'</span><span class="bdgv-t">OMR Beauty</span></div>';
+  }
+  var s=BADGE_STYLE[key]||{bg:"#7d1f3a",em:b[0]||"🏅"};
+  return '<div class="bdgv" style="background:'+s.bg+'"><span class="bdgv-anneau"></span><span class="bdgv-em">'+(s.em||b[0])+'</span><span class="bdgv-nom" translate="no">'+(t(key)||key)+'</span></div>';
+}
+window.badgeVisuel=badgeVisuel;
+const CSS_BADGES=`
+.grille-badges2{display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:12px;margin-top:12px}
+.bdgv{position:relative;border-radius:16px;padding:16px 8px 12px;text-align:center;color:#fff;box-shadow:0 6px 16px rgba(0,0,0,.18);overflow:hidden;min-height:108px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px}
+.bdgv::before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 30% 22%,rgba(255,255,255,.42),transparent 55%)}
+.bdgv>span{position:relative}
+.bdgv .bdgv-anneau{position:absolute;inset:6px;border:2px dashed rgba(255,255,255,.5);border-radius:12px}
+.bdgv .bdgv-omr-lbl{font-weight:800;letter-spacing:2px;font-size:1.15rem;text-shadow:0 1px 4px rgba(0,0,0,.25)}
+.bdgv .bdgv-em{font-size:1.7rem;line-height:1}
+.bdgv .bdgv-nom{font-size:.72rem;font-weight:600;text-transform:uppercase;letter-spacing:.4px}
+.bdgv .bdgv-t{font-size:.56rem;opacity:.85;text-transform:uppercase;letter-spacing:1px}
+`;
+(function(){var st=document.createElement("style");st.textContent=CSS_BADGES;document.head.appendChild(st);})();
 function ouvrirEditeurEngagement(){
   var box=document.getElementById("editeurEngagement"); if(!box)return;
   var e=window.MON_ENGAGEMENT||{};
@@ -6347,7 +6383,7 @@ function rendreProfil(){
     <div class="verre" style="margin-top:14px">
       <h3 style="color:var(--rose)">🏅 ${t("bdg.title")}</h3>
       <p style="font-size:.78rem;color:var(--beige)">${t("bdg.intro")}</p>
-      ${mesBadges.length?`<div class="grille-badges">${mesBadges.map(function(b){return '<div class="badge-carte"><span class="be">'+b[0]+'</span><span class="bn" translate="no">'+(t(b[1])||b[1])+'</span></div>';}).join("")}</div>`:`<p style="font-size:.78rem;color:var(--beige);margin-top:8px">${t("bdg.none")}</p>`}
+      ${mesBadges.length?`<div class="grille-badges2">${mesBadges.map(function(b){return badgeVisuel(b);}).join("")}</div>`:`<p style="font-size:.78rem;color:var(--beige);margin-top:8px">${t("bdg.none")}</p>`}
     </div>
     <div class="verre" style="margin-top:14px">
       <h3 style="color:var(--rose)">${t("x.ppTitle")}</h3>
@@ -6584,6 +6620,7 @@ function imprimerPasseport(){
     .bp{background:linear-gradient(150deg,#7d1f3a,#c2456a);color:#fff;border-radius:14px;padding:16px 8px 12px;text-align:center;box-shadow:0 4px 10px rgba(125,31,58,.2)}
     .bp .bpe{font-size:2rem;display:block;line-height:1}
     .bp .bpn{font-size:.64rem;display:block;margin-top:7px;line-height:1.2}
+    ${CSS_BADGES}
     /* journal */
     .journal{background:repeating-linear-gradient(0deg,transparent 0 31px,#e8c0cf 31px 32px);
          min-height:60vh;border-radius:10px;padding:8px 14px}
@@ -6677,7 +6714,7 @@ function imprimerPasseport(){
   ${mesBadgesP.length?`<div class="page">
     <p class="titre-p">✦ Mes badges ✦</p>
     <p class="ss-titre">mes badges débloqués dans la communauté</p>
-    <div class="badges-pass">${mesBadgesP.map(function(b){return '<div class="bp"><span class="bpe">'+b[0]+'</span><span class="bpn" translate="no">'+(t(b[1])||b[1])+'</span></div>';}).join("")}</div>
+    <div class="grille-badges2">${mesBadgesP.map(function(b){return badgeVisuel(b);}).join("")}</div>
     <span class="num-page">· ♦ ·</span>
   </div>`:``}
   <div class="page">
