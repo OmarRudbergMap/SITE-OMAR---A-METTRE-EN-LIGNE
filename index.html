@@ -536,7 +536,7 @@ footer .marque{font-family:'Bebas Neue';font-size:1.1rem;letter-spacing:.15em;co
         <p style="margin:4px 0"><span data-i18n="acc.connected">Connected:</span> <b id="auth-qui"></b></p>
         <button type="button" class="btn fantome" onclick="seDeconnecter()" data-i18n="acc.logout">Log out</button>
       </div>
-      <div style="font-size:.66rem;opacity:.5;margin-top:8px">version : COMPTES-14</div>
+      <div style="font-size:.66rem;opacity:.5;margin-top:8px">version : COMPTES-16</div>
     </div>
     <div class="verre" id="dejaFiche" style="display:none;margin-bottom:16px">
       <h3 class="accent" data-i18n="acc.haveCard">Your card is created ✓</h3>
@@ -3000,23 +3000,23 @@ function anneesFidelite(fn){
 /* Badges gagnés par un fan, calculés automatiquement depuis ses données (chaque badge = +10 pts) */
 function badgesFan(fn){
   var b=[]; if(!fn) return b;
+  var TB=window.TOUR_BADGES||{};
   if(fn.histoire) b.push(["📖","bdg.histoire"]);
-  var nc=fn.tampons||0;
-  if(nc>=1) b.push(["🎤","bdg.concert1"]);
-  if(nc>=5) b.push(["🎶","bdg.concert5"]);
-  if(nc>=10) b.push(["🏆","bdg.concert10"]);
-  if(fn.lieuYR) b.push(["📍","bdg.lieuYR"]);
-  if(fn.vuSerie) b.push(["📺","bdg.serie"]);
+  /* badges-photo des tournées vues (depuis les concerts cochés) */
+  var tours={}; (fn.concertsVus||[]).forEach(function(cle){ if(cle!=="YR"){ var tid=String(cle).split("#")[0]; tours[tid]=1; } });
+  ["solo24","f24","enf24","enf25","f25","ms25"].forEach(function(tid){ if(tours[tid]&&TB[tid]) b.push(["🎤",TB[tid].label,{photo:TB[tid].img}]); });
+  if(fn.lieuYR) b.push(["📍","bdg.lieuYR",{photo:"photos/BADGE_LIEUYR.webp"}]);
+  if(fn.vuSerie) b.push(["📺","Young Royals",{photo:"photos/BADGE_YR.webp"}]);
   if(fn.projetConcert) b.push(["🎉","bdg.projet"]);
   (fn.omrProduits||[]).forEach(function(pr){ b.push(["💄","OMR Beauty · "+pr]); });
   if(fn.vetementDiy) b.push(["👕","bdg.diy"]);
   if(fn.merchTournee) b.push(["🛍️","bdg.merch"]);
   if(anneesFidelite(fn)>=1) b.push(["🎂","bdg.anniv"]);
-  if(fn.assoAdherent) b.push(["🫶","bdg.adherent"]);
-  if((fn.assoDons||0)>0) b.push(["❤️","bdg.donateur"]);
-  if((fn.assoConcours||0)>0) b.push(["🎯","bdg.concours"]);
-  if(fn.assoRencontre) b.push(["🤝","bdg.rencontre"]);
-  if(fn.radioDay) b.push(["📻","bdg.radioDay"]);
+  if(fn.assoAdherent) b.push(["🫶","bdg.adherent",{logo:"photos/ASSO_ADHERENT.webp"}]);
+  if((fn.assoDons||0)>0) b.push(["❤️","bdg.donateur",{logo:"photos/ASSO_DONATEUR.webp"}]);
+  if((fn.assoConcours||0)>0) b.push(["🎯","bdg.concours",{logo:"photos/ASSO_CONCOURS.webp"}]);
+  if(fn.assoRencontre) b.push(["🤝","bdg.rencontre",{logo:"photos/ASSO_RENCONTRE.webp"}]);
+  if(fn.radioDay) b.push(["📻","bdg.radioDay",{photo:"photos/BADGE_RADIODAY.webp"}]);
   return b;
 }
 window.badgesFan=badgesFan;
@@ -6133,9 +6133,27 @@ const BADGE_STYLE={
   "bdg.adherent":{bg:"#6a4bbd",em:"🫶"},"bdg.donateur":{bg:"#c2456a",em:"❤️"},"bdg.concours":{bg:"#e0a66a",em:"🎯"},"bdg.rencontre":{bg:"#3f7bbd",em:"🤝"},"bdg.radioDay":{bg:"linear-gradient(135deg,#f0d27a,#c8962f)",em:"📻"}
 };
 window.BADGE_STYLE=BADGE_STYLE;
-/* HTML d'un badge (b = [emoji, clé]) — beau rendu façon notre design */
-function badgeVisuel(b){
-  var key=b[1];
+/* Tournées → badge-photo (image dans le dossier photos) */
+const TOUR_BADGES={
+  solo24:{img:"photos/BADGE_CIRKUS.webp",label:"First Solo Show · Cirkus 2024"},
+  f24:{img:"photos/BADGE_FEST24.webp",label:"Festivals 2024"},
+  enf24:{img:"photos/BADGE_EFT24.webp",label:"Every Night Fantasy 2024"},
+  enf25:{img:"photos/BADGE_EFT25.webp",label:"Every Night Fantasy 2025"},
+  f25:{img:"photos/BADGE_FEST25.webp",label:"Festivals 2025"},
+  ms25:{img:"photos/BADGE_MST25.webp",label:"Midnight Sun 2025"}
+};
+window.TOUR_BADGES=TOUR_BADGES;
+/* HTML d'un badge (b = [emoji, clé/texte, opts?]) · abs = fonction pour URL absolue (passeport) */
+function badgeVisuel(b, abs){
+  abs = abs || function(u){return u;};
+  var key=b[1], opts=b[2]||{}, nom=(t(key)||key);
+  if(opts.photo){
+    var u=abs(opts.photo);
+    return '<div class="bdgv-photo"><div class="bdgv-ph-bg" style="background-image:url('+u+')"></div><img class="bdgv-ph-img" src="'+u+'" alt=""><div class="bdgv-ph-lg" translate="no">'+nom+'</div></div>';
+  }
+  if(opts.logo){
+    return '<div class="bdgv-asso"><div class="bdgv-asso-logo" style="background-image:url('+abs(opts.logo)+')"></div><div class="bdgv-asso-lbl">'+nom+'</div></div>';
+  }
   if(key.indexOf("OMR Beauty · ")===0){
     var prod=key.slice(13);
     var col=OMR_COULEURS[prod]||"#7d1f3a";
@@ -6143,7 +6161,7 @@ function badgeVisuel(b){
     return '<div class="bdgv bdgv-omr" style="background:'+col+';color:'+(dark?"#2a2226":"#fff")+'"><span class="bdgv-anneau" style="border-color:'+(dark?"rgba(0,0,0,.25)":"rgba(255,255,255,.55)")+'"></span><span class="bdgv-omr-lbl">OMR</span><span class="bdgv-nom" translate="no">'+prod+'</span><span class="bdgv-t">OMR Beauty</span></div>';
   }
   var s=BADGE_STYLE[key]||{bg:"#7d1f3a",em:b[0]||"🏅"};
-  return '<div class="bdgv" style="background:'+s.bg+'"><span class="bdgv-anneau"></span><span class="bdgv-em">'+(s.em||b[0])+'</span><span class="bdgv-nom" translate="no">'+(t(key)||key)+'</span></div>';
+  return '<div class="bdgv" style="background:'+s.bg+'"><span class="bdgv-anneau"></span><span class="bdgv-em">'+(s.em||b[0])+'</span><span class="bdgv-nom" translate="no">'+nom+'</span></div>';
 }
 window.badgeVisuel=badgeVisuel;
 const CSS_BADGES=`
@@ -6156,6 +6174,13 @@ const CSS_BADGES=`
 .bdgv .bdgv-em{font-size:1.7rem;line-height:1}
 .bdgv .bdgv-nom{font-size:.72rem;font-weight:600;text-transform:uppercase;letter-spacing:.4px}
 .bdgv .bdgv-t{font-size:.56rem;opacity:.85;text-transform:uppercase;letter-spacing:1px}
+.bdgv-photo{position:relative;border-radius:16px;overflow:hidden;min-height:158px;box-shadow:0 6px 16px rgba(0,0,0,.2);display:flex;flex-direction:column;justify-content:flex-end;background:#1a0e14}
+.bdgv-photo .bdgv-ph-bg{position:absolute;inset:0;background-size:cover;background-position:center;filter:blur(15px) brightness(.55);transform:scale(1.25)}
+.bdgv-photo .bdgv-ph-img{position:relative;width:100%;height:120px;object-fit:contain;margin-top:10px;filter:drop-shadow(0 4px 8px rgba(0,0,0,.45))}
+.bdgv-photo .bdgv-ph-lg{position:relative;background:linear-gradient(135deg,#7d1f3a,#e6789b);color:#fff;font-size:.6rem;font-weight:700;text-transform:uppercase;letter-spacing:.4px;padding:7px 6px;line-height:1.2}
+.bdgv-asso{background:#fff;border-radius:14px;padding:12px 8px;text-align:center;box-shadow:0 4px 12px rgba(106,75,189,.14);display:flex;flex-direction:column;justify-content:center;min-height:108px}
+.bdgv-asso .bdgv-asso-logo{height:74px;background-size:contain;background-position:center;background-repeat:no-repeat}
+.bdgv-asso .bdgv-asso-lbl{margin-top:6px;color:#6a4bbd;font-weight:700;font-size:.7rem}
 `;
 (function(){var st=document.createElement("style");st.textContent=CSS_BADGES;document.head.appendChild(st);})();
 function ouvrirEditeurEngagement(){
@@ -6714,7 +6739,7 @@ function imprimerPasseport(){
   ${mesBadgesP.length?`<div class="page">
     <p class="titre-p">✦ Mes badges ✦</p>
     <p class="ss-titre">mes badges débloqués dans la communauté</p>
-    <div class="grille-badges2">${mesBadgesP.map(function(b){return badgeVisuel(b);}).join("")}</div>
+    <div class="grille-badges2">${mesBadgesP.map(function(b){return badgeVisuel(b, absU);}).join("")}</div>
     <span class="num-page">· ♦ ·</span>
   </div>`:``}
   <div class="page">
