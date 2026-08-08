@@ -464,6 +464,8 @@ footer .marque{font-family:'Bebas Neue';font-size:1.1rem;letter-spacing:.15em;co
     <p style="font-size:.68rem;color:var(--beige)" data-i18n="hero.hint">Drag the globe ✦ it spins on its own</p>
   </div>
 
+  <div id="banniereAnniv" style="display:none"></div>
+
   <section>
     <p class="eyebrow" data-i18n="stats.eyebrow">Total statistics</p>
     <h2 data-i18n="stats.title">The community in numbers</h2>
@@ -534,7 +536,7 @@ footer .marque{font-family:'Bebas Neue';font-size:1.1rem;letter-spacing:.15em;co
         <p style="margin:4px 0"><span data-i18n="acc.connected">Connected:</span> <b id="auth-qui"></b></p>
         <button type="button" class="btn fantome" onclick="seDeconnecter()" data-i18n="acc.logout">Log out</button>
       </div>
-      <div style="font-size:.66rem;opacity:.5;margin-top:8px">version : COMPTES-12</div>
+      <div style="font-size:.66rem;opacity:.5;margin-top:8px">version : COMPTES-13</div>
     </div>
     <div class="verre" id="dejaFiche" style="display:none;margin-bottom:16px">
       <h3 class="accent" data-i18n="acc.haveCard">Your card is created ✓</h3>
@@ -1104,7 +1106,7 @@ en:{
   "x.fpProp1":"Birthday project","x.fpProp2":"Tour project","x.fpProp3":"Christmas project","x.fpOfficial":"Official project chosen by the association",
   "x.cmEyebrow":"Community","x.cmTitle":"Find fans near you","x.ffFind":"Search",
   "x.ffFriend":"Friend request","x.ffGroup":"Create a group","x.ffMeet":"Organise a meetup","x.ffPrep":"Prepare a concert",
-  "x.bdayTitle":"🎂 Fan birthdays","x.bdayToday":(n)=>`Today, ${n} fans celebrate their birthday.`,"x.bdayMsg":"Leave them a message",
+  "x.bdayTitle":"🎂 Fan birthdays","x.bdayToday":(n)=>`Today, ${n} fans celebrate their birthday.`,"x.bdayMsg":"Leave them a message","x.bdayBanner":"Today it's the birthday of","x.bdayBannerEnd":"Send them your warmest wishes! 🎉",
   "x.prEyebrow":"My space","x.prTitle":"My story with Omar","x.prSince":"days as a fan","x.prSinceLbl":"Fan since","x.myCard":"My card","x.noPhoto":"No photo yet","x.storyInStories":"Your story (text and background photo) is edited in the Stories tab.",
   "x.prConcerts":"concerts","x.prPhotos":"photos","x.prVideos":"videos","x.prBadges":"badges","x.prProjects":"projects","x.prDons":"donations",
   "x.ppTitle":"🛂 Fan Passport","x.ppNote":"Each concert becomes a stamp · your passport fills in automatically, like a real one.",
@@ -1215,7 +1217,7 @@ fr:{
   "x.fpProp1":"Projet anniversaire","x.fpProp2":"Projet tournée","x.fpProp3":"Projet Noël","x.fpOfficial":"Projet officiel choisi par l'association",
   "x.cmEyebrow":"Communauté","x.cmTitle":"Trouver des fans près de chez toi","x.ffFind":"Rechercher",
   "x.ffFriend":"Demande d'amitié","x.ffGroup":"Créer un groupe","x.ffMeet":"Organiser une rencontre","x.ffPrep":"Préparer un concert",
-  "x.bdayTitle":"🎂 Anniversaires des fans","x.bdayToday":(n)=>`Aujourd'hui, ${n} fans fêtent leur anniversaire.`,"x.bdayMsg":"Leur laisser un message",
+  "x.bdayTitle":"🎂 Anniversaires des fans","x.bdayToday":(n)=>`Aujourd'hui, ${n} fans fêtent leur anniversaire.`,"x.bdayMsg":"Leur laisser un message","x.bdayBanner":"Aujourd'hui, c'est l'anniversaire de","x.bdayBannerEnd":"Souhaite-lui un joyeux anniversaire ! 🎉",
   "x.prEyebrow":"Mon espace","x.prTitle":"Mon histoire avec Omar","x.prSince":"jours en tant que fan","x.prSinceLbl":"Fan depuis","x.myCard":"Ma fiche","x.noPhoto":"Pas encore de photo","x.storyInStories":"Ton histoire (le texte et la photo de fond) se modifie dans l'onglet Histoires.",
   "x.prConcerts":"concerts","x.prPhotos":"photos","x.prVideos":"vidéos","x.prBadges":"badges","x.prProjects":"projets","x.prDons":"dons",
   "x.ppTitle":"🛂 Fan Passport","x.ppNote":"Chaque concert devient un tampon · ton passeport se remplit automatiquement, comme un vrai.",
@@ -3118,6 +3120,7 @@ function toutMettreAJour(anime){
   if(typeof rendreHallOfFame==="function")rendreHallOfFame();
   if(typeof rendreCommunaute==="function")rendreCommunaute();
   if(typeof rendreProfil==="function")rendreProfil();
+  if(typeof majBanniereAnniv==="function")majBanniereAnniv();
 }
 /* anniversaires du jour, calculés depuis les vraies inscriptions */
 function anniversairesAujourdhui(){
@@ -3128,6 +3131,24 @@ function anniversairesAujourdhui(){
     return !isNaN(d)&&d.getDate()===auj.getDate()&&d.getMonth()===auj.getMonth();
   });
 }
+/* Encart d'anniversaires du jour, mis en avant à l'ouverture du site (page d'accueil) */
+function majBanniereAnniv(){
+  var el=document.getElementById("banniereAnniv"); if(!el)return;
+  var liste=(typeof anniversairesAujourdhui==="function")?anniversairesAujourdhui():[];
+  if(!liste.length){ el.style.display="none"; el.innerHTML=""; return; }
+  var noms=liste.map(function(fn){return (fn.prenom||"")+" "+(fn.drapeau||"");}).join(" · ");
+  el.style.display="";
+  el.innerHTML='<div class="banniere-anniv"><span class="ba-emo">🎂</span><div><b>'+t("x.bdayBanner")+'</b><span class="ba-noms">'+noms+'</span><span class="ba-fin">'+t("x.bdayBannerEnd")+'</span></div></div>';
+}
+window.majBanniereAnniv=majBanniereAnniv;
+(function(){var st=document.createElement("style");st.textContent=`
+.banniere-anniv{display:flex;align-items:center;gap:14px;max-width:640px;margin:18px auto 0;padding:14px 20px;border-radius:16px;background:linear-gradient(135deg,var(--bordeaux),var(--rose));color:#fff;box-shadow:0 6px 20px rgba(125,31,58,.3);animation:pulseAnniv 2.6s ease-in-out infinite;text-align:left}
+.banniere-anniv .ba-emo{font-size:2rem;flex:0 0 auto}
+.banniere-anniv b{display:block;font-size:.9rem;font-weight:500}
+.banniere-anniv .ba-noms{display:block;font-weight:600;font-size:1.05rem;margin:2px 0}
+.banniere-anniv .ba-fin{display:block;font-size:.78rem;opacity:.92}
+@keyframes pulseAnniv{0%,100%{box-shadow:0 6px 20px rgba(125,31,58,.3)}50%{box-shadow:0 6px 32px rgba(230,120,155,.55)}}
+`;document.head.appendChild(st);})();
 /* réduit une image à M px max et renvoie un base64 JPEG (léger pour la sauvegarde) */
 function lireImage(fichier, M, q){
   return new Promise(res=>{
@@ -6489,6 +6510,7 @@ function imprimerPasseport(){
   var drapeauF=drapeauISO(codeF);
   var paysNom=""; try{ paysNom=nomsRegion().of(codeF==="XX"?"UN":codeF)||""; }catch(e){}
   var cls=(window.MON_CLASSEMENT_CHANSONS||[]);
+  var mesBadgesP=(moiFan && typeof badgesFan==="function")?badgesFan(moiFan):[];
   function absU(u){ try{ return u?new URL(u,location.href).href:""; }catch(e){ return u||""; } }
   function escP(x){ return String(x==null?"":x).replace(/[&<>]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;"}[c];}); }
   /* liste de TOUS les concerts d'Omar : drapeau + ville + date (depuis TOURNEES) */
@@ -6557,6 +6579,11 @@ function imprimerPasseport(){
     .photos-omar img{width:100%;aspect-ratio:3/4;object-fit:cover;border:5px solid #fff;border-radius:6px;box-shadow:0 4px 12px rgba(125,31,58,.18)}
     .photos-omar img:nth-child(odd){transform:rotate(-1.5deg)}
     .photos-omar img:nth-child(even){transform:rotate(1.5deg)}
+    /* badges du passeport */
+    .badges-pass{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:10px}
+    .bp{background:linear-gradient(150deg,#7d1f3a,#c2456a);color:#fff;border-radius:14px;padding:16px 8px 12px;text-align:center;box-shadow:0 4px 10px rgba(125,31,58,.2)}
+    .bp .bpe{font-size:2rem;display:block;line-height:1}
+    .bp .bpn{font-size:.64rem;display:block;margin-top:7px;line-height:1.2}
     /* journal */
     .journal{background:repeating-linear-gradient(0deg,transparent 0 31px,#e8c0cf 31px 32px);
          min-height:60vh;border-radius:10px;padding:8px 14px}
@@ -6647,6 +6674,12 @@ function imprimerPasseport(){
     <span class="num-page">· 4 ·</span>
   </div>
 
+  ${mesBadgesP.length?`<div class="page">
+    <p class="titre-p">✦ Mes badges ✦</p>
+    <p class="ss-titre">mes badges débloqués dans la communauté</p>
+    <div class="badges-pass">${mesBadgesP.map(function(b){return '<div class="bp"><span class="bpe">'+b[0]+'</span><span class="bpn" translate="no">'+(t(b[1])||b[1])+'</span></div>';}).join("")}</div>
+    <span class="num-page">· ♦ ·</span>
+  </div>`:``}
   <div class="page">
     <p class="titre-p">✦ Mes photos ✦</p>
     <p class="ss-titre">mes dessins, selfies et souvenirs partagés sur le site</p>
@@ -6971,7 +7004,7 @@ async function chargerFansSupabase(){
         photo:row.photo||null, photoHistoire:row.photo_histoire||null, tampons:nbConcerts(row.concerts_vus), lieuYR:aLieuYR(row.concerts_vus), concertsVus:row.concerts_vus||[], classementChansons:row.classement_chansons||[],
         vuSerie:!!row.vu_serie, projetConcert:!!row.projet_concert, omrProduits:row.omr_produits||[], vetementDiy:!!row.vetement_diy, merchTournee:!!row.merch_tournee,
         assoAdherent:!!row.asso_adherent, assoDons:row.asso_dons||0, assoConcours:row.asso_concours||0, assoRencontre:!!row.asso_rencontre, radioDay:!!row.radio_day,
-        inscritLe:(new Date()).toISOString() });
+        naissance:row.date_naissance||"", inscritLe:(new Date()).toISOString() });
     });
     toutMettreAJour(true);
     if(window.rendreHistoires) rendreHistoires();
@@ -7064,7 +7097,7 @@ async function chargerMonProfil(){
         histoire:row.histoire||"", photo:row.photo||null, photoHistoire:row.photo_histoire||null, tampons:nbConcerts(row.concerts_vus), lieuYR:aLieuYR(row.concerts_vus), concertsVus:row.concerts_vus||[], classementChansons:row.classement_chansons||[],
         vuSerie:!!row.vu_serie, projetConcert:!!row.projet_concert, omrProduits:row.omr_produits||[], vetementDiy:!!row.vetement_diy, merchTournee:!!row.merch_tournee,
         assoAdherent:!!row.asso_adherent, assoDons:row.asso_dons||0, assoConcours:row.asso_concours||0, assoRencontre:!!row.asso_rencontre, radioDay:!!row.radio_day,
-        inscritLe:(new Date()).toISOString() });
+        naissance:row.date_naissance||"", inscritLe:(new Date()).toISOString() });
     }
     window.MES_CONCERTS_VUS = row.concerts_vus||[];
     window.MON_CLASSEMENT_CHANSONS = row.classement_chansons||[];
