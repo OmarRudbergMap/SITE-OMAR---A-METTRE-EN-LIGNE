@@ -535,7 +535,7 @@ footer .marque{font-family:'Bebas Neue';font-size:1.1rem;letter-spacing:.15em;co
         <p style="margin:4px 0"><span data-i18n="acc.connected">Connected:</span> <b id="auth-qui"></b></p>
         <button type="button" class="btn fantome" onclick="seDeconnecter()" data-i18n="acc.logout">Log out</button>
       </div>
-      <div style="font-size:.66rem;opacity:.5;margin-top:8px">version : COMPTES-19</div>
+      <div style="font-size:.66rem;opacity:.5;margin-top:8px">version : COMPTES-20</div>
     </div>
     <div class="verre" id="dejaFiche" style="display:none;margin-bottom:16px">
       <h3 class="accent" data-i18n="acc.haveCard">Your card is created ✓</h3>
@@ -1105,7 +1105,7 @@ en:{
   "x.fpProp1":"Birthday project","x.fpProp2":"Tour project","x.fpProp3":"Christmas project","x.fpOfficial":"Official project chosen by the association",
   "x.cmEyebrow":"Community","x.cmTitle":"Find fans near you","x.ffFind":"Search",
   "x.ffFriend":"Friend request","x.ffGroup":"Create a group","x.ffMeet":"Organise a meetup","x.ffPrep":"Prepare a concert",
-  "x.bdayTitle":"🎂 Fan birthdays","x.bdayToday":(n)=>`Today, ${n} fans celebrate their birthday.`,"x.bdayMsg":"Leave them a message","x.bdayBanner":"Today it's the birthday of","x.bdayBannerEnd":"Send them your warmest wishes! 🎉",
+  "x.bdayTitle":"🎂 Fan birthdays","x.bdayToday":(n)=>`Today, ${n} fans celebrate their birthday.`,"x.bdayMsg":"Leave them a message","x.bdayBanner":"Today it's the birthday of","x.bdayBannerEnd":"Send them your warmest wishes! 🎉","x.bdayBannerEndP":"Send them all your warmest wishes! 🎉","x.bdayMore":"and {n} others",
   "x.prEyebrow":"My space","x.prTitle":"My story with Omar","x.prSince":"days as a fan","x.prSinceLbl":"Fan since","x.myCard":"My card","x.noPhoto":"No photo yet","x.storyInStories":"Your story (text and background photo) is edited in the Stories tab.",
   "x.prConcerts":"concerts","x.prPhotos":"photos","x.prVideos":"videos","x.prBadges":"badges","x.prProjects":"projects","x.prDons":"donations",
   "x.ppTitle":"🛂 Fan Passport","x.ppNote":"Each concert becomes a stamp · your passport fills in automatically, like a real one.",
@@ -1216,7 +1216,7 @@ fr:{
   "x.fpProp1":"Projet anniversaire","x.fpProp2":"Projet tournée","x.fpProp3":"Projet Noël","x.fpOfficial":"Projet officiel choisi par l'association",
   "x.cmEyebrow":"Communauté","x.cmTitle":"Trouver des fans près de chez toi","x.ffFind":"Rechercher",
   "x.ffFriend":"Demande d'amitié","x.ffGroup":"Créer un groupe","x.ffMeet":"Organiser une rencontre","x.ffPrep":"Préparer un concert",
-  "x.bdayTitle":"🎂 Anniversaires des fans","x.bdayToday":(n)=>`Aujourd'hui, ${n} fans fêtent leur anniversaire.`,"x.bdayMsg":"Leur laisser un message","x.bdayBanner":"Aujourd'hui, c'est l'anniversaire de","x.bdayBannerEnd":"Souhaite-lui un joyeux anniversaire ! 🎉",
+  "x.bdayTitle":"🎂 Anniversaires des fans","x.bdayToday":(n)=>`Aujourd'hui, ${n} fans fêtent leur anniversaire.`,"x.bdayMsg":"Leur laisser un message","x.bdayBanner":"Aujourd'hui, c'est l'anniversaire de","x.bdayBannerEnd":"Souhaite-lui un joyeux anniversaire ! 🎉","x.bdayBannerEndP":"Souhaite-leur un joyeux anniversaire ! 🎉","x.bdayMore":"et {n} autres",
   "x.prEyebrow":"Mon espace","x.prTitle":"Mon histoire avec Omar","x.prSince":"jours en tant que fan","x.prSinceLbl":"Fan depuis","x.myCard":"Ma fiche","x.noPhoto":"Pas encore de photo","x.storyInStories":"Ton histoire (le texte et la photo de fond) se modifie dans l'onglet Histoires.",
   "x.prConcerts":"concerts","x.prPhotos":"photos","x.prVideos":"vidéos","x.prBadges":"badges","x.prProjects":"projets","x.prDons":"dons",
   "x.ppTitle":"🛂 Fan Passport","x.ppNote":"Chaque concert devient un tampon · ton passeport se remplit automatiquement, comme un vrai.",
@@ -3137,9 +3137,12 @@ function majBanniereAnniv(){
   var el=document.getElementById("banniereAnniv"); if(!el)return;
   var liste=(typeof anniversairesAujourdhui==="function")?anniversairesAujourdhui():[];
   if(!liste.length){ el.style.display="none"; el.innerHTML=""; return; }
-  var noms=liste.map(function(fn){return (fn.prenom||"");}).join(" · ");
+  var prenoms=liste.map(function(fn){return (fn.prenom||"");});
+  var noms = (prenoms.length<=6) ? prenoms.join(" · ")
+           : prenoms.slice(0,6).join(" · ")+" · "+(t("x.bdayMore")||"et {n} autres").replace("{n}", prenoms.length-6);
+  var fin = (liste.length>1) ? (t("x.bdayBannerEndP")||t("x.bdayBannerEnd")) : t("x.bdayBannerEnd");
   el.style.display="";
-  el.innerHTML='<div class="banniere-anniv"><span class="ba-emo">🎂</span><div style="flex:1"><b>'+t("x.bdayBanner")+'</b><span class="ba-noms">'+noms+'</span><span class="ba-fin">'+t("x.bdayBannerEnd")+'</span><button class="btn fantome" style="margin-top:10px;font-size:.82rem;padding:8px 18px;border-color:rgba(255,255,255,.6);color:#fff" onclick="toast(t(\'x.demoAction\'))">💌 '+t("x.bdayMsg")+'</button></div></div>';
+  el.innerHTML='<div class="banniere-anniv"><span class="ba-emo">🎂</span><div style="flex:1"><b>'+t("x.bdayBanner")+'</b><span class="ba-noms">'+noms+'</span><span class="ba-fin">'+fin+'</span><button class="btn fantome" style="margin-top:10px;font-size:.82rem;padding:8px 18px;border-color:rgba(255,255,255,.6);color:#fff" onclick="toast(t(\'x.demoAction\'))">💌 '+t("x.bdayMsg")+'</button></div></div>';
 }
 window.majBanniereAnniv=majBanniereAnniv;
 (function(){var st=document.createElement("style");st.textContent=`
