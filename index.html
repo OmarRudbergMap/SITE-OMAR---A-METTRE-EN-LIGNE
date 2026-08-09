@@ -546,7 +546,7 @@ footer .marque{font-family:'Bebas Neue';font-size:1.1rem;letter-spacing:.15em;co
         <p style="margin:4px 0"><span data-i18n="acc.connected">Connected:</span> <b id="auth-qui"></b></p>
         <button type="button" class="btn fantome" onclick="seDeconnecter()" data-i18n="acc.logout">Log out</button>
       </div>
-      <div style="font-size:.66rem;opacity:.5;margin-top:8px">version : COMPTES-34</div>
+      <div style="font-size:.66rem;opacity:.5;margin-top:8px">version : COMPTES-35</div>
     </div>
     <div class="verre" id="dejaFiche" style="display:none;margin-bottom:16px">
       <h3 class="accent" data-i18n="acc.haveCard">Your card is created ✓</h3>
@@ -1170,7 +1170,7 @@ en:{
   "map.close":"✕ Close","map.since":"Fan since","map.song":"Favourite song","map.readStory":"Read their full story →",
   "map.anon":(v)=>`A fan shines in ${v}`, "map.anonSub":"Their profile will appear here once completed. Maybe you?",
   "aw.vote":"Vote","aw.voted":"Voted ✦","aw.see":"See their entry","aw.hide":"Hide",
-  "aw.propose":"Propose a nomination","aw.phNom":"Who / what do you nominate?","aw.phDetail":"A short detail (country, author, link…) — optional","aw.sent":"Nomination sent! It will appear once validated ✦","aw.needNom":"Please enter a name","aw.closed":"Voting is closed for now ✦","aw.closedNote":"Voting is closed for now — nominations stay open.","aw.openNoDate":"Voting is open!","aw.saved":"Awards settings saved ✦","aw.adminTitle":"Manage the Awards (admin)","aw.adminOpen":"Open the Awards to voting","aw.adminFin":"Voting end date:","aw.adminSave":"Save","aw.modTitle":"Nominations to review","aw.modIntro":"Nominations proposed by fans — approve or reject.",
+  "aw.propose":"Propose a nomination","aw.phNom":"Who / what do you nominate?","aw.phDetail":"A short detail (country, author, link…) — optional","aw.sent":"Nomination sent! It will appear once validated ✦","aw.needNom":"Please enter a name","aw.closed":"Voting is closed for now ✦","aw.closedNote":"Voting is closed for now — nominations stay open.","aw.openNoDate":"Voting is open!","aw.saved":"Awards settings saved ✦","aw.adminTitle":"Manage the Awards (admin)","aw.adminOpen":"Open the Awards to voting","aw.adminFin":"Voting end date:","aw.adminSave":"Save","aw.modTitle":"Nominations to review","aw.modIntro":"Nominations proposed by fans — approve or reject.","aw.photoLabel":"Attach the photo:","aw.videoLabel":"Video link:","aw.needPhoto":"Please choose a photo","aw.needVideo":"Please paste a video link",
   "aw.videoDemo":"Video preview · playback in the online version",
   "chooseCountry":"· Choose your country ·","otherCountry":"Other country…",
   "contDetected":(c)=>`Continent detected: <b>${c}</b> 🌍`,"contOther":"We will add your country to the map ✦",
@@ -1342,7 +1342,7 @@ fr:{
   
 
   "aw.vote":"Voter","aw.voted":"Voté ✦","aw.see":"Voir sa proposition","aw.hide":"Masquer",
-  "aw.propose":"Proposer une candidature","aw.phNom":"Qui / quoi proposes-tu ?","aw.phDetail":"Un petit détail (pays, auteur, lien…) — facultatif","aw.sent":"Candidature envoyée ! Elle apparaîtra après validation ✦","aw.needNom":"Indique un nom","aw.closed":"Le vote est fermé pour le moment ✦","aw.closedNote":"Le vote est fermé pour le moment — tu peux quand même proposer des candidatures.","aw.openNoDate":"Le vote est ouvert !","aw.saved":"Réglages des Awards enregistrés ✦","aw.adminTitle":"Gérer les Awards (admin)","aw.adminOpen":"Ouvrir les Awards au vote","aw.adminFin":"Date de fin du vote :","aw.adminSave":"Enregistrer","aw.modTitle":"Candidatures à valider","aw.modIntro":"Candidatures proposées par les fans — approuve ou rejette.",
+  "aw.propose":"Proposer une candidature","aw.phNom":"Qui / quoi proposes-tu ?","aw.phDetail":"Un petit détail (pays, auteur, lien…) — facultatif","aw.sent":"Candidature envoyée ! Elle apparaîtra après validation ✦","aw.needNom":"Indique un nom","aw.closed":"Le vote est fermé pour le moment ✦","aw.closedNote":"Le vote est fermé pour le moment — tu peux quand même proposer des candidatures.","aw.openNoDate":"Le vote est ouvert !","aw.saved":"Réglages des Awards enregistrés ✦","aw.adminTitle":"Gérer les Awards (admin)","aw.adminOpen":"Ouvrir les Awards au vote","aw.adminFin":"Date de fin du vote :","aw.adminSave":"Enregistrer","aw.modTitle":"Candidatures à valider","aw.modIntro":"Candidatures proposées par les fans — approuve ou rejette.","aw.photoLabel":"Joins la photo :","aw.videoLabel":"Lien de la vidéo :","aw.needPhoto":"Choisis une photo","aw.needVideo":"Colle le lien de la vidéo",
   "aw.videoDemo":"Aperçu vidéo · lecture dans la version en ligne",
   "foot.l1":"Ensemble, dessinons la plus grande carte mondiale des fans d'Omar Rudberg.",
   "foot.l2":"Prototype, version mobile. Les photos d'Omar sont des montages photo (aucune IA).",
@@ -6677,6 +6677,7 @@ window.carteMonEnvoi=carteMonEnvoi;
 .mod-item .mod-btns{display:flex;gap:6px;flex-wrap:wrap}
 .mod-item .mod-btns .btn{font-size:.78rem;padding:8px 14px}
 .badge-modo{display:inline-block;background:var(--bordeaux);color:#fff;font-size:.62rem;font-weight:700;min-width:18px;text-align:center;border-radius:9px;padding:1px 6px;margin-left:4px}
+.aw-vign{flex:0 0 auto;width:46px;height:46px;border-radius:8px;background-size:cover;background-position:center;display:flex;align-items:center;justify-content:center;text-decoration:none;font-size:1.3rem;background-color:#2a1622}
 `;document.head.appendChild(st);})();
 (function(){var st=document.createElement("style");st.textContent=`
 .eng-l{display:flex;align-items:center;gap:10px;padding:9px 4px;border-bottom:1px solid rgba(255,255,255,.07);font-size:.85rem;color:var(--blanc);font-weight:300;cursor:pointer}
@@ -7361,7 +7362,7 @@ async function chargerAwardsSupabase(){
   try{
     var rc=await window._sb.from("awards_config").select("ouvert,fin").eq("id",1).limit(1);
     if(!rc.error && rc.data && rc.data[0]) window.AWARDS_CONFIG={ouvert:!!rc.data[0].ouvert, fin:rc.data[0].fin||null};
-    var r=await window._sb.from("awards_cands").select("id,pseudo,categorie,nom,detail,cree_le").eq("valide",true).eq("rejete",false);
+    var r=await window._sb.from("awards_cands").select("id,pseudo,categorie,nom,detail,contenu,lien,cree_le").eq("valide",true).eq("rejete",false);
     if(!r.error){ var g={}; (r.data||[]).forEach(function(c){ (g[c.categorie]=g[c.categorie]||[]).push(c); }); window.AWARDS_CANDS=g; }
     var rv=await window._sb.from("awards_votes").select("categorie,jour,cand_id,user_id");
     if(!rv.error){
@@ -7370,7 +7371,7 @@ async function chargerAwardsSupabase(){
       window.AWARDS_COMPTE=cpt; window.AWARDS_MES_VOTES=mine;
     }
     if(estAdmin()){
-      var ra=await window._sb.from("awards_cands").select("id,pseudo,categorie,nom,detail,cree_le").eq("valide",false).eq("rejete",false).order("id",{ascending:true});
+      var ra=await window._sb.from("awards_cands").select("id,pseudo,categorie,nom,detail,contenu,lien,cree_le").eq("valide",false).eq("rejete",false).order("id",{ascending:true});
       if(!ra.error) window.AWARDS_MODERER=ra.data||[];
     }
     if(window.rendreAwardsExtra) rendreAwardsExtra();
@@ -7380,18 +7381,37 @@ async function chargerAwardsSupabase(){
   }catch(e){ console.warn("awards:",e); }
 }
 window.chargerAwardsSupabase=chargerAwardsSupabase;
+function majFormAward(){
+  var c=document.getElementById("aw-cat"); if(!c) return;
+  var zp=document.getElementById("aw-zone-photo"), zv=document.getElementById("aw-zone-video");
+  if(zp) zp.style.display=(c.value==="photo")?"":"none";
+  if(zv) zv.style.display=(c.value==="video")?"":"none";
+}
+window.majFormAward=majFormAward;
 async function envoyerAward(){
   if(!window.MON_USER || !window.MON_PROFIL_ID){ toast(t("prj.needLogin")); return; }
   var cat=(document.getElementById("aw-cat").value||"fan");
   var nom=(document.getElementById("aw-nom").value||"").trim();
   var detail=(document.getElementById("aw-detail").value||"").trim();
-  if(!nom){ toast(t("aw.needNom")); return; }
   var champs={user_id:window.MON_USER.id, fan_id:window.MON_PROFIL_ID, pseudo:(typeof MOI!=="undefined"&&MOI?MOI.prenom:"")||"", categorie:cat, nom:nom, detail:detail, valide:false, rejete:false};
+  if(cat==="photo"){
+    var f=(document.getElementById("aw-photo")||{files:[]}).files[0];
+    if(!f && !nom){ toast(t("aw.needPhoto")); return; }
+    if(f) champs.contenu=await lireImage(f,1100,.82);
+  } else if(cat==="video"){
+    var lien=(document.getElementById("aw-lien")||{}).value||""; lien=lien.trim();
+    if(!lien && !nom){ toast(t("aw.needVideo")); return; }
+    if(lien) champs.lien=lien;
+  } else {
+    if(!nom){ toast(t("aw.needNom")); return; }
+  }
   var r=await window._sb.from("awards_cands").insert(champs);
   if(r&&r.error){ diag("L'envoi n'a pas fonctionné ✦",false); console.warn("award insert:",r.error); return; }
   toast(t("aw.sent"));
   var a=document.getElementById("aw-nom"); if(a)a.value="";
   var b=document.getElementById("aw-detail"); if(b)b.value="";
+  var pf=document.getElementById("aw-photo"); if(pf)pf.value="";
+  var ln=document.getElementById("aw-lien"); if(ln)ln.value="";
   chargerAwardsSupabase();
 }
 window.envoyerAward=envoyerAward;
@@ -7426,7 +7446,9 @@ window.enregistrerConfigAwards=enregistrerConfigAwards;
 function unItemAwardModo(c){
   var cat=AWARD_CATS.find(function(x){return x.id===c.categorie;});
   var nomCat=cat?t(cat.cle):c.categorie;
-  return '<div class="mod-item"><div class="mod-info" style="flex:1"><b>🏆 '+echapAw(c.nom||"")+'</b>'
+  var apercu = c.contenu ? '<div class="mod-img" style="background-image:url('+c.contenu+')"></div>'
+             : c.lien ? '<a href="'+echapAw(c.lien)+'" target="_blank" rel="noopener" style="color:var(--rose)">🎬 '+echapAw(c.lien)+'</a>' : '';
+  return '<div class="mod-item">'+apercu+'<div class="mod-info" style="flex:1"><b>🏆 '+echapAw(c.nom||"")+'</b>'
     +'<span>'+nomCat+' · '+echapAw(c.pseudo||"")+'</span>'
     +(c.detail?'<span>'+echapAw(c.detail)+'</span>':'')+'</div>'
     +'<div class="mod-btns"><button class="btn" onclick="approuverAward('+c.id+')">✅ '+t("med.approve")+'</button>'
@@ -7466,8 +7488,16 @@ function rendreAwardsExtra(){
   var etat = ouvert ? "" : `<p style="text-align:center;font-size:.82rem;color:var(--beige);margin:0 0 14px">🔒 ${t("aw.closedNote")}</p>`;
   var form = connecte ? `<details class="verre" style="margin-bottom:14px">
       <summary style="cursor:pointer;color:var(--rose);font-weight:600;list-style:none">➕ ${t("aw.propose")}</summary>
-      <select id="aw-cat" style="width:100%;margin-top:10px">${AWARD_CATS.map(function(c){return '<option value="'+c.id+'">'+t(c.cle)+'</option>';}).join("")}</select>
+      <select id="aw-cat" onchange="majFormAward()" style="width:100%;margin-top:10px">${AWARD_CATS.map(function(c){return '<option value="'+c.id+'">'+t(c.cle)+'</option>';}).join("")}</select>
       <input type="text" id="aw-nom" placeholder="${t("aw.phNom")}" style="width:100%;margin-top:8px">
+      <div id="aw-zone-photo" style="margin-top:8px;display:none">
+        <label style="display:block;font-size:.7rem;color:var(--beige);margin-bottom:4px">📸 ${t("aw.photoLabel")}</label>
+        <input type="file" accept="image/*" id="aw-photo">
+      </div>
+      <div id="aw-zone-video" style="margin-top:8px;display:none">
+        <label style="display:block;font-size:.7rem;color:var(--beige);margin-bottom:4px">🎬 ${t("aw.videoLabel")}</label>
+        <input type="url" id="aw-lien" placeholder="${t("med.linkPh")}" style="width:100%">
+      </div>
       <input type="text" id="aw-detail" placeholder="${t("aw.phDetail")}" style="width:100%;margin-top:8px">
       <button class="btn btn-large" style="margin-top:10px" onclick="envoyerAward()">📤 ${t("prj.send")}</button>
       <p style="font-size:.68rem;color:var(--beige);margin-top:6px">${t("prj.modNote")}</p>
@@ -7479,7 +7509,9 @@ function rendreAwardsExtra(){
     var total=cands.reduce(function(s,c){return s+(window.AWARDS_COMPTE[c.id]||0);},0);
     var lignes = cands.length ? cands.map(function(c){
         var n=window.AWARDS_COMPTE[c.id]||0, vote=(monVote===c.id);
-        return `<div class="option-vote"><span>${echapAw(c.nom)}<small>${c.detail?echapAw(c.detail)+" · ":""}${c.pseudo?"✦ "+echapAw(c.pseudo)+" · ":""}${n} ${ta("votes")}</small></span>
+        var vign = c.contenu ? '<a href="'+c.contenu+'" target="_blank" rel="noopener" class="aw-vign" style="background-image:url('+c.contenu+')"></a>'
+                 : c.lien ? '<a href="'+echapAw(c.lien)+'" target="_blank" rel="noopener" class="aw-vign aw-vid">🎬</a>' : '';
+        return `<div class="option-vote"><span style="display:flex;align-items:center;gap:8px;min-width:0">${vign}<span style="min-width:0">${echapAw(c.nom)||(c.lien?"🎬":"📸")}<small>${c.detail?echapAw(c.detail)+" · ":""}${c.pseudo?"✦ "+echapAw(c.pseudo)+" · ":""}${n} ${ta("votes")}</small></span></span>
           <span style="display:flex;align-items:center;gap:6px">
             <button class="btn-vote${vote?" vote":""}" ${dis} style="${opa}" onclick="voterAwardSb('${cat.id}',${c.id})">${vote?t("aw.voted"):t("aw.vote")}</button>
             ${admin?'<button class="mm-retirer" style="position:static" onclick="retirerAward('+c.id+')" title="'+t("med.remove")+'">🗑️</button>':""}
@@ -7489,6 +7521,7 @@ function rendreAwardsExtra(){
     return `<div class="verre categorie-vote"><h3 class="accent">${t(cat.cle)}</h3>${lignes}${ltotal}</div>`;
   }).join("");
   s.innerHTML=panneauAdmin+etat+form+cats;
+  if(typeof majFormAward==="function") majFormAward();
   if(window.majCompteRebours) majCompteRebours();
 }
 
