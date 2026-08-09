@@ -549,7 +549,7 @@ footer .marque{font-family:'Bebas Neue';font-size:1.1rem;letter-spacing:.15em;co
         <p style="margin:4px 0"><span data-i18n="acc.connected">Connected:</span> <b id="auth-qui"></b></p>
         <button type="button" class="btn fantome" onclick="seDeconnecter()" data-i18n="acc.logout">Log out</button>
       </div>
-      <div style="font-size:.66rem;opacity:.5;margin-top:8px">version : COMPTES-39</div>
+      <div style="font-size:.66rem;opacity:.5;margin-top:8px">version : COMPTES-40</div>
     </div>
     <div class="verre" id="dejaFiche" style="display:none;margin-bottom:16px">
       <h3 class="accent" data-i18n="acc.haveCard">Your card is created ✓</h3>
@@ -2947,7 +2947,7 @@ const PAYS_DATA=[
   ["IT","europe",42.8,12.5],["PL","europe",52,19],["NL","europe",52.2,5.3],["BE","europe",50.6,4.6],["CH","europe",46.8,8.2],
   ["PT","europe",39.5,-8],["NO","europe",64,11],["DK","europe",56,10],["FI","europe",63,26],["IE","europe",53.3,-8],
   ["AT","europe",47.5,14.5],["GR","europe",39,22],["CZ","europe",49.8,15.5],["RO","europe",45.9,25],["HU","europe",47.2,19],
-  ["US","northAmerica",39,-98],["CA","northAmerica",56,-100],["MX","northAmerica",23.5,-102],["GT","northAmerica",15.5,-90.4],["CR","northAmerica",9.9,-84],["CU","northAmerica",21.5,-79],
+  ["US","northAmerica",39,-98],["CA","northAmerica",49,-96],["MX","northAmerica",23.5,-102],["GT","northAmerica",15.5,-90.4],["CR","northAmerica",9.9,-84],["CU","northAmerica",21.5,-79],
   ["BR","southAmerica",-10,-52],["VE","southAmerica",7.5,-66],["AR","southAmerica",-35,-64],["CO","southAmerica",4.5,-73],
   ["CL","southAmerica",-33,-71],["PE","southAmerica",-9.5,-75],["EC","southAmerica",-1.5,-78.5],["UY","southAmerica",-32.8,-56],["BO","southAmerica",-16.5,-64.5],
   ["PH","asia",12.5,122],["JP","asia",36.5,138],["KR","asia",36.5,127.8],["TH","asia",15.5,101],["ID","asia",-2.5,118],
@@ -3220,18 +3220,19 @@ function pointsFan(fn){ return detailPoints(fn).reduce(function(s,l){return s+l[
 function integrerFan(fn){
   window.REGISTRE_FANS.push(fn);
   /* 1 · point sur la carte mondiale */
-  const existante=FANS.find(f=>f[2].toLowerCase()===fn.ville.toLowerCase());
+  const existante=FANS.find(f=>f[2].toLowerCase()===fn.ville.toLowerCase() && (f[5]||"")===(fn.code||""));
   if(existante){ existante[3]++; }
   else{
-    /* coordonnées exactes si la ville est connue, sinon autour du centre du pays */
-    const vc=Object.keys(VILLES_COORDS).find(v=>v.toLowerCase()===fn.ville.toLowerCase());
+    /* coordonnées exactes si la ville est connue (villes du monde, en tenant compte du pays),
+       sinon autour du centre du pays */
+    const cv=coordsVille(fn.ville, fn.code);
     let lat,lon;
-    if(vc){ lat=VILLES_COORDS[vc].lat; lon=VILLES_COORDS[vc].lon; }
+    if(cv){ lat=cv.lat; lon=cv.lon; }
     else{
       const d=PAYS_DATA.find(x=>x[0]===fn.code);
       lat=d?d[2]+(Math.random()-.5)*3:0; lon=d?d[3]+(Math.random()-.5)*3:0;
     }
-    FANS.push([lat,lon,fn.ville,1,fn.drapeau]);
+    FANS.push([lat,lon,fn.ville,1,fn.drapeau,fn.code]);
   }
   /* 2 · fiche consultable en touchant le point */
   FICHES[fn.ville]={prenom:fn.prenom,age:fn.age,pays:fn.drapeau+" "+(nomsRegion().of(fn.code==="XX"?"UN":fn.code)||""),
@@ -6044,6 +6045,76 @@ const VILLES_COORDS={
  "Vienna":{lat:48.21,lon:16.37},"Dublin":{lat:53.35,lon:-6.26},"Düsseldorf":{lat:51.23,lon:6.78},
  "Riga":{lat:56.95,lon:24.11},"Malmö":{lat:55.60,lon:13.00},"Helsinki":{lat:60.17,lon:24.94},
 };
+/* ---- Grande liste de villes du monde (nom sans accent en minuscules, lat, lon, pays) ----
+   Permet de placer correctement les fans, en tenant compte du PAYS (évite les homonymes). */
+function _normVille(s){ try{ return (s||"").trim().toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g,""); }catch(e){ return (s||"").trim().toLowerCase(); } }
+const VILLES_MONDE=[
+ /* Canada */ ["toronto",43.65,-79.38,"CA"],["montreal",45.50,-73.57,"CA"],["vancouver",49.28,-123.12,"CA"],["ottawa",45.42,-75.70,"CA"],["calgary",51.05,-114.07,"CA"],["edmonton",53.55,-113.49,"CA"],["quebec",46.81,-71.21,"CA"],["quebec city",46.81,-71.21,"CA"],["winnipeg",49.90,-97.14,"CA"],["hamilton",43.26,-79.87,"CA"],["halifax",44.65,-63.58,"CA"],["victoria",48.43,-123.37,"CA"],["london",42.98,-81.24,"CA"],["mississauga",43.59,-79.64,"CA"],["brampton",43.73,-79.76,"CA"],["laval",45.57,-73.72,"CA"],["kitchener",43.45,-80.49,"CA"],["windsor",42.31,-83.04,"CA"],["saskatoon",52.13,-106.67,"CA"],["regina",50.45,-104.62,"CA"],["gatineau",45.48,-75.70,"CA"],["moncton",46.09,-64.77,"CA"],
+ /* USA */ ["new york",40.71,-74.01,"US"],["los angeles",34.05,-118.24,"US"],["chicago",41.88,-87.63,"US"],["houston",29.76,-95.37,"US"],["phoenix",33.45,-112.07,"US"],["philadelphia",39.95,-75.16,"US"],["san antonio",29.42,-98.49,"US"],["san diego",32.72,-117.16,"US"],["dallas",32.78,-96.80,"US"],["san jose",37.34,-121.89,"US"],["austin",30.27,-97.74,"US"],["san francisco",37.77,-122.42,"US"],["seattle",47.61,-122.33,"US"],["boston",42.36,-71.06,"US"],["miami",25.76,-80.19,"US"],["atlanta",33.75,-84.39,"US"],["denver",39.74,-104.99,"US"],["washington",38.90,-77.04,"US"],["las vegas",36.17,-115.14,"US"],["portland",45.52,-122.68,"US"],["detroit",42.33,-83.05,"US"],["minneapolis",44.98,-93.27,"US"],["nashville",36.16,-86.78,"US"],["orlando",28.54,-81.38,"US"],["new orleans",29.95,-90.07,"US"],["sacramento",38.58,-121.49,"US"],["kansas city",39.10,-94.58,"US"],["pittsburgh",40.44,-79.99,"US"],["cleveland",41.50,-81.69,"US"],["tampa",27.95,-82.46,"US"],["charlotte",35.23,-80.84,"US"],["columbus",39.96,-82.99,"US"],["indianapolis",39.77,-86.16,"US"],["salt lake city",40.76,-111.89,"US"],["honolulu",21.31,-157.86,"US"],["st louis",38.63,-90.20,"US"],["baltimore",39.29,-76.61,"US"],
+ /* Mexique */ ["mexico city",19.43,-99.13,"MX"],["mexico",19.43,-99.13,"MX"],["ciudad de mexico",19.43,-99.13,"MX"],["guadalajara",20.67,-103.35,"MX"],["monterrey",25.67,-100.31,"MX"],["puebla",19.04,-98.20,"MX"],["tijuana",32.51,-117.04,"MX"],["cancun",21.16,-86.85,"MX"],["merida",20.97,-89.62,"MX"],
+ /* Brésil */ ["sao paulo",-23.55,-46.63,"BR"],["rio de janeiro",-22.91,-43.17,"BR"],["rio",-22.91,-43.17,"BR"],["brasilia",-15.79,-47.88,"BR"],["salvador",-12.97,-38.51,"BR"],["fortaleza",-3.73,-38.52,"BR"],["belo horizonte",-19.92,-43.94,"BR"],["manaus",-3.12,-60.02,"BR"],["curitiba",-25.43,-49.27,"BR"],["recife",-8.05,-34.88,"BR"],["porto alegre",-30.03,-51.23,"BR"],["belem",-1.46,-48.50,"BR"],["goiania",-16.68,-49.25,"BR"],["campinas",-22.91,-47.06,"BR"],["florianopolis",-27.60,-48.55,"BR"],
+ /* Argentine / Colombie / Chili / Pérou / Équateur / Venezuela / Uruguay / Bolivie */
+ ["buenos aires",-34.60,-58.38,"AR"],["cordoba",-31.42,-64.18,"AR"],["rosario",-32.95,-60.66,"AR"],["mendoza",-32.89,-68.84,"AR"],["la plata",-34.92,-57.95,"AR"],
+ ["bogota",4.71,-74.07,"CO"],["medellin",6.24,-75.57,"CO"],["cali",3.45,-76.53,"CO"],["barranquilla",10.96,-74.80,"CO"],["cartagena",10.39,-75.51,"CO"],
+ ["santiago",-33.45,-70.67,"CL"],["valparaiso",-33.05,-71.62,"CL"],["concepcion",-36.83,-73.05,"CL"],
+ ["lima",-12.05,-77.04,"PE"],["arequipa",-16.41,-71.54,"PE"],["cusco",-13.53,-71.97,"PE"],
+ ["quito",-0.18,-78.47,"EC"],["guayaquil",-2.19,-79.89,"EC"],
+ ["caracas",10.48,-66.90,"VE"],["maracaibo",10.65,-71.64,"VE"],["valencia",10.16,-68.00,"VE"],
+ ["montevideo",-34.90,-56.19,"UY"],["la paz",-16.50,-68.15,"BO"],["santa cruz",-17.78,-63.18,"BO"],
+ /* Asie */ ["tokyo",35.68,139.69,"JP"],["osaka",34.69,135.50,"JP"],["yokohama",35.44,139.64,"JP"],["nagoya",35.18,136.91,"JP"],["sapporo",43.06,141.35,"JP"],["fukuoka",33.59,130.40,"JP"],["kyoto",35.01,135.77,"JP"],["kobe",34.69,135.20,"JP"],
+ ["seoul",37.57,126.98,"KR"],["busan",35.18,129.08,"KR"],["incheon",37.46,126.71,"KR"],["daegu",35.87,128.60,"KR"],
+ ["bangkok",13.76,100.50,"TH"],["chiang mai",18.79,98.99,"TH"],["phuket",7.88,98.39,"TH"],
+ ["jakarta",-6.21,106.85,"ID"],["surabaya",-7.25,112.75,"ID"],["bandung",-6.91,107.61,"ID"],["denpasar",-8.65,115.22,"ID"],["bali",-8.65,115.22,"ID"],
+ ["mumbai",19.08,72.88,"IN"],["delhi",28.61,77.21,"IN"],["new delhi",28.61,77.21,"IN"],["bangalore",12.97,77.59,"IN"],["bengaluru",12.97,77.59,"IN"],["hyderabad",17.39,78.49,"IN"],["chennai",13.08,80.27,"IN"],["kolkata",22.57,88.36,"IN"],["pune",18.52,73.86,"IN"],["ahmedabad",23.03,72.58,"IN"],
+ ["shanghai",31.23,121.47,"CN"],["beijing",39.90,116.40,"CN"],["guangzhou",23.13,113.26,"CN"],["shenzhen",22.54,114.06,"CN"],["chengdu",30.57,104.07,"CN"],["hong kong",22.32,114.17,"CN"],
+ ["hanoi",21.03,105.85,"VN"],["ho chi minh city",10.82,106.63,"VN"],["saigon",10.82,106.63,"VN"],["da nang",16.05,108.20,"VN"],
+ ["kuala lumpur",3.14,101.69,"MY"],["george town",5.41,100.34,"MY"],["johor bahru",1.49,103.74,"MY"],
+ ["singapore",1.35,103.82,"SG"],
+ ["istanbul",41.01,28.98,"TR"],["ankara",39.93,32.86,"TR"],["izmir",38.42,27.14,"TR"],["antalya",36.90,30.70,"TR"],
+ ["tel aviv",32.08,34.78,"IL"],["jerusalem",31.77,35.21,"IL"],["haifa",32.79,34.99,"IL"],
+ ["manila",14.60,120.98,"PH"],["quezon city",14.68,121.04,"PH"],["cebu",10.32,123.89,"PH"],["davao",7.19,125.46,"PH"],
+ /* Afrique */ ["johannesburg",-26.20,28.05,"ZA"],["cape town",-33.92,18.42,"ZA"],["durban",-29.86,31.02,"ZA"],["pretoria",-25.75,28.19,"ZA"],
+ ["casablanca",33.57,-7.59,"MA"],["rabat",34.02,-6.83,"MA"],["marrakech",31.63,-8.01,"MA"],["tanger",35.76,-5.83,"MA"],
+ ["lagos",6.52,3.38,"NG"],["abuja",9.06,7.50,"NG"],["kano",12.00,8.52,"NG"],
+ ["nairobi",-1.29,36.82,"KE"],["mombasa",-4.04,39.67,"KE"],
+ ["cairo",30.04,31.24,"EG"],["alexandria",31.20,29.92,"EG"],["giza",30.01,31.21,"EG"],
+ ["tunis",36.81,10.18,"TN"],["sfax",34.74,10.76,"TN"],["accra",5.60,-0.19,"GH"],["kumasi",6.69,-1.62,"GH"],["dakar",14.72,-17.47,"SN"],
+ /* Océanie */ ["sydney",-33.87,151.21,"AU"],["melbourne",-37.81,144.96,"AU"],["brisbane",-27.47,153.03,"AU"],["perth",-31.95,115.86,"AU"],["adelaide",-34.93,138.60,"AU"],["gold coast",-28.02,153.40,"AU"],["canberra",-35.28,149.13,"AU"],
+ ["auckland",-36.85,174.76,"NZ"],["wellington",-41.29,174.78,"NZ"],["christchurch",-43.53,172.64,"NZ"],["suva",-18.14,178.44,"FJ"],
+ /* Europe (complément) */
+ ["lyon",45.76,4.83,"FR"],["marseille",43.30,5.37,"FR"],["toulouse",43.60,1.44,"FR"],["nice",43.70,7.27,"FR"],["nantes",47.22,-1.55,"FR"],["bordeaux",44.84,-0.58,"FR"],["lille",50.63,3.06,"FR"],["strasbourg",48.57,7.75,"FR"],["rennes",48.11,-1.68,"FR"],["montpellier",43.61,3.88,"FR"],["grenoble",45.19,5.72,"FR"],["rouen",49.44,1.10,"FR"],["reims",49.26,4.03,"FR"],
+ ["frankfurt",50.11,8.68,"DE"],["stuttgart",48.78,9.18,"DE"],["dortmund",51.51,7.47,"DE"],["essen",51.46,7.01,"DE"],["leipzig",51.34,12.37,"DE"],["dresden",51.05,13.74,"DE"],["hannover",52.37,9.73,"DE"],["nurnberg",49.45,11.08,"DE"],["bremen",53.08,8.80,"DE"],
+ ["sevilla",37.39,-5.99,"ES"],["seville",37.39,-5.99,"ES"],["valencia",39.47,-0.38,"ES"],["bilbao",43.26,-2.93,"ES"],["malaga",36.72,-4.42,"ES"],["zaragoza",41.65,-0.88,"ES"],["murcia",37.99,-1.13,"ES"],["palma",39.57,2.65,"ES"],
+ ["roma",41.90,12.50,"IT"],["rome",41.90,12.50,"IT"],["napoli",40.85,14.27,"IT"],["naples",40.85,14.27,"IT"],["torino",45.07,7.69,"IT"],["turin",45.07,7.69,"IT"],["firenze",43.77,11.26,"IT"],["florence",43.77,11.26,"IT"],["bologna",44.49,11.34,"IT"],["venezia",45.44,12.33,"IT"],["venice",45.44,12.33,"IT"],["palermo",38.12,13.36,"IT"],
+ ["lisboa",38.72,-9.13,"PT"],["lisbon",38.72,-9.13,"PT"],["porto",41.15,-8.61,"PT"],["braga",41.55,-8.42,"PT"],
+ ["rotterdam",51.92,4.48,"NL"],["den haag",52.08,4.31,"NL"],["the hague",52.08,4.31,"NL"],["utrecht",52.09,5.12,"NL"],["eindhoven",51.44,5.48,"NL"],
+ ["brussels",50.85,4.35,"BE"],["bruxelles",50.85,4.35,"BE"],["gent",51.05,3.72,"BE"],["ghent",51.05,3.72,"BE"],["brugge",51.21,3.22,"BE"],["liege",50.63,5.57,"BE"],
+ ["zurich",47.38,8.54,"CH"],["geneve",46.20,6.14,"CH"],["geneva",46.20,6.14,"CH"],["basel",47.56,7.59,"CH"],["bern",46.95,7.44,"CH"],["lausanne",46.52,6.63,"CH"],
+ ["krakow",50.06,19.94,"PL"],["lodz",51.76,19.46,"PL"],["wroclaw",51.11,17.03,"PL"],["poznan",52.41,16.93,"PL"],["gdansk",54.35,18.65,"PL"],
+ ["trondheim",63.43,10.39,"NO"],["stavanger",58.97,5.73,"NO"],
+ ["uppsala",59.86,17.64,"SE"],["lund",55.70,13.19,"SE"],["orebro",59.27,15.21,"SE"],["linkoping",58.41,15.62,"SE"],["gothenburg",57.71,11.97,"SE"],
+ ["aarhus",56.16,10.20,"DK"],["aalborg",57.05,9.92,"DK"],
+ ["tampere",61.50,23.79,"FI"],["espoo",60.21,24.66,"FI"],["oulu",65.01,25.47,"FI"],
+ ["cork",51.90,-8.47,"IE"],["galway",53.27,-9.05,"IE"],
+ ["graz",47.07,15.44,"AT"],["salzburg",47.81,13.05,"AT"],["linz",48.31,14.29,"AT"],["innsbruck",47.27,11.39,"AT"],
+ ["athens",37.98,23.73,"GR"],["thessaloniki",40.64,22.94,"GR"],["prague",50.08,14.44,"CZ"],["praha",50.08,14.44,"CZ"],["brno",49.20,16.61,"CZ"],["budapest",47.50,19.04,"HU"],["bucharest",44.43,26.10,"RO"],["cluj",46.77,23.60,"RO"],
+ ["liverpool",53.41,-2.99,"GB"],["leeds",53.80,-1.55,"GB"],["edinburgh",55.95,-3.19,"GB"],["sheffield",53.38,-1.47,"GB"],["cardiff",51.48,-3.18,"GB"],["belfast",54.60,-5.93,"GB"],["newcastle",54.98,-1.61,"GB"],["nottingham",52.95,-1.15,"GB"],["brighton",50.82,-0.14,"GB"],["leicester",52.64,-1.13,"GB"],
+ ["havana",23.11,-82.37,"CU"],["san jose",9.93,-84.08,"CR"],["guatemala city",14.63,-90.51,"GT"],
+];
+function coordsVille(ville, code){
+  var v=_normVille(ville); if(!v) return null;
+  /* 1) ville connue DANS le bon pays (priorité, évite les homonymes) */
+  var m=VILLES_MONDE.find(function(x){return x[0]===v && x[3]===code;});
+  if(m) return {lat:m[1],lon:m[2]};
+  /* 2) villes de concert (par nom) */
+  var k=Object.keys(VILLES_COORDS).find(function(c){return _normVille(c)===v;});
+  if(k) return VILLES_COORDS[k];
+  /* 3) même nom dans un autre pays (dernier recours avant le centre du pays) */
+  var m2=VILLES_MONDE.find(function(x){return x[0]===v;});
+  if(m2) return {lat:m2[1],lon:m2[2]};
+  return null;
+}
+window.coordsVille=coordsVille;
 /* Carte des concerts : version monde + version Europe (mêmes fonctions, cadrage différent) */
 const EU_CADRAGE={lonMin:-12,lonMax:31,latMin:34,latMax:66};
 function dessinerCarteTour(){
