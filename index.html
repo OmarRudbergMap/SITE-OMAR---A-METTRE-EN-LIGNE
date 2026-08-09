@@ -536,7 +536,7 @@ footer .marque{font-family:'Bebas Neue';font-size:1.1rem;letter-spacing:.15em;co
         <p style="margin:4px 0"><span data-i18n="acc.connected">Connected:</span> <b id="auth-qui"></b></p>
         <button type="button" class="btn fantome" onclick="seDeconnecter()" data-i18n="acc.logout">Log out</button>
       </div>
-      <div style="font-size:.66rem;opacity:.5;margin-top:8px">version : COMPTES-28</div>
+      <div style="font-size:.66rem;opacity:.5;margin-top:8px">version : COMPTES-29</div>
     </div>
     <div class="verre" id="dejaFiche" style="display:none;margin-bottom:16px">
       <h3 class="accent" data-i18n="acc.haveCard">Your card is created ✓</h3>
@@ -3630,6 +3630,8 @@ button.chip{font:inherit;text-align:left;line-height:1.5}
 .carrousel .tuile{flex:0 0 62%;min-width:62%;aspect-ratio:16/11;scroll-snap-align:center}
 .carrousel .diapo{position:relative;overflow:hidden}
 .carrousel .diapo img,.carrousel .diapo video{width:100%;height:100%;object-fit:cover;border-radius:14px;display:block}
+.carrousel .diapo .diapo-insta{position:absolute;left:6px;bottom:6px;z-index:3;background:rgba(0,0,0,.6);color:#fff;font-size:.62rem;font-weight:600;padding:3px 8px;border-radius:10px;text-decoration:none;max-width:calc(100% - 12px);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.carrousel .diapo .diapo-insta:hover{background:var(--bordeaux)}
 .sup-apercu{position:absolute;top:6px;right:6px;width:24px;height:24px;border-radius:50%;
   border:none;background:rgba(17,17,17,.75);color:var(--blanc);font-size:.7rem;z-index:2}
 .dep-apercu{position:absolute;bottom:8px;width:30px;height:30px;border-radius:50%;
@@ -5563,6 +5565,27 @@ function diapoMediaFixe(m,mid){
     ${statsMediaHTML(mid)}
   </div>`;
 }
+/* ---- Instagram d'un fan : normalisation + recherche par média ---- */
+function normInsta(raw){
+  raw=String(raw||"").trim(); if(!raw) return null;
+  var h=raw; var mm=raw.match(/instagram\.com\/([^\/?#]+)/i); if(mm) h=mm[1];
+  h=h.replace(/^@+/,"").replace(/\/+$/,"").trim(); if(!h) return null;
+  return {handle:"@"+h, url:"https://instagram.com/"+encodeURIComponent(h)};
+}
+function instaDuMedia(m){
+  var raw=(m&&m.insta)||"";
+  if(!raw && m && m.fan_id){ var f=(window.REGISTRE_FANS||[]).find(function(x){return x.fanId===m.fan_id;}); if(f) raw=f.insta||""; }
+  return normInsta(raw);
+}
+window.instaDuMedia=instaDuMedia;
+/* Diapo d'une photo/vidéo de fan (validée) dans le carrousel d'un concert, avec le pseudo Instagram */
+function diapoMediaFanConcert(m,mid){
+  var ig=m._insta;
+  var badge = ig ? '<a class="diapo-insta" href="'+ig.url+'" target="_blank" rel="noopener" onclick="event.stopPropagation()">📷 '+escapeHtmlM(ig.handle)+'</a>' : '';
+  return '<div class="diapo media" data-mid="'+mid+'"'+(m.type==="video"?' data-type="video"':"")+'>'
+    +(m.type==="video"?'<video src="'+m.url+'" playsinline controls preload="metadata" onerror="videoManquante(this)"></video>':'<img src="'+m.url+'" alt="">')
+    +badge+statsMediaHTML(mid)+'</div>';
+}
 function rangGalerie(cleBase,type,store,titre,placeholders){
   const cle=cleBase+":"+type;
   const fixes=(store==="modo")?(GALERIE_ADMIN[cle]||[]):[];
@@ -5575,11 +5598,11 @@ function rangGalerie(cleBase,type,store,titre,placeholders){
       if(m.concert!==cleBase) return false;
       return type==="v" ? (m.type==="video") : (m.type!=="video");
     }).map(function(m){
-      return {url:(m.type==="video"?(m.lien||""):(m.contenu||"")), type:(m.type==="video"?"video":"photo"), _id:m.id};
+      return {url:(m.type==="video"?(m.lien||""):(m.contenu||"")), type:(m.type==="video"?"video":"photo"), _id:m.id, _insta:instaDuMedia(m)};
     });
   }
   const contenu = fixes.map((m,i)=>diapoMediaFixe(m,cle+"-f"+i)).join("")
-                + valides.map((m)=>diapoMediaFixe(m,"fan-"+cle+"-sb"+m._id)).join("")
+                + valides.map((m)=>diapoMediaFanConcert(m,"fan-"+cle+"-sb"+m._id)).join("")
                 + persos.map((m,i)=>diapoMedia(m,cle,i,store)).join("");
   return `<p style="font-size:.6rem;letter-spacing:.14em;text-transform:uppercase;color:var(--beige);margin:12px 0 4px">${titre}</p>
     <div class="carrousel" data-cle="${dataCle}">${
@@ -6418,9 +6441,11 @@ function unItemModeration(m){
     : '<div class="mod-img" style="background-image:url('+(m.contenu||"")+')"></div>';
   var selC='<label style="display:block;font-size:.66rem;color:var(--beige);margin-top:6px">🎤 '+t("med.assignConcert")+'</label>'
     +'<select class="sel-concert-med" onchange="assignerConcertMedia('+m.id+',this.value)">'+optionsConcertsMedia(m.concert||"")+'</select>';
+  var ig=instaDuMedia(m);
+  var igLine=ig?'<span>📷 <a href="'+ig.url+'" target="_blank" rel="noopener" style="color:var(--rose)">'+escapeHtmlM(ig.handle)+'</a></span>':'';
   return '<div class="mod-item">'+inner
     +'<div class="mod-info"><b>'+iconeType(m.type)+' '+escapeHtmlM(m.pseudo||"")+'</b>'
-    +(m.legende?'<span>'+escapeHtmlM(m.legende)+'</span>':'')+selC+'</div>'
+    +igLine+(m.legende?'<span>'+escapeHtmlM(m.legende)+'</span>':'')+selC+'</div>'
     +'<div class="mod-btns"><button class="btn" onclick="approuverMedia('+m.id+')">✅ '+t("med.approve")+'</button>'
     +'<button class="btn fantome" onclick="rejeterMedia('+m.id+')">✕ '+t("med.reject")+'</button></div></div>';
 }
@@ -6462,7 +6487,9 @@ function miniMedia(m, showStatus){
   /* bouton retirer : sur ses propres envois, ou pour l'admin sur n'importe quel visuel */
   var peutRetirer = (m.id!=null) && (showStatus || (typeof estAdmin==="function" && estAdmin()));
   var btnRetirer = peutRetirer ? '<button class="mm-retirer" title="'+t("med.remove")+'" onclick="retirerMedia('+m.id+')">🗑️</button>' : '';
-  return '<div class="mm">'+inner+btnRetirer+'<span class="mm-ico">'+iconeType(m.type)+'</span>'+statut+(m.legende?'<span class="mm-lg">'+escapeHtmlM(m.legende)+'</span>':'')+'</div>';
+  var ig=instaDuMedia(m);
+  var igHtml = ig ? '<a class="mm-insta" href="'+ig.url+'" target="_blank" rel="noopener">📷 '+escapeHtmlM(ig.handle)+'</a>' : '';
+  return '<div class="mm">'+inner+btnRetirer+'<span class="mm-ico">'+iconeType(m.type)+'</span>'+statut+(m.legende?'<span class="mm-lg">'+escapeHtmlM(m.legende)+'</span>':'')+igHtml+'</div>';
 }
 window.miniMedia=miniMedia;
 /* Carte d'un de MES envois : miniature + statut + menu pour rattacher à un concert */
@@ -6488,6 +6515,8 @@ window.carteMonEnvoi=carteMonEnvoi;
 .mm .mm-statut.ok{background:#2a8f56;color:#fff}
 .mm .mm-statut.att{background:#e0a24f;color:#3a2600}
 .mm .mm-lg{display:block;font-size:.62rem;color:var(--beige);padding:4px 6px;background:rgba(0,0,0,.25)}
+.mm .mm-insta{display:block;font-size:.62rem;font-weight:600;color:var(--rose);padding:4px 6px;text-decoration:none;background:rgba(0,0,0,.2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.mm .mm-insta:hover{text-decoration:underline}
 .mm .mm-retirer{position:absolute;bottom:5px;right:5px;font-size:.8rem;line-height:1;background:rgba(0,0,0,.55);border:none;border-radius:8px;padding:4px 6px;cursor:pointer;z-index:2}
 .mm .mm-retirer:hover{background:var(--bordeaux)}
 .mes-envois{display:flex;flex-direction:column;gap:10px;margin-top:8px}
