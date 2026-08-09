@@ -285,6 +285,14 @@ textarea.immense{min-height:300px}
   backdrop-filter:blur(6px);
 }
 .tuile .type{position:absolute;top:8px;right:8px;font-size:.85rem}
+.grille-galerie{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px;margin-top:12px}
+.grille-galerie .tuile{aspect-ratio:1}
+.grille-galerie .tuile-img{position:absolute;inset:0;background-size:cover;background-position:center}
+.grille-galerie .tuile-video{position:absolute;inset:0;display:grid;place-items:center;background:#111;text-decoration:none}
+.grille-galerie .tuile .tag{max-width:calc(100% - 16px);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.grille-galerie .tuile .tag a{color:#fff;text-decoration:underline}
+.grille-galerie .tuile .mm-retirer{position:absolute;top:6px;left:6px;font-size:.8rem;background:rgba(0,0,0,.55);border:none;border-radius:8px;padding:3px 6px;cursor:pointer;z-index:3}
+.grille-galerie .tuile .mm-retirer:hover{background:var(--bordeaux)}
 .filtres{display:flex;gap:8px;overflow-x:auto;padding:2px 0 12px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
 .filtres::-webkit-scrollbar{display:none}
 .puce{
@@ -536,7 +544,7 @@ footer .marque{font-family:'Bebas Neue';font-size:1.1rem;letter-spacing:.15em;co
         <p style="margin:4px 0"><span data-i18n="acc.connected">Connected:</span> <b id="auth-qui"></b></p>
         <button type="button" class="btn fantome" onclick="seDeconnecter()" data-i18n="acc.logout">Log out</button>
       </div>
-      <div style="font-size:.66rem;opacity:.5;margin-top:8px">version : COMPTES-29</div>
+      <div style="font-size:.66rem;opacity:.5;margin-top:8px">version : COMPTES-30</div>
     </div>
     <div class="verre" id="dejaFiche" style="display:none;margin-bottom:16px">
       <h3 class="accent" data-i18n="acc.haveCard">Your card is created ✓</h3>
@@ -662,10 +670,11 @@ footer .marque{font-family:'Bebas Neue';font-size:1.1rem;letter-spacing:.15em;co
     <h2 data-i18n="gal.title">Photos & Videos</h2>
     <p style="color:var(--beige);margin:8px 0 16px" data-i18n="gal.sub">This is where fans share their own photos and videos: concerts, meetings, fan art, edits. Anyone can send their visuals to enrich the community gallery.</p>
     <div class="filtres" id="filtresGalerie">
-      <button class="puce actif" data-filtre="tout" data-i18n="gal.all">All</button>
-      <button class="puce" data-filtre="rencontre" data-i18n="gal.meetings">Meetings</button>
-      <button class="puce" data-filtre="fanart">Fan art</button>
-      <button class="puce" data-filtre="video" data-i18n="gal.videos">Videos</button>
+      <button class="puce actif" data-filtre="tout" data-i18n="gal.fAll">Tout</button>
+      <button class="puce" data-filtre="photo" data-i18n="gal.fPhotos">📸 Photos</button>
+      <button class="puce" data-filtre="selfie" data-i18n="gal.fSelfies">🤳 Selfies</button>
+      <button class="puce" data-filtre="dessin" data-i18n="gal.fArt">🎨 Fan art</button>
+      <button class="puce" data-filtre="video" data-i18n="gal.fVideos">🎬 Vidéos</button>
     </div>
     <div class="filtres" id="filtresAnnee">
       <button class="puce actif" data-an="tout" data-i18n="gal.all2">All</button>
@@ -673,31 +682,9 @@ footer .marque{font-family:'Bebas Neue';font-size:1.1rem;letter-spacing:.15em;co
       <button class="puce" data-an="2025">2025</button>
       <button class="puce" data-an="2026">2026</button>
     </div>
-    <div class="groupe-galerie" data-cat="rencontre">
-      <h4 style="font-family:'Bebas Neue';letter-spacing:.1em;color:var(--rose);margin:14px 0 8px" data-i18n="gal.gMeetings">🤝 Meetings</h4>
-      <div class="carrousel">
-        <div class="tuile" data-cat="rencontre" data-an="2026"><span class="picto">🖼️</span><span class="tag"><span data-i18n="gal.tMeeting2">Meeting</span> · Göteborg · 2026</span></div>
-        <div class="tuile" data-cat="rencontre" data-an="2025"><span class="picto">🖼️</span><span class="tag"><span data-i18n="gal.tMeeting">Meeting</span> · Paris · 2025</span></div>
-        <div class="tuile grande" data-cat="rencontre" data-an="2024"><span class="picto">🖼️</span><span class="tag">Meeting · Madrid · 2024</span></div>
-      </div>
-    </div>
-    <div class="groupe-galerie" data-cat="fanart">
-      <h4 style="font-family:'Bebas Neue';letter-spacing:.1em;color:var(--rose);margin:14px 0 8px">🎨 Fan art</h4>
-      <div class="carrousel">
-        <div class="tuile" data-cat="fanart" data-an="2026"><span class="picto">🎨</span><span class="tag">Fan art · Caracas · 2026</span></div>
-        <div class="tuile" data-cat="fanart" data-an="2025"><span class="picto">🎨</span><span class="tag">Fan art · Warsaw · 2025</span></div>
-        <div class="tuile" data-cat="fanart" data-an="2024"><span class="picto">🎨</span><span class="tag">Fan art · Manila · 2024</span></div>
-      </div>
-    </div>
-    <div class="groupe-galerie" data-cat="video">
-      <h4 style="font-family:'Bebas Neue';letter-spacing:.1em;color:var(--rose);margin:14px 0 8px" data-i18n="gal.gVideos">🎬 Videos</h4>
-      <div class="carrousel">
-        <div class="tuile grande" data-cat="video" data-an="2026" data-type="video"><span class="picto">🎬</span><span class="type">▶</span><span class="tag"><span data-i18n="gal.tVideo2">Video</span> · Berlin · 2026</span></div>
-        <div class="tuile" data-cat="video" data-an="2025" data-type="video"><span class="picto">🎬</span><span class="type">▶</span><span class="tag"><span data-i18n="gal.tVideo">Video</span> · São Paulo · 2025</span></div>
-        <div class="tuile" data-cat="video" data-an="2024" data-type="video"><span class="picto">🎬</span><span class="type">▶</span><span class="tag">Video · Fan meetup · 2024</span></div>
-      </div>
-    </div>
-    <p style="font-size:.72rem;color:var(--beige);margin-top:14px;text-align:center" data-i18n="gal.note">✦ These tiles are placeholders: this is where you'll place your own photos and videos. Use the button below to send your visuals (no AI-generated images).</p>
+    <div id="grilleGalerie" class="grille-galerie"></div>
+    <p id="galerieVide" style="display:none;font-size:.85rem;color:var(--beige);text-align:center;margin:16px 0" data-i18n="gal.empty">Les photos et vidéos des fans apparaîtront ici après validation ✦</p>
+    <p style="font-size:.72rem;color:var(--beige);margin-top:14px;text-align:center" data-i18n="gal.note">✦ These are the real photos and videos shared by fans, once validated. Send yours with the button below (no AI-generated images).</p>
     <p style="font-size:.78rem;color:var(--bordeaux);background:#fdeef3;border-radius:12px;padding:10px 14px;margin-top:10px;text-align:center" data-i18n="gal.videolink">🎬 For videos: don't upload a file from your phone (too heavy). Just paste the link to your video from Instagram, TikTok or YouTube — it will appear here. Photos, on the other hand, can be sent directly as image files.</p>
     <button class="btn fantome btn-large" style="margin-top:10px" onclick="allerA('inscription')" data-i18n="gal.send">Send my photos & videos</button>
   </section>
@@ -1084,7 +1071,7 @@ en:{
   "form.concerts":"Which of Omar's concerts & festivals have you attended?",
   "form.stampNote":"Each ticked date automatically adds its stamp to your Fan Passport.",
   "form.yr":"Have you ever visited the Young Royals filming locations?",
-  "gal.all2":"All years","gal.gMeetings":"🤝 Meetings","gal.gVideos":"🎬 Videos",
+  "gal.all2":"All years","gal.gMeetings":"🤝 Meetings","gal.gVideos":"🎬 Videos","gal.fAll":"All","gal.fPhotos":"📸 Photos","gal.fSelfies":"🤳 Selfies","gal.fArt":"🎨 Fan art","gal.fVideos":"🎬 Videos","gal.empty":"Fans' photos and videos will appear here once validated ✦","gal.note":"✦ These are the real photos and videos shared by fans, once validated. Send yours with the button below (no AI-generated images).",
   "nav.timeline2":"Omar",
   "x.omConcerts":"🎤 Every concert & festival · 2024 → 2026","x.tbc":"to be confirmed","stats.songs":"Songs released",
   "x.omEyebrow":"The artist","x.omStreamsLive":"Total Spotify streams · live",
@@ -1197,7 +1184,7 @@ fr:{
   "form.concerts":"À quels concerts et festivals d'Omar as-tu assisté ?",
   "form.stampNote":"Chaque date cochée ajoute automatiquement son tampon à ton Fan Passport.",
   "form.yr":"As-tu déjà visité les lieux de tournage de Young Royals ?",
-  "gal.all2":"Toutes les années","gal.gMeetings":"🤝 Rencontres","gal.gVideos":"🎬 Vidéos",
+  "gal.all2":"Toutes les années","gal.gMeetings":"🤝 Rencontres","gal.gVideos":"🎬 Vidéos","gal.fAll":"Tout","gal.fPhotos":"📸 Photos","gal.fSelfies":"🤳 Selfies","gal.fArt":"🎨 Fan art","gal.fVideos":"🎬 Vidéos","gal.empty":"Les photos et vidéos des fans apparaîtront ici après validation ✦",
   "nav.timeline2":"Omar",
   "x.omConcerts":"🎤 Tous les concerts & festivals · 2024 → 2026","x.tbc":"à confirmer","stats.songs":"Chansons sorties",
   "x.omEyebrow":"L'artiste","x.omStreamsLive":"Streams Spotify totaux · en direct",
@@ -1311,7 +1298,7 @@ fr:{
   "gal.sub":"C'est ici que les fans partagent leurs propres photos et vidéos : concerts, rencontres, fan arts, montages. Chacun peut envoyer ses visuels pour enrichir la galerie de la communauté.",
   "gal.all":"Tout","gal.concerts":"Concerts","gal.meetings":"Rencontres","gal.videos":"Vidéos",
   "gal.tConcert":"Concert","gal.tMeeting":"Rencontre","gal.tVideo":"Vidéo","gal.tConcert2":"Concert","gal.tVideo2":"Vidéo","gal.tMeeting2":"Rencontre",
-  "gal.note":"✦ Ces cases sont des emplacements : c'est ici que vous placerez vos propres photos et vidéos. Utilisez le bouton ci-dessous pour envoyer vos visuels (aucune image générée par IA).",
+  "gal.note":"✦ Ce sont les vraies photos et vidéos partagées par les fans, une fois validées. Envoie les tiennes avec le bouton ci-dessous (aucune image générée par IA).",
   "gal.videolink":"🎬 Pour les vidéos : ne mettez pas un fichier depuis votre téléphone (trop lourd). Copiez simplement le lien de votre vidéo depuis Instagram, TikTok ou YouTube — elle s'affichera ici. Les photos, elles, peuvent être envoyées directement en fichier image.",
   "gal.send":"Envoyer mes photos & vidéos",
   "sto.eyebrow":"Le livre collaboratif","sto.title":"Histoires des fans","sto.intro":"Chaque fan possède une histoire unique. Racontez :",
@@ -3260,16 +3247,48 @@ document.getElementById("formulaireFan").addEventListener("submit",async e=>{
 });
 
 /* ---------------- GALERIE ---------------- */
+var FILTRE_GAL={cat:"tout",an:"tout"};
+function appliquerFiltreGalerie(){
+  document.querySelectorAll("#grilleGalerie .tuile").forEach(function(tl){
+    var okC=(FILTRE_GAL.cat==="tout"||tl.dataset.cat===FILTRE_GAL.cat);
+    var okA=(FILTRE_GAL.an==="tout"||tl.dataset.an===FILTRE_GAL.an);
+    tl.style.display=(okC&&okA)?"":"none";
+  });
+}
 document.querySelectorAll("#filtresGalerie .puce").forEach(p=>{
   p.addEventListener("click",()=>{
     document.querySelectorAll("#filtresGalerie .puce").forEach(x=>x.classList.remove("actif"));
     p.classList.add("actif");
-    const f=p.dataset.filtre;
-    document.querySelectorAll("#grilleGalerie .tuile").forEach(tl=>{
-      tl.style.display=(f==="tout"||tl.dataset.cat===f)?"":"none";
-    });
+    FILTRE_GAL.cat=p.dataset.filtre; appliquerFiltreGalerie();
   });
 });
+document.querySelectorAll("#filtresAnnee .puce").forEach(p=>{
+  p.addEventListener("click",()=>{
+    document.querySelectorAll("#filtresAnnee .puce").forEach(x=>x.classList.remove("actif"));
+    p.classList.add("actif");
+    FILTRE_GAL.an=p.dataset.an; appliquerFiltreGalerie();
+  });
+});
+/* Remplit l'onglet Galerie avec les vrais visuels validés (avec le pseudo Instagram) */
+function tuileGalerie(m){
+  var an=(m.cree_le?String(m.cree_le).slice(0,4):"");
+  var ig=(typeof instaDuMedia==="function")?instaDuMedia(m):null;
+  var media = m.type==="video"
+    ? '<a href="'+escapeHtmlM(m.lien||"#")+'" target="_blank" rel="noopener" class="tuile-video"><span class="picto">🎬</span><span class="type">▶</span></a>'
+    : '<div class="tuile-img" style="background-image:url('+(m.contenu||"")+')"></div>';
+  var tagInner=iconeType(m.type)+(m.legende?' '+escapeHtmlM(m.legende):'');
+  if(ig) tagInner+=(m.legende?' · ':' ')+'<a href="'+ig.url+'" target="_blank" rel="noopener">'+escapeHtmlM(ig.handle)+'</a>';
+  var retirer=(typeof estAdmin==="function"&&estAdmin()&&m.id!=null)?'<button class="mm-retirer" onclick="retirerMedia('+m.id+')" title="'+t("med.remove")+'">🗑️</button>':'';
+  return '<div class="tuile" data-cat="'+m.type+'" data-an="'+an+'">'+media+'<span class="tag">'+tagInner+'</span>'+retirer+'</div>';
+}
+function rendreGalerie(){
+  var g=document.getElementById("grilleGalerie"); if(!g) return;
+  var liste=(window.MEDIAS_VALIDES||[]);
+  g.innerHTML=liste.map(tuileGalerie).join("");
+  var vide=document.getElementById("galerieVide"); if(vide) vide.style.display=liste.length?"none":"";
+  appliquerFiltreGalerie();
+}
+window.rendreGalerie=rendreGalerie;
 
 /* ---------------- HISTOIRES sur photo d'Omar ---------------- */
 const HISTOIRES=[]; /* histoires réelles envoyées via le formulaire */
@@ -6337,6 +6356,7 @@ async function chargerMediasSupabase(){
     }
     if(window.rendreProfil) rendreProfil();
     if(window.majAccesAdmin) majAccesAdmin();
+    if(window.rendreGalerie) rendreGalerie();
     if(window.toutMettreAJour) toutMettreAJour(false);
   }catch(e){ console.warn("medias:",e); }
 }
