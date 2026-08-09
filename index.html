@@ -525,7 +525,7 @@ footer .marque{font-family:'Bebas Neue';font-size:1.1rem;letter-spacing:.15em;co
     <h2 data-i18n="cta.title">Together, let's draw the biggest worldwide map of Omar Rudberg's fans.</h2>
     <p style="margin:12px 0 20px;color:var(--beige)" data-i18n="cta.sub">Add your city. Share your story. Represent your country.</p>
     <button class="btn btn-large" onclick="allerA('inscription')" data-i18n="cta.btn">✦ Add my dot on the map</button>
-    <div style="margin-top:12px"><a class="btn fantome btn-large" href="GUIDE_FANS.pdf" download="Guide_des_fans_Omar_Rudberg_World_Map.pdf" style="display:inline-block;text-decoration:none" data-i18n="cta.guide">📖 Télécharger le mode d'emploi (PDF)</a></div>
+    <div style="margin-top:12px"><a id="lienGuidePDF" class="btn fantome btn-large" href="GUIDE_FANS_fr.pdf" download style="display:inline-block;text-decoration:none" data-i18n="cta.guide">📖 Télécharger le mode d'emploi (PDF)</a></div>
     <p style="margin-top:14px;font-size:.75rem;color:var(--beige)" data-i18n-html="cta.welcome">Welcome to the Worldwide Map of the <b style="color:var(--rose)">O.R. WORLD ASSOCIATION</b>.</p>
   </section>
 </div>
@@ -549,7 +549,7 @@ footer .marque{font-family:'Bebas Neue';font-size:1.1rem;letter-spacing:.15em;co
         <p style="margin:4px 0"><span data-i18n="acc.connected">Connected:</span> <b id="auth-qui"></b></p>
         <button type="button" class="btn fantome" onclick="seDeconnecter()" data-i18n="acc.logout">Log out</button>
       </div>
-      <div style="font-size:.66rem;opacity:.5;margin-top:8px">version : COMPTES-37</div>
+      <div style="font-size:.66rem;opacity:.5;margin-top:8px">version : COMPTES-38</div>
     </div>
     <div class="verre" id="dejaFiche" style="display:none;margin-bottom:16px">
       <h3 class="accent" data-i18n="acc.haveCard">Your card is created ✓</h3>
@@ -2185,6 +2185,9 @@ function traduirePage(){
   const dr=document.getElementById("drapeauActuel");
   if(dr) dr.textContent=FLAGS[LANG]||"🌐";
   document.querySelectorAll("#langListe button").forEach(bt=>bt.classList.toggle("actif", bt.dataset.lang===LANG));
+  /* Guide PDF : télécharger la version dans la langue courante */
+  var lg=document.getElementById("lienGuidePDF");
+  if(lg) lg.setAttribute("href","GUIDE_FANS_"+LANG+".pdf");
 }
 const langBtnEl=document.getElementById("langBtn"),langListeEl=document.getElementById("langListe");
 langBtnEl.addEventListener("click",e=>{
