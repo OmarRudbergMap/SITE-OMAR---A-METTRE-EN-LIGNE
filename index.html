@@ -544,7 +544,7 @@ footer .marque{font-family:'Bebas Neue';font-size:1.1rem;letter-spacing:.15em;co
         <p style="margin:4px 0"><span data-i18n="acc.connected">Connected:</span> <b id="auth-qui"></b></p>
         <button type="button" class="btn fantome" onclick="seDeconnecter()" data-i18n="acc.logout">Log out</button>
       </div>
-      <div style="font-size:.66rem;opacity:.5;margin-top:8px">version : COMPTES-30</div>
+      <div style="font-size:.66rem;opacity:.5;margin-top:8px">version : COMPTES-31</div>
     </div>
     <div class="verre" id="dejaFiche" style="display:none;margin-bottom:16px">
       <h3 class="accent" data-i18n="acc.haveCard">Your card is created ✓</h3>
@@ -1091,6 +1091,8 @@ en:{
   "x.cBack":"← All concerts","x.cOpen":"Concert page →",
   "x.demoAction":"✦ Community feature coming soon — meanwhile, connect with the other fans on Instagram!",
   "x.fpTitle":"Fan Projects · propose & vote","x.fpIntro":"Fans propose ideas, everyone votes, and the association picks the official project.",
+  "prj.proposeBtn":"Propose a project","prj.phTitre":"Project title","prj.phDesc":"Describe your idea in a few words…","prj.send":"Send for validation","prj.sent":"Project sent! It will appear once validated ✦","prj.modNote":"Your project will be visible after the moderator validates it.","prj.needLogin":"Log in with your profile to propose a project and vote.","prj.needTitre":"Please give your project a title","prj.votes":"votes","prj.empty":"No project yet — propose the first one!","prj.modTitle":"Projects to review","prj.modIntro":"Projects proposed by fans — approve or reject.",
+  "cat.evenement":"Event / Birthday","cat.radio":"Radio & streaming","cat.video":"Video edit","cat.creatif":"Creative gift","cat.caritatif":"Charity action","cat.autre":"Other",
   "x.fpProp1":"Birthday project","x.fpProp2":"Tour project","x.fpProp3":"Christmas project","x.fpOfficial":"Official project chosen by the association",
   "x.cmEyebrow":"Community","x.cmTitle":"Find fans near you","x.ffFind":"Search",
   "x.ffFriend":"Friend request","x.ffGroup":"Create a group","x.ffMeet":"Organise a meetup","x.ffPrep":"Prepare a concert",
@@ -1204,6 +1206,8 @@ fr:{
   "x.cBack":"← Tous les concerts","x.cOpen":"Page du concert →",
   "x.demoAction":"✦ Fonctionnalité communautaire à venir — en attendant, retrouve les autres fans sur Instagram !",
   "x.fpTitle":"Fan Projects · proposez & votez","x.fpIntro":"Les fans proposent, tout le monde vote, et l'association choisit le projet officiel.",
+  "prj.proposeBtn":"Proposer un projet","prj.phTitre":"Titre du projet","prj.phDesc":"Décris ton idée en quelques mots…","prj.send":"Envoyer pour validation","prj.sent":"Projet envoyé ! Il apparaîtra après validation ✦","prj.modNote":"Ton projet sera visible après validation par la modératrice.","prj.needLogin":"Connecte-toi avec ton profil pour proposer un projet et voter.","prj.needTitre":"Donne un titre à ton projet","prj.votes":"votes","prj.empty":"Aucun projet pour l'instant — propose le premier !","prj.modTitle":"Projets à valider","prj.modIntro":"Projets proposés par les fans — approuve ou rejette.",
+  "cat.evenement":"Événement / Anniversaire","cat.radio":"Radio & streaming","cat.video":"Montage vidéo","cat.creatif":"Cadeau créatif","cat.caritatif":"Action caritative","cat.autre":"Autre",
   "x.fpProp1":"Projet anniversaire","x.fpProp2":"Projet tournée","x.fpProp3":"Projet Noël","x.fpOfficial":"Projet officiel choisi par l'association",
   "x.cmEyebrow":"Communauté","x.cmTitle":"Trouver des fans près de chez toi","x.ffFind":"Rechercher",
   "x.ffFriend":"Demande d'amitié","x.ffGroup":"Créer un groupe","x.ffMeet":"Organiser une rencontre","x.ffPrep":"Préparer un concert",
@@ -6407,6 +6411,79 @@ function blocGroupeInstagram(cle){
     +boutonFan+editeurAdmin+'</div>';
 }
 window.blocGroupeInstagram=blocGroupeInstagram;
+/* ===== PROJETS DE FANS (proposition + modération + vote partagé) ===== */
+var CAT_PROJETS=[
+ {id:"evenement",emo:"🎂"},
+ {id:"radio",emo:"📻"},
+ {id:"video",emo:"🎬"},
+ {id:"creatif",emo:"🎨"},
+ {id:"caritatif",emo:"🤝"},
+ {id:"autre",emo:"🌍"}
+];
+function catProjet(id){ var c=CAT_PROJETS.find(function(x){return x.id===id;}); return c||{id:"autre",emo:"🌍"}; }
+var FILTRE_PROJ="tout";
+function filtrerProjets(cat){ FILTRE_PROJ=cat; rendreFanProjects(); }
+window.filtrerProjets=filtrerProjets;
+window.PROJETS_VALIDES=[]; window.PROJETS_MODERER=[]; window.COMPTE_VOTES={}; window.MES_VOTES_PROJETS=new Set();
+async function chargerProjetsSupabase(){
+  if(!window._sb) return;
+  try{
+    var r=await window._sb.from("projets").select("id,fan_id,pseudo,titre,description,categorie,cree_le").eq("valide",true).eq("rejete",false).order("id",{ascending:false});
+    if(!r.error) window.PROJETS_VALIDES=r.data||[];
+    var rv=await window._sb.from("votes_projets").select("projet_id,user_id");
+    if(!rv.error){
+      var cpt={}, mine=new Set();
+      (rv.data||[]).forEach(function(v){ cpt[v.projet_id]=(cpt[v.projet_id]||0)+1; if(window.MON_USER && v.user_id===window.MON_USER.id) mine.add(v.projet_id); });
+      window.COMPTE_VOTES=cpt; window.MES_VOTES_PROJETS=mine;
+    }
+    if(estAdmin()){
+      var ra=await window._sb.from("projets").select("id,fan_id,pseudo,titre,description,categorie,cree_le").eq("valide",false).eq("rejete",false).order("id",{ascending:true});
+      if(!ra.error) window.PROJETS_MODERER=ra.data||[];
+    }
+    if(window.rendreFanProjects) rendreFanProjects();
+    if(window.majAccesAdmin) majAccesAdmin();
+    if(window.rendreModeration) rendreModeration();
+  }catch(e){ console.warn("projets:",e); }
+}
+window.chargerProjetsSupabase=chargerProjetsSupabase;
+async function envoyerProjet(){
+  if(!window.MON_USER || !window.MON_PROFIL_ID){ toast(t("prj.needLogin")); return; }
+  var titre=(document.getElementById("proj-titre").value||"").trim();
+  var desc=(document.getElementById("proj-desc").value||"").trim();
+  var cat=(document.getElementById("proj-cat").value||"autre");
+  if(!titre){ toast(t("prj.needTitre")); return; }
+  var champs={user_id:window.MON_USER.id, fan_id:window.MON_PROFIL_ID, pseudo:(typeof MOI!=="undefined"&&MOI?MOI.prenom:"")||"", titre:titre, description:desc, categorie:cat, valide:false, rejete:false};
+  var r=await window._sb.from("projets").insert(champs);
+  if(r&&r.error){ diag("L'envoi n'a pas fonctionné, réessaie ✦",false); console.warn("projet insert:",r.error); return; }
+  toast(t("prj.sent"));
+  var a=document.getElementById("proj-titre"); if(a)a.value="";
+  var b=document.getElementById("proj-desc"); if(b)b.value="";
+  chargerProjetsSupabase();
+}
+window.envoyerProjet=envoyerProjet;
+async function voterProjetSb(id){
+  if(!window.MON_USER){ toast(t("prj.needLogin")); return; }
+  var deja=(window.MES_VOTES_PROJETS||new Set()).has(id);
+  var r = deja
+    ? await window._sb.from("votes_projets").delete().eq("projet_id",id).eq("user_id",window.MON_USER.id)
+    : await window._sb.from("votes_projets").insert({projet_id:id,user_id:window.MON_USER.id});
+  if(r&&r.error){ diag("Action impossible ✦",false); console.warn(r.error); return; }
+  toast(t("toast.vote")); chargerProjetsSupabase();
+}
+window.voterProjetSb=voterProjetSb;
+async function approuverProjet(id){ var r=await window._sb.from("projets").update({valide:true,rejete:false}).eq("id",id); if(r&&r.error){diag("Action impossible ✦",false);return;} toast(t("med.approved")); chargerProjetsSupabase(); }
+async function rejeterProjet(id){ var r=await window._sb.from("projets").update({rejete:true}).eq("id",id); if(r&&r.error){diag("Action impossible ✦",false);return;} toast(t("med.rejected")); chargerProjetsSupabase(); }
+async function retirerProjet(id){ var r=await window._sb.from("projets").update({valide:false,rejete:true}).eq("id",id); if(r&&r.error){diag("Action impossible ✦",false);return;} toast(t("med.removed")); chargerProjetsSupabase(); }
+window.approuverProjet=approuverProjet; window.rejeterProjet=rejeterProjet; window.retirerProjet=retirerProjet;
+function unItemProjetModo(p){
+  var c=catProjet(p.categorie);
+  return '<div class="mod-item"><div class="mod-info" style="flex:1"><b>'+c.emo+' '+escapeHtmlM(p.titre||"")+'</b>'
+    +'<span>'+t("cat."+c.id)+' · '+escapeHtmlM(p.pseudo||"")+'</span>'
+    +(p.description?'<span>'+escapeHtmlM(p.description)+'</span>':'')+'</div>'
+    +'<div class="mod-btns"><button class="btn" onclick="approuverProjet('+p.id+')">✅ '+t("med.approve")+'</button>'
+    +'<button class="btn fantome" onclick="rejeterProjet('+p.id+')">✕ '+t("med.reject")+'</button></div></div>';
+}
+window.unItemProjetModo=unItemProjetModo;
 async function envoyerMedia(){
   if(!window.MON_USER || !window.MON_PROFIL_ID){ toast(t("med.needProfile")); return; }
   var type=document.getElementById("med-type").value;
@@ -6481,11 +6558,16 @@ function rendreModeration(){
     ? '<div class="verre" style="margin-top:14px"><h3 style="color:var(--rose)">✅ '+t("med.modDone")+'</h3>'
       +'<div class="galerie-medias">'+traites.map(function(m){return miniMedia(m,false);}).join("")+'</div></div>'
     : '';
+  var projAtt=window.PROJETS_MODERER||[];
+  var htmlProjets = projAtt.length
+    ? '<div class="verre" style="margin-top:14px;border-color:var(--bordeaux)"><h3 style="color:var(--rose)">✨ '+t("prj.modTitle")+' ('+projAtt.length+')</h3>'
+      +'<p style="font-size:.78rem;color:var(--beige)">'+t("prj.modIntro")+'</p>'+projAtt.map(unItemProjetModo).join("")+'</div>'
+    : '';
   s.innerHTML='<p class="eyebrow">🛡️ '+t("med.nav")+'</p><h2>'+t("med.modTitle")+'</h2>'
     +'<div class="verre" style="margin-top:12px;border-color:var(--bordeaux)">'
     +'<h3 style="color:var(--rose)">⏳ '+t("med.modSection")+' ('+enAttente.length+')</h3>'
     +'<p style="font-size:.78rem;color:var(--beige)">'+t("med.modIntro")+'</p>'
-    +htmlAttente+'</div>'+htmlTraites;
+    +htmlAttente+'</div>'+htmlProjets+htmlTraites;
 }
 window.rendreModeration=rendreModeration;
 /* Affiche/masque l'onglet Modération + la pastille du nombre en attente, selon admin */
@@ -6494,7 +6576,7 @@ function majAccesAdmin(){
   var admin=(typeof estAdmin==="function" && estAdmin());
   lien.style.display=admin?"":"none";
   var badge=document.getElementById("badgeModeration");
-  var n=(window.MEDIAS_MODERER||[]).length;
+  var n=(window.MEDIAS_MODERER||[]).length+(window.PROJETS_MODERER||[]).length;
   if(badge){ if(admin && n>0){ badge.style.display=""; badge.textContent=n; } else { badge.style.display="none"; } }
   if(admin) rendreModeration();
 }
@@ -6593,16 +6675,48 @@ const FAN_PROJETS=[
 ];
 function rendreFanProjects(){
   const s=document.getElementById("secFanProjects"); if(!s)return;
+  var connecte=!!(window.MON_USER && window.MON_PROFIL_ID);
+  var admin=(typeof estAdmin==="function"&&estAdmin());
+  var liste=(window.PROJETS_VALIDES||[]).slice().sort(function(a,b){return (window.COMPTE_VOTES[b.id]||0)-(window.COMPTE_VOTES[a.id]||0);});
+  if(FILTRE_PROJ!=="tout") liste=liste.filter(function(p){return (p.categorie||"autre")===FILTRE_PROJ;});
+  var form = connecte
+    ? `<details class="verre" style="margin-bottom:14px">
+        <summary style="cursor:pointer;color:var(--rose);font-weight:600;list-style:none">➕ ${t("prj.proposeBtn")}</summary>
+        <input type="text" id="proj-titre" placeholder="${t("prj.phTitre")}" style="width:100%;margin-top:10px">
+        <textarea id="proj-desc" placeholder="${t("prj.phDesc")}" style="width:100%;margin-top:8px;min-height:70px"></textarea>
+        <select id="proj-cat" style="width:100%;margin-top:8px">${CAT_PROJETS.map(function(c){return '<option value="'+c.id+'">'+c.emo+' '+t("cat."+c.id)+'</option>';}).join("")}</select>
+        <button class="btn btn-large" style="margin-top:10px" onclick="envoyerProjet()">📤 ${t("prj.send")}</button>
+        <p style="font-size:.68rem;color:var(--beige);margin-top:6px">${t("prj.modNote")}</p>
+      </details>`
+    : `<p style="font-size:.8rem;color:var(--beige);margin-bottom:10px">${t("prj.needLogin")}</p>`;
+  var chips = `<div class="filtres">
+      <button class="puce${FILTRE_PROJ==="tout"?" actif":""}" onclick="filtrerProjets('tout')">${t("gal.fAll")}</button>
+      ${CAT_PROJETS.map(function(c){return '<button class="puce'+(FILTRE_PROJ===c.id?" actif":"")+'" onclick="filtrerProjets(\''+c.id+'\')">'+c.emo+' '+t("cat."+c.id)+'</button>';}).join("")}
+    </div>`;
+  var items = liste.length ? liste.map(function(p){
+      var n=window.COMPTE_VOTES[p.id]||0;
+      var vote=(window.MES_VOTES_PROJETS||new Set()).has(p.id);
+      var c=catProjet(p.categorie);
+      return `<div class="verre" style="margin-bottom:10px">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px">
+          <div style="flex:1;min-width:0">
+            <b style="color:var(--rose)">${c.emo} ${escapeHtmlM(p.titre||"")}</b>
+            <span style="display:block;font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:var(--beige);margin-top:2px">${t("cat."+c.id)} · ${escapeHtmlM(p.pseudo||"")}</span>
+            ${p.description?`<p style="font-size:.82rem;margin-top:6px">${escapeHtmlM(p.description)}</p>`:""}
+          </div>
+          ${admin?`<button class="mm-retirer" style="position:static" onclick="retirerProjet(${p.id})" title="${t("med.remove")}">🗑️</button>`:""}
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;margin-top:8px">
+          <button class="btn${vote?"":" fantome"}" style="font-size:.8rem;padding:7px 14px" onclick="voterProjetSb(${p.id})">${vote?"❤":"♡"} ${t("aw.vote")}</button>
+          <span style="font-size:.95rem;color:var(--bordeaux);font-weight:700">${n} <span style="font-weight:400;font-size:.8rem;color:var(--beige)">${t("prj.votes")}</span></span>
+        </div>
+      </div>`;
+    }).join("") : `<p style="font-size:.82rem;color:var(--beige)">${t("prj.empty")}</p>`;
   s.innerHTML=`<div class="verre" style="margin-bottom:16px">
-    <h3 style="color:var(--rose)">✨ ${t("x.fpTitle")}</h3>
-    <p style="font-size:.8rem;color:var(--beige);margin:6px 0 4px">${t("x.fpIntro")}</p>
-    ${FAN_PROJETS.map((p,i)=>`
-      <div class="concert-ligne">
-        <span class="drapeau-c">${p.emo}</span>
-        <span>${t(p.k)}${p.officiel?`<small style="color:#e8b64c">🏆 ${t("x.fpOfficial")}</small>`:`<small>${p.votes} votes</small>`}</span>
-        ${p.officiel?"":`<button class="btn-mini" onclick="voterProjet(${i},this)">${t("aw.vote")}</button>`}
-      </div>`).join("")}
-  </div>`;
+      <h3 style="color:var(--rose)">✨ ${t("x.fpTitle")}</h3>
+      <p style="font-size:.8rem;color:var(--beige);margin:6px 0 10px">${t("x.fpIntro")}</p>
+      ${form}${chips}${items}
+    </div>`;
 }
 
 function voterProjet(i,btn){
@@ -7431,6 +7545,7 @@ window.chargerFansSupabase=chargerFansSupabase;
 chargerFansSupabase();
 if(window.chargerMediasSupabase) chargerMediasSupabase();
 if(window.chargerGroupesSupabase) chargerGroupesSupabase();
+if(window.chargerProjetsSupabase) chargerProjetsSupabase();
 
 /* ================= COMPTES FANS (connexion email + mot de passe) =================
    Étape 1 : créer un compte / se connecter / se déconnecter.
@@ -7536,6 +7651,7 @@ function majPanneauCompte(session){
     var q=document.getElementById("auth-qui"); if(q) q.textContent=session.user.email||"toi";
     chargerMonProfil();
     if(window.chargerMediasSupabase) chargerMediasSupabase();
+    if(window.chargerProjetsSupabase) chargerProjetsSupabase();
   } else {
     window.MON_USER=null; window.MON_PROFIL_ID=null;
     if(d) d.style.display=""; if(c) c.style.display="none";
