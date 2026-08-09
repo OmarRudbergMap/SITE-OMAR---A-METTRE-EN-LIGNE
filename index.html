@@ -549,7 +549,7 @@ footer .marque{font-family:'Bebas Neue';font-size:1.1rem;letter-spacing:.15em;co
         <p style="margin:4px 0"><span data-i18n="acc.connected">Connected:</span> <b id="auth-qui"></b></p>
         <button type="button" class="btn fantome" onclick="seDeconnecter()" data-i18n="acc.logout">Log out</button>
       </div>
-      <div style="font-size:.66rem;opacity:.5;margin-top:8px">version : COMPTES-40</div>
+      <div style="font-size:.66rem;opacity:.5;margin-top:8px">version : COMPTES-41</div>
     </div>
     <div class="verre" id="dejaFiche" style="display:none;margin-bottom:16px">
       <h3 class="accent" data-i18n="acc.haveCard">Your card is created ✓</h3>
@@ -606,6 +606,9 @@ footer .marque{font-family:'Bebas Neue';font-size:1.1rem;letter-spacing:.15em;co
 
         <label for="f-concert" data-i18n="form.favConcert">Favourite concert?</label>
         <input type="text" id="f-concert" data-i18n-ph="form.favConcertPh" placeholder="City / date / festival…">
+
+        <label data-i18n="fiche.position">📍 Place my exact point on the map (optional)</label>
+        <div id="reg-picker"></div>
 
         <label data-i18n="form.met">Have you ever met Omar?</label>
         <div class="ouinon">
@@ -1253,7 +1256,7 @@ en:{
   "bdg.title":"My badges","bdg.intro":"Badges you've unlocked. Each badge earns +10 points.","bdg.none":"No badges yet — take part to unlock your first ones ✦",
   "bdg.histoire":"Storyteller","bdg.concert1":"First concert","bdg.concert5":"5 concerts","bdg.concert10":"10 concerts","bdg.lieuYR":"YR filming location","bdg.serie":"Watched Young Royals","bdg.projet":"Event organiser","bdg.omrBeauty":"OMR Beauty fan","bdg.diy":"DIY creator","bdg.merch":"Merch collector","bdg.anniv":"Loyal fan","bdg.adherent":"Member","bdg.donateur":"Donor","bdg.concours":"Contest winner","bdg.rencontre":"Fan meet-up","bdg.radioDay":"Omar Global Radio Day","bdg.photos":"First photos","bdg.dessinateur":"Omar's artist","bdg.selfie":"Selfie with Omar",
   "pt.photos":"Concert photos","pt.videos":"Videos","pt.dessins":"Drawings","pt.selfies":"Selfies with Omar",
-  "med.title":"My photos & videos","med.intro":"Send your concert photos, drawings, selfies, or a video link — once validated they appear on the site and earn points & badges.","med.typePhoto":"Concert photo","med.typeDessin":"Drawing / fan art","med.typeSelfie":"Selfie with Omar","med.typeVideo":"Video (link)","med.linkPh":"Video link (YouTube, Instagram…)","med.legendePh":"Caption (optional)","med.concertPh":"Which concert? (optional)","med.concertLabel":"Which concert is this from?","med.concertNone":"— No specific concert —","med.concertFans":"Fan photos of this concert","med.remove":"Remove","med.removed":"Removed ✦","med.concertSet":"Concert updated ✦","med.assignConcert":"Attach to a concert:","med.send":"Send for validation","med.sent":"Sent! It will appear once validated ✦","med.mine":"My submissions","med.validated":"Online","med.pending":"Pending","med.needFile":"Please choose a file","med.needLink":"Please paste a link","med.needProfile":"Create your profile first ✦","med.watch":"Watch","med.galTitle":"Fan gallery","med.galIntro":"Photos and videos shared by the community (validated).","med.modTitle":"Moderation","med.modIntro":"Pending submissions — approve or reject.","med.approve":"Approve","med.reject":"Reject","med.approved":"Approved ✦","med.rejected":"Rejected ✦","med.modEmpty":"No submissions waiting. Everything is handled ✦","med.modAll":"Everything sent by fans (validated, pending and removed).","med.modSection":"Waiting for your review","med.modDone":"Recently processed","med.nav":"Moderation","nav.moderation":"Moderation","nav.guide":"Fan guide","cta.guide":"📖 Download the fan guide (PDF)","fiche.title":"Edit my profile","fiche.intro":"Made a typo? You can correct your info anytime — it updates right away.","fiche.edit":"Edit my info","fiche.prenom":"First name","fiche.pays":"Country","fiche.ville":"City","fiche.naissance":"Date of birth","fiche.depuis":"Fan since (month & year)","fiche.chanson":"Favourite song","fiche.concert":"Favourite concert","fiche.save":"Save my changes","fiche.saved":"Saved! Your profile is updated ✦","fiche.needBase":"First name, country and city are required","notice.medias":"The photos and videos on this site do not belong to me — they are shared by the fan community. If you are the author and would like your name added, or your content removed, please contact me and I'll take care of it right away. 💛","grp.title":"Concert group","grp.intro":"To organise together — hotels, travel, meeting up on the spot… join this concert's group on Instagram.","grp.join":"Join the Instagram group","grp.soon":"The group will be available soon ✦","grp.adminLabel":"Instagram group link (only you can set it):","grp.save":"Save the link","grp.saved":"Group link saved ✦","grp.open":"Open Instagram","grp.mobile":"📱 To be opened from the Instagram app on your phone.",
+  "med.title":"My photos & videos","med.intro":"Send your concert photos, drawings, selfies, or a video link — once validated they appear on the site and earn points & badges.","med.typePhoto":"Concert photo","med.typeDessin":"Drawing / fan art","med.typeSelfie":"Selfie with Omar","med.typeVideo":"Video (link)","med.linkPh":"Video link (YouTube, Instagram…)","med.legendePh":"Caption (optional)","med.concertPh":"Which concert? (optional)","med.concertLabel":"Which concert is this from?","med.concertNone":"— No specific concert —","med.concertFans":"Fan photos of this concert","med.remove":"Remove","med.removed":"Removed ✦","med.concertSet":"Concert updated ✦","med.assignConcert":"Attach to a concert:","med.send":"Send for validation","med.sent":"Sent! It will appear once validated ✦","med.mine":"My submissions","med.validated":"Online","med.pending":"Pending","med.needFile":"Please choose a file","med.needLink":"Please paste a link","med.needProfile":"Create your profile first ✦","med.watch":"Watch","med.galTitle":"Fan gallery","med.galIntro":"Photos and videos shared by the community (validated).","med.modTitle":"Moderation","med.modIntro":"Pending submissions — approve or reject.","med.approve":"Approve","med.reject":"Reject","med.approved":"Approved ✦","med.rejected":"Rejected ✦","med.modEmpty":"No submissions waiting. Everything is handled ✦","med.modAll":"Everything sent by fans (validated, pending and removed).","med.modSection":"Waiting for your review","med.modDone":"Recently processed","med.nav":"Moderation","nav.moderation":"Moderation","nav.guide":"Fan guide","cta.guide":"📖 Download the fan guide (PDF)","fiche.title":"Edit my profile","fiche.intro":"Made a typo? You can correct your info anytime — it updates right away.","fiche.edit":"Edit my info","fiche.prenom":"First name","fiche.pays":"Country","fiche.ville":"City","fiche.naissance":"Date of birth","fiche.depuis":"Fan since (month & year)","fiche.chanson":"Favourite song","fiche.concert":"Favourite concert","fiche.save":"Save my changes","fiche.saved":"Saved! Your profile is updated ✦","fiche.needBase":"First name, country and city are required","fiche.position":"📍 Place my exact point on the map (optional)","fiche.pinHint":"Tap on the map to place your dot exactly where you live.","notice.medias":"The photos and videos on this site do not belong to me — they are shared by the fan community. If you are the author and would like your name added, or your content removed, please contact me and I'll take care of it right away. 💛","grp.title":"Concert group","grp.intro":"To organise together — hotels, travel, meeting up on the spot… join this concert's group on Instagram.","grp.join":"Join the Instagram group","grp.soon":"The group will be available soon ✦","grp.adminLabel":"Instagram group link (only you can set it):","grp.save":"Save the link","grp.saved":"Group link saved ✦","grp.open":"Open Instagram","grp.mobile":"📱 To be opened from the Instagram app on your phone.",
   "sto.emptyQuote":"The first fan stories will appear here. Yours can be the very first one ✦",
   "toast.editSent":"Your story has been updated — it's now online ✦",
   "toast.photoChanged":"Photo updated — it's now online ✦",
@@ -1462,7 +1465,7 @@ fr:{
   "bdg.title":"Mes badges","bdg.intro":"Les badges que tu as débloqués. Chaque badge rapporte +10 points.","bdg.none":"Pas encore de badge — participe pour débloquer les premiers ✦",
   "bdg.histoire":"Conteur·se","bdg.concert1":"Premier concert","bdg.concert5":"5 concerts","bdg.concert10":"10 concerts","bdg.lieuYR":"Lieu de tournage YR","bdg.serie":"A vu Young Royals","bdg.projet":"Organisateur·rice de projet","bdg.omrBeauty":"Fan OMR Beauty","bdg.diy":"Créateur·rice DIY","bdg.merch":"Collectionneur·se de merch","bdg.anniv":"Fan fidèle","bdg.adherent":"Adhérent·e","bdg.donateur":"Donateur·rice","bdg.concours":"Gagnant·e de concours","bdg.rencontre":"Rencontre de fans","bdg.radioDay":"Omar Global Radio Day","bdg.photos":"Premières photos","bdg.dessinateur":"Dessinateur d'Omar","bdg.selfie":"Selfie avec Omar",
   "pt.photos":"Photos de concert","pt.videos":"Vidéos","pt.dessins":"Dessins","pt.selfies":"Selfies avec Omar",
-  "med.title":"Mes photos & vidéos","med.intro":"Envoie tes photos de concert, dessins, selfies, ou un lien vidéo — après validation ils apparaissent sur le site et rapportent points & badges.","med.typePhoto":"Photo de concert","med.typeDessin":"Dessin / fan art","med.typeSelfie":"Selfie avec Omar","med.typeVideo":"Vidéo (lien)","med.linkPh":"Lien de la vidéo (YouTube, Instagram…)","med.legendePh":"Légende (facultatif)","med.concertPh":"Quel concert ? (facultatif)","med.concertLabel":"Ce visuel vient de quel concert ?","med.concertNone":"— Aucun concert précis —","med.concertFans":"Photos des fans de ce concert","med.remove":"Retirer","med.removed":"Retiré ✦","med.concertSet":"Concert mis à jour ✦","med.assignConcert":"Rattacher à un concert :","med.send":"Envoyer pour validation","med.sent":"Envoyé ! Ça s'affichera après ta validation ✦","med.mine":"Mes envois","med.validated":"En ligne","med.pending":"En attente","med.needFile":"Choisis un fichier","med.needLink":"Colle un lien","med.needProfile":"Crée d'abord ton profil ✦","med.watch":"Voir","med.galTitle":"Galerie des fans","med.galIntro":"Les photos et vidéos partagées par la communauté (validées).","med.modTitle":"Modération","med.modIntro":"Envois en attente — approuve ou rejette.","med.approve":"Approuver","med.reject":"Rejeter","med.approved":"Approuvé ✦","med.rejected":"Rejeté ✦","med.modEmpty":"Aucun envoi en attente. Tout est traité ✦","med.modAll":"Tout ce que les fans ont envoyé (validé, en attente et retiré).","med.modSection":"En attente de ta validation","med.modDone":"Traités récemment","med.nav":"Modération","nav.moderation":"Modération","nav.guide":"Guide des fans","cta.guide":"📖 Télécharger le mode d'emploi (PDF)","fiche.title":"Modifier ma fiche","fiche.intro":"Une faute de frappe ? Tu peux corriger tes infos à tout moment — c'est mis à jour tout de suite.","fiche.edit":"Modifier mes infos","fiche.prenom":"Prénom","fiche.pays":"Pays","fiche.ville":"Ville","fiche.naissance":"Date de naissance","fiche.depuis":"Fan depuis (mois & année)","fiche.chanson":"Chanson préférée","fiche.concert":"Concert préféré","fiche.save":"Enregistrer mes modifications","fiche.saved":"Enregistré ! Ta fiche est à jour ✦","fiche.needBase":"Le prénom, le pays et la ville sont obligatoires","notice.medias":"Toutes les photos et vidéos présentes sur ce site ne m'appartiennent pas — elles sont partagées par la communauté des fans. Si tu es l'auteur d'un contenu et souhaites que ton nom soit ajouté, ou qu'il soit retiré, contacte-moi et je m'en occupe tout de suite. 💛","grp.title":"Groupe du concert","grp.intro":"Pour s'organiser ensemble — hôtels, voyage, se retrouver sur place… rejoignez le groupe de ce concert sur Instagram.","grp.join":"Rejoindre le groupe Instagram","grp.soon":"Le groupe sera bientôt disponible ✦","grp.adminLabel":"Lien du groupe Instagram (toi seule peux le mettre) :","grp.save":"Enregistrer le lien","grp.saved":"Lien du groupe enregistré ✦","grp.open":"Ouvrir Instagram","grp.mobile":"📱 À ouvrir depuis l'application Instagram sur ton téléphone.",
+  "med.title":"Mes photos & vidéos","med.intro":"Envoie tes photos de concert, dessins, selfies, ou un lien vidéo — après validation ils apparaissent sur le site et rapportent points & badges.","med.typePhoto":"Photo de concert","med.typeDessin":"Dessin / fan art","med.typeSelfie":"Selfie avec Omar","med.typeVideo":"Vidéo (lien)","med.linkPh":"Lien de la vidéo (YouTube, Instagram…)","med.legendePh":"Légende (facultatif)","med.concertPh":"Quel concert ? (facultatif)","med.concertLabel":"Ce visuel vient de quel concert ?","med.concertNone":"— Aucun concert précis —","med.concertFans":"Photos des fans de ce concert","med.remove":"Retirer","med.removed":"Retiré ✦","med.concertSet":"Concert mis à jour ✦","med.assignConcert":"Rattacher à un concert :","med.send":"Envoyer pour validation","med.sent":"Envoyé ! Ça s'affichera après ta validation ✦","med.mine":"Mes envois","med.validated":"En ligne","med.pending":"En attente","med.needFile":"Choisis un fichier","med.needLink":"Colle un lien","med.needProfile":"Crée d'abord ton profil ✦","med.watch":"Voir","med.galTitle":"Galerie des fans","med.galIntro":"Les photos et vidéos partagées par la communauté (validées).","med.modTitle":"Modération","med.modIntro":"Envois en attente — approuve ou rejette.","med.approve":"Approuver","med.reject":"Rejeter","med.approved":"Approuvé ✦","med.rejected":"Rejeté ✦","med.modEmpty":"Aucun envoi en attente. Tout est traité ✦","med.modAll":"Tout ce que les fans ont envoyé (validé, en attente et retiré).","med.modSection":"En attente de ta validation","med.modDone":"Traités récemment","med.nav":"Modération","nav.moderation":"Modération","nav.guide":"Guide des fans","cta.guide":"📖 Télécharger le mode d'emploi (PDF)","fiche.title":"Modifier ma fiche","fiche.intro":"Une faute de frappe ? Tu peux corriger tes infos à tout moment — c'est mis à jour tout de suite.","fiche.edit":"Modifier mes infos","fiche.prenom":"Prénom","fiche.pays":"Pays","fiche.ville":"Ville","fiche.naissance":"Date de naissance","fiche.depuis":"Fan depuis (mois & année)","fiche.chanson":"Chanson préférée","fiche.concert":"Concert préféré","fiche.save":"Enregistrer mes modifications","fiche.saved":"Enregistré ! Ta fiche est à jour ✦","fiche.needBase":"Le prénom, le pays et la ville sont obligatoires","fiche.position":"📍 Placer mon point exact sur la carte (facultatif)","fiche.pinHint":"Touche la carte pour placer ton point exactement où tu habites.","notice.medias":"Toutes les photos et vidéos présentes sur ce site ne m'appartiennent pas — elles sont partagées par la communauté des fans. Si tu es l'auteur d'un contenu et souhaites que ton nom soit ajouté, ou qu'il soit retiré, contacte-moi et je m'en occupe tout de suite. 💛","grp.title":"Groupe du concert","grp.intro":"Pour s'organiser ensemble — hôtels, voyage, se retrouver sur place… rejoignez le groupe de ce concert sur Instagram.","grp.join":"Rejoindre le groupe Instagram","grp.soon":"Le groupe sera bientôt disponible ✦","grp.adminLabel":"Lien du groupe Instagram (toi seule peux le mettre) :","grp.save":"Enregistrer le lien","grp.saved":"Lien du groupe enregistré ✦","grp.open":"Ouvrir Instagram","grp.mobile":"📱 À ouvrir depuis l'application Instagram sur ton téléphone.",
   "sto.emptyQuote":"Les premières histoires de fans apparaîtront ici. La tienne peut être la toute première ✦",
   "toast.vote":"Merci pour ton vote ! (démo · 1 vote par catégorie)",
   "toast.editSent":"Ton histoire est mise à jour — c'est en ligne ✦",
@@ -2229,8 +2232,15 @@ function allerA(p,sansScroll){
   fermerTiroir();
   if(!sansScroll) window.scrollTo({top:0, behavior:"smooth"});
   try{ if(location.hash !== "#"+p) history.replaceState(null,"","#"+p); }catch(e){} /* interdit dans certains aperçus sandbox */
-  if(p==="inscription") requestAnimationFrame(dessinerCartePlate);
+  if(p==="inscription"){ requestAnimationFrame(dessinerCartePlate); requestAnimationFrame(function(){ if(window.majPickerReg) majPickerReg(false); }); }
 }
+function majPickerReg(reinit){
+  if(reinit) window.POS_INSCRIPTION=null;
+  if(!document.getElementById("reg-picker")) return;
+  var code=(typeof selPays!=="undefined"&&selPays&&selPays.value)||"FR";
+  if(window.monterPickerCarte) monterPickerCarte("reg-picker", window.POS_INSCRIPTION?window.POS_INSCRIPTION.lat:null, window.POS_INSCRIPTION?window.POS_INSCRIPTION.lon:null, "POS_INSCRIPTION", code);
+}
+window.majPickerReg=majPickerReg;
 document.querySelectorAll(".navbasse button[data-page]").forEach(b=>b.addEventListener("click",()=>allerA(b.dataset.page)));
 document.querySelectorAll(".tiroir a").forEach(a=>a.addEventListener("click",e=>{e.preventDefault();allerA(a.dataset.page);}));
 window.addEventListener("hashchange",()=>allerA(location.hash.slice(1)));
@@ -2956,6 +2966,7 @@ const PAYS_DATA=[
   ["AU","oceania",-25,134],["NZ","oceania",-41.5,173],["FJ","oceania",-17.8,178],
 ];
 const selPays=document.getElementById("f-pays");
+if(selPays) selPays.addEventListener("change",function(){ if(window.majPickerReg) majPickerReg(true); });
 function rendreSelectPays(){
   const noms=new Intl.DisplayNames([LANG],{type:"region"});
   const parCont={};
@@ -3098,16 +3109,23 @@ function ouvrirEditeurFiche(){
   var chansonsOpts=(typeof DISCO!=="undefined"?DISCO:[]).map(function(c){return '<option value="'+escapeHtmlM(c.n)+'">';}).join("");
   box.innerHTML=
     '<label class="fl">'+t("fiche.prenom")+'</label><input type="text" id="ef-prenom" value="'+escapeHtmlM(f.prenom||M.prenom||"")+'">'
-   +'<label class="fl">'+t("fiche.pays")+'</label><select id="ef-pays">'+opts+'</select>'
+   +'<label class="fl">'+t("fiche.pays")+'</label><select id="ef-pays" onchange="majPickerFiche()">'+opts+'</select>'
    +'<label class="fl">'+t("fiche.ville")+'</label><input type="text" id="ef-ville" value="'+escapeHtmlM(f.ville||M.ville||"")+'">'
    +'<label class="fl">'+t("fiche.naissance")+'</label><input type="date" id="ef-naissance" value="'+escapeHtmlM(naiss)+'">'
    +'<label class="fl">'+t("fiche.depuis")+'</label><input type="month" id="ef-depuis" value="'+escapeHtmlM(fd)+'">'
    +'<label class="fl">'+t("fiche.chanson")+'</label><input type="text" id="ef-chanson" list="ef-chansons" value="'+escapeHtmlM(f.chanson||M.chanson||"")+'"><datalist id="ef-chansons">'+chansonsOpts+'</datalist>'
    +'<label class="fl">Instagram</label><input type="text" id="ef-insta" value="'+escapeHtmlM(f.insta||M.insta||"")+'" placeholder="@pseudo">'
    +'<label class="fl">'+t("fiche.concert")+'</label><input type="text" id="ef-concert" value="'+escapeHtmlM(f.concert||M.concertFav||"")+'">'
+   +'<label class="fl">📍 '+t("fiche.position")+'</label><div id="ef-picker"></div>'
    +'<button class="btn btn-large" style="margin-top:12px" onclick="sauvegarderFiche()">💾 '+t("fiche.save")+'</button>';
+  if(window.monterPickerCarte) monterPickerCarte("ef-picker", (f.lat!=null?f.lat:null), (f.lon!=null?f.lon:null), "POS_FICHE", code);
 }
 window.ouvrirEditeurFiche=ouvrirEditeurFiche;
+function majPickerFiche(){
+  var s=document.getElementById("ef-pays"); if(!s) return;
+  monterPickerCarte("ef-picker", null, null, "POS_FICHE", s.value);
+}
+window.majPickerFiche=majPickerFiche;
 async function sauvegarderFiche(){
   var g=function(id){var e=document.getElementById(id);return e?e.value:"";};
   var prenom=(g("ef-prenom")||"").trim(), pays=g("ef-pays")||"", ville=(g("ef-ville")||"").trim();
@@ -3118,9 +3136,11 @@ async function sauvegarderFiche(){
   var champs={ pseudo:prenom, pays:pays, ville:ville, chanson:chanson, insta:insta, concert:concert, fan_depuis:(fd||null) };
   if(naiss && naiss.indexOf("-")!==-1) champs.date_naissance=naiss;
   if(annee) champs.annee=annee;
+  var pos=window.POS_FICHE;
+  if(pos && !isNaN(pos.lat)){ champs.lat=pos.lat; champs.lon=pos.lon; }
   var ok=await majFicheSupabase(champs); if(ok===false) return;
   var f=monFanCourant();
-  if(f){ f.prenom=prenom; f.code=pays; f.drapeau=drapeauISO(pays); f.ville=ville; if(naiss)f.naissance=naiss; f.chanson=chanson; f.insta=insta; f.concert=concert; f.fanDepuis=fd; if(annee)f.annee=annee; }
+  if(f){ f.prenom=prenom; f.code=pays; f.drapeau=drapeauISO(pays); f.ville=ville; if(naiss)f.naissance=naiss; f.chanson=chanson; f.insta=insta; f.concert=concert; f.fanDepuis=fd; if(annee)f.annee=annee; if(pos&&!isNaN(pos.lat)){ f.lat=pos.lat; f.lon=pos.lon; } }
   if(typeof MOI!=="undefined"&&MOI){ MOI.prenom=prenom; MOI.code=pays; MOI.ville=ville; MOI.naissance=naiss; MOI.chanson=chanson; MOI.insta=insta; MOI.concertFav=concert; MOI.fanDepuis=fd; if(annee)MOI.fanDepuisAnnee=annee; }
   if(window.toutMettreAJour) toutMettreAJour(false);
   if(window.rendreProfil) rendreProfil();
@@ -3220,6 +3240,11 @@ function pointsFan(fn){ return detailPoints(fn).reduce(function(s,l){return s+l[
 function integrerFan(fn){
   window.REGISTRE_FANS.push(fn);
   /* 1 · point sur la carte mondiale */
+  /* position EXACTE choisie par le fan (clic sur la carte) → prioritaire */
+  const aPosExacte = (fn.lat!=null && fn.lon!=null && !isNaN(+fn.lat) && !isNaN(+fn.lon));
+  if(aPosExacte){
+    FANS.push([+fn.lat, +fn.lon, fn.ville, 1, fn.drapeau, fn.code]);
+  } else {
   const existante=FANS.find(f=>f[2].toLowerCase()===fn.ville.toLowerCase() && (f[5]||"")===(fn.code||""));
   if(existante){ existante[3]++; }
   else{
@@ -3233,6 +3258,7 @@ function integrerFan(fn){
       lat=d?d[2]+(Math.random()-.5)*3:0; lon=d?d[3]+(Math.random()-.5)*3:0;
     }
     FANS.push([lat,lon,fn.ville,1,fn.drapeau,fn.code]);
+  }
   }
   /* 2 · fiche consultable en touchant le point */
   FICHES[fn.ville]={prenom:fn.prenom,age:fn.age,pays:fn.drapeau+" "+(nomsRegion().of(fn.code==="XX"?"UN":fn.code)||""),
@@ -3371,7 +3397,10 @@ document.getElementById("formulaireFan").addEventListener("submit",async e=>{
     chanson, concert:document.getElementById("f-concert").value.trim(),
     rencontre:(document.querySelector('input[name="rencontre"]:checked')||{}).value==="oui",
     histoire:document.getElementById("f-histoire").value.trim(),
-    photo, photoHistoire:photoFond, tampons:nbTampons, lieuYR:aLieuYR(clesConcerts), concertsVus:clesConcerts, inscritLe:new Date().toISOString()
+    photo, photoHistoire:photoFond, tampons:nbTampons, lieuYR:aLieuYR(clesConcerts), concertsVus:clesConcerts,
+    lat:(window.POS_INSCRIPTION&&!isNaN(window.POS_INSCRIPTION.lat))?window.POS_INSCRIPTION.lat:null,
+    lon:(window.POS_INSCRIPTION&&!isNaN(window.POS_INSCRIPTION.lon))?window.POS_INSCRIPTION.lon:null,
+    inscritLe:new Date().toISOString()
   };
   integrerFan(fn);
   /* mémorise QUI je suis (compte + fiche) */
@@ -3396,6 +3425,8 @@ document.getElementById("formulaireFan").addEventListener("submit",async e=>{
         insta: fn.insta || null,
         annee: fn.annee || null,
         fan_depuis: (depuis && /^\d{4}-\d{2}/.test(depuis)) ? depuis : null,
+        lat: (window.POS_INSCRIPTION && !isNaN(window.POS_INSCRIPTION.lat)) ? window.POS_INSCRIPTION.lat : null,
+        lon: (window.POS_INSCRIPTION && !isNaN(window.POS_INSCRIPTION.lon)) ? window.POS_INSCRIPTION.lon : null,
         concert: fn.concert || null,
         concerts_vus: clesConcerts,
         rencontre: !!fn.rencontre,
@@ -6115,6 +6146,61 @@ function coordsVille(ville, code){
   return null;
 }
 window.coordsVille=coordsVille;
+/* ---- Mini-carte cliquable : le fan pose son point EXACT, dans son pays ---- */
+function bornesPays(code){
+  var pts=[];
+  try{ VILLES_MONDE.forEach(function(x){ if(x[3]===code) pts.push([x[1],x[2]]); }); }catch(e){}
+  var d=PAYS_DATA.find(function(p){return p[0]===code;}); if(d) pts.push([d[2],d[3]]);
+  if(!pts.length) pts.push([20,0]);
+  var lats=pts.map(function(p){return p[0];}), lons=pts.map(function(p){return p[1];});
+  var latMin=Math.min.apply(null,lats), latMax=Math.max.apply(null,lats);
+  var lonMin=Math.min.apply(null,lons), lonMax=Math.max.apply(null,lons);
+  var mLat=Math.max(2.5,(latMax-latMin)*0.30+2), mLon=Math.max(2.5,(lonMax-lonMin)*0.30+2);
+  latMin-=mLat; latMax+=mLat; lonMin-=mLon; lonMax+=mLon;
+  latMin=Math.max(-85,latMin); latMax=Math.min(85,latMax); lonMin=Math.max(-179,lonMin); lonMax=Math.min(179,lonMax);
+  /* éviter un cadre trop plat : garder un ratio raisonnable */
+  return {latMin:latMin,latMax:latMax,lonMin:lonMin,lonMax:lonMax};
+}
+function dessinerPicker(cv, lat, lon, B){
+  var ctx=cv.getContext("2d"), W=cv.width, H=cv.height;
+  var pj=function(la,lo){ return { x:(lo-B.lonMin)/(B.lonMax-B.lonMin)*W, y:(B.latMax-la)/(B.latMax-B.latMin)*H }; };
+  ctx.clearRect(0,0,W,H);
+  ctx.fillStyle="#160a1c"; ctx.fillRect(0,0,W,H);
+  ctx.fillStyle="rgba(239,143,176,.32)";
+  try{ for(var i=0;i<LAND.length;i++){ var b=LAND[i];
+    var a=pj(b[1],b[2]), c=pj(b[0],b[3]);
+    var x=Math.min(a.x,c.x), y=Math.min(a.y,c.y), w=Math.abs(c.x-a.x), h=Math.abs(c.y-a.y);
+    if(x+w<0||x>W||y+h<0||y>H) continue;
+    ctx.fillRect(x,y,w+1,h+1);
+  } }catch(e){}
+  if(lat!=null && lon!=null && !isNaN(lat)){
+    var p=pj(lat,lon);
+    var g=ctx.createRadialGradient(p.x,p.y,0,p.x,p.y,18); g.addColorStop(0,"rgba(224,80,72,.9)"); g.addColorStop(1,"rgba(224,80,72,0)");
+    ctx.fillStyle=g; ctx.beginPath(); ctx.arc(p.x,p.y,18,0,7); ctx.fill();
+    ctx.fillStyle="#f8ecea"; ctx.beginPath(); ctx.arc(p.x,p.y,5,0,7); ctx.fill();
+    ctx.strokeStyle="#b33533"; ctx.lineWidth=2.5; ctx.stroke();
+  }
+}
+function monterPickerCarte(containerId, initLat, initLon, storeKey, code){
+  var box=document.getElementById(containerId); if(!box) return;
+  var B=bornesPays(code||"");
+  window[storeKey]=(initLat!=null&&initLon!=null&&!isNaN(initLat))?{lat:+initLat,lon:+initLon}:null;
+  box.innerHTML='<canvas id="'+containerId+'-cv" width="720" height="360" style="width:100%;height:auto;border-radius:12px;cursor:crosshair;touch-action:manipulation;border:1px solid var(--verre-bord)"></canvas>'
+    +'<p style="font-size:.68rem;color:var(--beige);margin-top:4px">'+t("fiche.pinHint")+'</p>';
+  var cv=document.getElementById(containerId+"-cv");
+  function draw(){ var p=window[storeKey]; dessinerPicker(cv, p?p.lat:null, p?p.lon:null, B); }
+  function place(e){
+    var r=cv.getBoundingClientRect();
+    var x=(e.clientX-r.left)*cv.width/r.width, y=(e.clientY-r.top)*cv.height/r.height;
+    var lon=B.lonMin + x/cv.width*(B.lonMax-B.lonMin);
+    var lat=B.latMax - y/cv.height*(B.latMax-B.latMin);
+    window[storeKey]={lat:Math.round(lat*1000)/1000, lon:Math.round(lon*1000)/1000};
+    draw();
+  }
+  cv.addEventListener("click", place);
+  draw();
+}
+window.monterPickerCarte=monterPickerCarte; window.dessinerPicker=dessinerPicker; window.bornesPays=bornesPays;
 /* Carte des concerts : version monde + version Europe (mêmes fonctions, cadrage différent) */
 const EU_CADRAGE={lonMin:-12,lonMax:31,latMin:34,latMax:66};
 function dessinerCarteTour(){
@@ -7936,7 +8022,7 @@ async function chargerFansSupabase(){
   if(!window._sb) return;
   try{
     const rep=await window._sb.from("fans")
-      .select("id,user_id,pseudo,ville,pays,date_naissance,histoire,photo,photo_histoire,chanson,insta,annee,concert,rencontre,concerts_vus,classement_chansons,vu_serie,projet_concert,omr_beauty,omr_produits,vetement_diy,merch_tournee,merch_tournees,asso_adherent,asso_dons,asso_concours,asso_rencontre,radio_day,fan_depuis").eq("valide",true);
+      .select("id,user_id,pseudo,ville,pays,date_naissance,histoire,photo,photo_histoire,chanson,insta,annee,concert,rencontre,concerts_vus,classement_chansons,vu_serie,projet_concert,omr_beauty,omr_produits,vetement_diy,merch_tournee,merch_tournees,asso_adherent,asso_dons,asso_concours,asso_rencontre,radio_day,fan_depuis,lat,lon").eq("valide",true);
     if(rep.error){ console.warn("Supabase lecture fans:",rep.error.message); return; }
     const data=rep.data||[];
     if(!data.length) return;
@@ -7966,7 +8052,7 @@ async function chargerFansSupabase(){
         photo:row.photo||null, photoHistoire:row.photo_histoire||null, tampons:nbConcerts(row.concerts_vus), lieuYR:aLieuYR(row.concerts_vus), concertsVus:row.concerts_vus||[], classementChansons:row.classement_chansons||[],
         vuSerie:!!row.vu_serie, projetConcert:!!row.projet_concert, omrProduits:row.omr_produits||[], vetementDiy:!!row.vetement_diy, merchTournees:row.merch_tournees||[],
         assoAdherent:!!row.asso_adherent, assoDons:row.asso_dons||0, assoConcours:row.asso_concours||0, assoRencontre:!!row.asso_rencontre, radioDay:!!row.radio_day,
-        naissance:row.date_naissance||"", fanDepuis:row.fan_depuis||"", inscritLe:(new Date()).toISOString() });
+        naissance:row.date_naissance||"", fanDepuis:row.fan_depuis||"", lat:(row.lat!=null?row.lat:null), lon:(row.lon!=null?row.lon:null), inscritLe:(new Date()).toISOString() });
     });
     toutMettreAJour(true);
     if(window.rendreHistoires) rendreHistoires();
@@ -8030,7 +8116,7 @@ async function chargerMonProfil(){
   if(!window._sb || !window.MON_USER){ return; }
   try{
     var r=await window._sb.from("fans")
-      .select("id,user_id,pseudo,ville,pays,date_naissance,histoire,photo,photo_histoire,chanson,insta,annee,concert,rencontre,concerts_vus,classement_chansons,vu_serie,projet_concert,omr_beauty,omr_produits,vetement_diy,merch_tournee,merch_tournees,asso_adherent,asso_dons,asso_concours,asso_rencontre,radio_day,fan_depuis")
+      .select("id,user_id,pseudo,ville,pays,date_naissance,histoire,photo,photo_histoire,chanson,insta,annee,concert,rencontre,concerts_vus,classement_chansons,vu_serie,projet_concert,omr_beauty,omr_produits,vetement_diy,merch_tournee,merch_tournees,asso_adherent,asso_dons,asso_concours,asso_rencontre,radio_day,fan_depuis,lat,lon")
       .eq("user_id", window.MON_USER.id).limit(1);
     if(r.error){ console.warn("mon profil:",r.error.message); return; }
     var row=(r.data&&r.data[0])||null;
@@ -8064,7 +8150,7 @@ async function chargerMonProfil(){
         histoire:row.histoire||"", photo:row.photo||null, photoHistoire:row.photo_histoire||null, tampons:nbConcerts(row.concerts_vus), lieuYR:aLieuYR(row.concerts_vus), concertsVus:row.concerts_vus||[], classementChansons:row.classement_chansons||[],
         vuSerie:!!row.vu_serie, projetConcert:!!row.projet_concert, omrProduits:row.omr_produits||[], vetementDiy:!!row.vetement_diy, merchTournees:row.merch_tournees||[],
         assoAdherent:!!row.asso_adherent, assoDons:row.asso_dons||0, assoConcours:row.asso_concours||0, assoRencontre:!!row.asso_rencontre, radioDay:!!row.radio_day,
-        naissance:row.date_naissance||"", fanDepuis:row.fan_depuis||"", inscritLe:(new Date()).toISOString() });
+        naissance:row.date_naissance||"", fanDepuis:row.fan_depuis||"", lat:(row.lat!=null?row.lat:null), lon:(row.lon!=null?row.lon:null), inscritLe:(new Date()).toISOString() });
     }
     window.MES_CONCERTS_VUS = row.concerts_vus||[];
     window.MON_CLASSEMENT_CHANSONS = row.classement_chansons||[];
