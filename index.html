@@ -295,6 +295,8 @@ textarea.immense{min-height:300px}
 .grille-galerie .tuile .mm-retirer:hover{background:var(--bordeaux)}
 .filtres{display:flex;gap:8px;overflow-x:auto;padding:2px 0 12px;-webkit-overflow-scrolling:touch;scrollbar-width:none}
 .filtres::-webkit-scrollbar{display:none}
+.filtres-wrap{flex-wrap:wrap;overflow:visible}
+.filtres-wrap .puce{flex:0 0 auto}
 .puce{
   flex:0 0 auto;font-size:.72rem;letter-spacing:.06em;padding:8px 15px;border-radius:99px;
   border:1px solid var(--verre-bord);background:var(--verre);color:var(--beige);
@@ -544,7 +546,7 @@ footer .marque{font-family:'Bebas Neue';font-size:1.1rem;letter-spacing:.15em;co
         <p style="margin:4px 0"><span data-i18n="acc.connected">Connected:</span> <b id="auth-qui"></b></p>
         <button type="button" class="btn fantome" onclick="seDeconnecter()" data-i18n="acc.logout">Log out</button>
       </div>
-      <div style="font-size:.66rem;opacity:.5;margin-top:8px">version : COMPTES-32</div>
+      <div style="font-size:.66rem;opacity:.5;margin-top:8px">version : COMPTES-33</div>
     </div>
     <div class="verre" id="dejaFiche" style="display:none;margin-bottom:16px">
       <h3 class="accent" data-i18n="acc.haveCard">Your card is created ✓</h3>
@@ -6726,7 +6728,7 @@ function rendreFanProjects(){
         <p style="font-size:.68rem;color:var(--beige);margin-top:6px">${t("prj.modNote")}</p>
       </details>`
     : `<p style="font-size:.8rem;color:var(--beige);margin-bottom:10px">${t("prj.needLogin")}</p>`;
-  var chips = `<div class="filtres">
+  var chips = `<div class="filtres filtres-wrap">
       <button class="puce${FILTRE_PROJ==="tout"?" actif":""}" onclick="filtrerProjets('tout')">${t("gal.fAll")}</button>
       ${CAT_PROJETS.map(function(c){return '<button class="puce'+(FILTRE_PROJ===c.id?" actif":"")+'" onclick="filtrerProjets(\''+c.id+'\')">'+c.emo+' '+t("cat."+c.id)+'</button>';}).join("")}
     </div>`;
