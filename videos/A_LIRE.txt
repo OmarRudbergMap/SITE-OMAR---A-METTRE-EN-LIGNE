@@ -1,0 +1,2 @@
+Mets ici TOUTES les videos .mp4 du site (ex. DUS_V1.mp4, RIGA_V1.mp4, ...).
+Ne mets PAS les fichiers finissant par _src. Le site les cherche a "videos/NOM.mp4".

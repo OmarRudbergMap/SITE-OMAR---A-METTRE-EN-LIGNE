@@ -5,10 +5,9 @@ Thumbs.db
 # Fichiers de travail vidéo (sources non compressées)
 *_src.mp4
 
-# Le dossier vidéos est TROP LOURD pour GitHub Pages (limite 1 Go).
-# On ne l'envoie donc pas sur GitHub. Les vidéos manquantes se cachent
-# automatiquement sur le site (les photos, elles, restent).
-videos/
+# Le dossier vidéos EST maintenant envoyé sur GitHub (une vidéo par concert,
+# total sous la limite de 1 Go de GitHub Pages). Les vidéos manquantes se
+# cachent automatiquement sur le site (les photos, elles, restent).
 
 # Dossiers techniques à ignorer
 _corbeille/
