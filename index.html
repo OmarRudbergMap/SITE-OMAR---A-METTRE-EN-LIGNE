@@ -546,7 +546,7 @@ footer .marque{font-family:'Bebas Neue';font-size:1.1rem;letter-spacing:.15em;co
         <p style="margin:4px 0"><span data-i18n="acc.connected">Connected:</span> <b id="auth-qui"></b></p>
         <button type="button" class="btn fantome" onclick="seDeconnecter()" data-i18n="acc.logout">Log out</button>
       </div>
-      <div style="font-size:.66rem;opacity:.5;margin-top:8px">version : COMPTES-33</div>
+      <div style="font-size:.66rem;opacity:.5;margin-top:8px">version : COMPTES-34</div>
     </div>
     <div class="verre" id="dejaFiche" style="display:none;margin-bottom:16px">
       <h3 class="accent" data-i18n="acc.haveCard">Your card is created ✓</h3>
@@ -746,7 +746,7 @@ footer .marque{font-family:'Bebas Neue';font-size:1.1rem;letter-spacing:.15em;co
       <div class="verre" style="padding:10px 6px"><div class="n" id="cr-h">—</div><div class="l" data-i18n="aw.hours">Hours</div></div>
       <div class="verre" style="padding:10px 6px"><div class="n" id="cr-m">—</div><div class="l">Min</div></div>
     </div>
-    <p style="text-align:center;font-size:.7rem;color:var(--beige);margin-bottom:18px" data-i18n="aw.before">No vote in progress · dates will be announced in due time</p>
+    <p id="awAvant" style="text-align:center;font-size:.7rem;color:var(--beige);margin-bottom:18px" data-i18n="aw.before">No vote in progress · dates will be announced in due time</p>
 
     <div id="secAwardsExtra"></div>
   </section>
@@ -1170,6 +1170,7 @@ en:{
   "map.close":"✕ Close","map.since":"Fan since","map.song":"Favourite song","map.readStory":"Read their full story →",
   "map.anon":(v)=>`A fan shines in ${v}`, "map.anonSub":"Their profile will appear here once completed. Maybe you?",
   "aw.vote":"Vote","aw.voted":"Voted ✦","aw.see":"See their entry","aw.hide":"Hide",
+  "aw.propose":"Propose a nomination","aw.phNom":"Who / what do you nominate?","aw.phDetail":"A short detail (country, author, link…) — optional","aw.sent":"Nomination sent! It will appear once validated ✦","aw.needNom":"Please enter a name","aw.closed":"Voting is closed for now ✦","aw.closedNote":"Voting is closed for now — nominations stay open.","aw.openNoDate":"Voting is open!","aw.saved":"Awards settings saved ✦","aw.adminTitle":"Manage the Awards (admin)","aw.adminOpen":"Open the Awards to voting","aw.adminFin":"Voting end date:","aw.adminSave":"Save","aw.modTitle":"Nominations to review","aw.modIntro":"Nominations proposed by fans — approve or reject.",
   "aw.videoDemo":"Video preview · playback in the online version",
   "chooseCountry":"· Choose your country ·","otherCountry":"Other country…",
   "contDetected":(c)=>`Continent detected: <b>${c}</b> 🌍`,"contOther":"We will add your country to the map ✦",
@@ -1341,6 +1342,7 @@ fr:{
   
 
   "aw.vote":"Voter","aw.voted":"Voté ✦","aw.see":"Voir sa proposition","aw.hide":"Masquer",
+  "aw.propose":"Proposer une candidature","aw.phNom":"Qui / quoi proposes-tu ?","aw.phDetail":"Un petit détail (pays, auteur, lien…) — facultatif","aw.sent":"Candidature envoyée ! Elle apparaîtra après validation ✦","aw.needNom":"Indique un nom","aw.closed":"Le vote est fermé pour le moment ✦","aw.closedNote":"Le vote est fermé pour le moment — tu peux quand même proposer des candidatures.","aw.openNoDate":"Le vote est ouvert !","aw.saved":"Réglages des Awards enregistrés ✦","aw.adminTitle":"Gérer les Awards (admin)","aw.adminOpen":"Ouvrir les Awards au vote","aw.adminFin":"Date de fin du vote :","aw.adminSave":"Enregistrer","aw.modTitle":"Candidatures à valider","aw.modIntro":"Candidatures proposées par les fans — approuve ou rejette.",
   "aw.videoDemo":"Aperçu vidéo · lecture dans la version en ligne",
   "foot.l1":"Ensemble, dessinons la plus grande carte mondiale des fans d'Omar Rudberg.",
   "foot.l2":"Prototype, version mobile. Les photos d'Omar sont des montages photo (aucune IA).",
@@ -6598,11 +6600,16 @@ function rendreModeration(){
     ? '<div class="verre" style="margin-top:14px;border-color:var(--bordeaux)"><h3 style="color:var(--rose)">✨ '+t("prj.modTitle")+' ('+projAtt.length+')</h3>'
       +'<p style="font-size:.78rem;color:var(--beige)">'+t("prj.modIntro")+'</p>'+projAtt.map(unItemProjetModo).join("")+'</div>'
     : '';
+  var awAtt=window.AWARDS_MODERER||[];
+  var htmlAwards = awAtt.length
+    ? '<div class="verre" style="margin-top:14px;border-color:var(--bordeaux)"><h3 style="color:var(--rose)">🏆 '+t("aw.modTitle")+' ('+awAtt.length+')</h3>'
+      +'<p style="font-size:.78rem;color:var(--beige)">'+t("aw.modIntro")+'</p>'+awAtt.map(unItemAwardModo).join("")+'</div>'
+    : '';
   s.innerHTML='<p class="eyebrow">🛡️ '+t("med.nav")+'</p><h2>'+t("med.modTitle")+'</h2>'
     +'<div class="verre" style="margin-top:12px;border-color:var(--bordeaux)">'
     +'<h3 style="color:var(--rose)">⏳ '+t("med.modSection")+' ('+enAttente.length+')</h3>'
     +'<p style="font-size:.78rem;color:var(--beige)">'+t("med.modIntro")+'</p>'
-    +htmlAttente+'</div>'+htmlProjets+htmlTraites;
+    +htmlAttente+'</div>'+htmlProjets+htmlAwards+htmlTraites;
 }
 window.rendreModeration=rendreModeration;
 /* Affiche/masque l'onglet Modération + la pastille du nombre en attente, selon admin */
@@ -6611,7 +6618,7 @@ function majAccesAdmin(){
   var admin=(typeof estAdmin==="function" && estAdmin());
   lien.style.display=admin?"":"none";
   var badge=document.getElementById("badgeModeration");
-  var n=(window.MEDIAS_MODERER||[]).length+(window.PROJETS_MODERER||[]).length;
+  var n=(window.MEDIAS_MODERER||[]).length+(window.PROJETS_MODERER||[]).length+(window.AWARDS_MODERER||[]).length;
   if(badge){ if(admin && n>0){ badge.style.display=""; badge.textContent=n; } else { badge.style.display="none"; } }
   if(admin) rendreModeration();
 }
@@ -7344,46 +7351,145 @@ function ta(k){ const d=TXT_AW[LANG]||TXT_AW.en; return d[k]||TXT_AW.en[k]; }
 /* date du jour (YYYY-M-D) pour limiter à 1 vote par catégorie ET par jour */
 function aujourdhuiAw(){ const d=new Date(); return d.getFullYear()+"-"+(d.getMonth()+1)+"-"+d.getDate(); }
 function echapAw(x){ return String(x).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c])); }
+/* ===== AWARDS · version partagée (Supabase) : candidatures + modération + vote + ouverture ===== */
+window.AWARDS_CONFIG={ouvert:false,fin:null};
+window.AWARDS_CANDS={}; window.AWARDS_COMPTE={}; window.AWARDS_MES_VOTES={}; window.AWARDS_MODERER=[];
+function awardsOuverts(){ var c=window.AWARDS_CONFIG||{}; if(!c.ouvert) return false; if(c.fin){ return Date.now() < new Date(c.fin).getTime(); } return true; }
+window.awardsOuverts=awardsOuverts;
+async function chargerAwardsSupabase(){
+  if(!window._sb) return;
+  try{
+    var rc=await window._sb.from("awards_config").select("ouvert,fin").eq("id",1).limit(1);
+    if(!rc.error && rc.data && rc.data[0]) window.AWARDS_CONFIG={ouvert:!!rc.data[0].ouvert, fin:rc.data[0].fin||null};
+    var r=await window._sb.from("awards_cands").select("id,pseudo,categorie,nom,detail,cree_le").eq("valide",true).eq("rejete",false);
+    if(!r.error){ var g={}; (r.data||[]).forEach(function(c){ (g[c.categorie]=g[c.categorie]||[]).push(c); }); window.AWARDS_CANDS=g; }
+    var rv=await window._sb.from("awards_votes").select("categorie,jour,cand_id,user_id");
+    if(!rv.error){
+      var cpt={}, mine={}, auj=aujourdhuiAw();
+      (rv.data||[]).forEach(function(v){ cpt[v.cand_id]=(cpt[v.cand_id]||0)+1; if(window.MON_USER && v.user_id===window.MON_USER.id && v.jour===auj) mine[v.categorie]=v.cand_id; });
+      window.AWARDS_COMPTE=cpt; window.AWARDS_MES_VOTES=mine;
+    }
+    if(estAdmin()){
+      var ra=await window._sb.from("awards_cands").select("id,pseudo,categorie,nom,detail,cree_le").eq("valide",false).eq("rejete",false).order("id",{ascending:true});
+      if(!ra.error) window.AWARDS_MODERER=ra.data||[];
+    }
+    if(window.rendreAwardsExtra) rendreAwardsExtra();
+    if(window.majAccesAdmin) majAccesAdmin();
+    if(window.rendreModeration) rendreModeration();
+    if(window.majCompteRebours) majCompteRebours();
+  }catch(e){ console.warn("awards:",e); }
+}
+window.chargerAwardsSupabase=chargerAwardsSupabase;
+async function envoyerAward(){
+  if(!window.MON_USER || !window.MON_PROFIL_ID){ toast(t("prj.needLogin")); return; }
+  var cat=(document.getElementById("aw-cat").value||"fan");
+  var nom=(document.getElementById("aw-nom").value||"").trim();
+  var detail=(document.getElementById("aw-detail").value||"").trim();
+  if(!nom){ toast(t("aw.needNom")); return; }
+  var champs={user_id:window.MON_USER.id, fan_id:window.MON_PROFIL_ID, pseudo:(typeof MOI!=="undefined"&&MOI?MOI.prenom:"")||"", categorie:cat, nom:nom, detail:detail, valide:false, rejete:false};
+  var r=await window._sb.from("awards_cands").insert(champs);
+  if(r&&r.error){ diag("L'envoi n'a pas fonctionné ✦",false); console.warn("award insert:",r.error); return; }
+  toast(t("aw.sent"));
+  var a=document.getElementById("aw-nom"); if(a)a.value="";
+  var b=document.getElementById("aw-detail"); if(b)b.value="";
+  chargerAwardsSupabase();
+}
+window.envoyerAward=envoyerAward;
+async function voterAwardSb(cat, candId){
+  if(!window.MON_USER){ toast(t("prj.needLogin")); return; }
+  if(!awardsOuverts()){ toast(t("aw.closed")); return; }
+  var auj=aujourdhuiAw();
+  var actuel=(window.AWARDS_MES_VOTES||{})[cat];
+  var r = (actuel===candId)
+    ? await window._sb.from("awards_votes").delete().eq("user_id",window.MON_USER.id).eq("categorie",cat).eq("jour",auj)
+    : await window._sb.from("awards_votes").upsert({user_id:window.MON_USER.id,categorie:cat,jour:auj,cand_id:candId},{onConflict:"user_id,categorie,jour"});
+  if(r&&r.error){ diag("Action impossible ✦",false); console.warn(r.error); return; }
+  if(actuel!==candId) toast(t("toast.vote"));
+  chargerAwardsSupabase();
+}
+window.voterAwardSb=voterAwardSb;
+async function approuverAward(id){ var r=await window._sb.from("awards_cands").update({valide:true,rejete:false}).eq("id",id); if(r&&r.error){diag("Action impossible ✦",false);return;} toast(t("med.approved")); chargerAwardsSupabase(); }
+async function rejeterAward(id){ var r=await window._sb.from("awards_cands").update({rejete:true}).eq("id",id); if(r&&r.error){diag("Action impossible ✦",false);return;} toast(t("med.rejected")); chargerAwardsSupabase(); }
+async function retirerAward(id){ var r=await window._sb.from("awards_cands").update({valide:false,rejete:true}).eq("id",id); if(r&&r.error){diag("Action impossible ✦",false);return;} toast(t("med.removed")); chargerAwardsSupabase(); }
+window.approuverAward=approuverAward; window.rejeterAward=rejeterAward; window.retirerAward=retirerAward;
+async function enregistrerConfigAwards(){
+  if(!window._sb){ toast("Base non connectée ✦"); return; }
+  var ouvert=!!(document.getElementById("aw-ouvert")||{}).checked;
+  var finVal=(document.getElementById("aw-fin")||{}).value||"";
+  var fin=finVal? new Date(finVal+"T23:59:59").toISOString() : null;
+  var r=await window._sb.from("awards_config").upsert({id:1,ouvert:ouvert,fin:fin,maj_le:new Date().toISOString()},{onConflict:"id"});
+  if(r&&r.error){ diag("Action impossible ✦",false); console.warn(r.error); return; }
+  window.AWARDS_CONFIG={ouvert:ouvert,fin:fin};
+  toast(t("aw.saved")); chargerAwardsSupabase();
+}
+window.enregistrerConfigAwards=enregistrerConfigAwards;
+function unItemAwardModo(c){
+  var cat=AWARD_CATS.find(function(x){return x.id===c.categorie;});
+  var nomCat=cat?t(cat.cle):c.categorie;
+  return '<div class="mod-item"><div class="mod-info" style="flex:1"><b>🏆 '+echapAw(c.nom||"")+'</b>'
+    +'<span>'+nomCat+' · '+echapAw(c.pseudo||"")+'</span>'
+    +(c.detail?'<span>'+echapAw(c.detail)+'</span>':'')+'</div>'
+    +'<div class="mod-btns"><button class="btn" onclick="approuverAward('+c.id+')">✅ '+t("med.approve")+'</button>'
+    +'<button class="btn fantome" onclick="rejeterAward('+c.id+')">✕ '+t("med.reject")+'</button></div></div>';
+}
+window.unItemAwardModo=unItemAwardModo;
+function majCompteRebours(){
+  var j=document.getElementById("cr-j"), h=document.getElementById("cr-h"), m=document.getElementById("cr-m");
+  var avant=document.getElementById("awAvant"); if(!j) return;
+  var c=window.AWARDS_CONFIG||{};
+  if(awardsOuverts() && c.fin){
+    var diff=new Date(c.fin).getTime()-Date.now(); if(diff<0)diff=0;
+    j.textContent=Math.floor(diff/864e5);
+    h.textContent=Math.floor((diff%864e5)/36e5);
+    m.textContent=Math.floor((diff%36e5)/6e4);
+    if(avant) avant.style.display="none";
+  } else {
+    j.textContent="—"; h.textContent="—"; m.textContent="—";
+    if(avant){ avant.style.display=""; avant.textContent = awardsOuverts()? t("aw.openNoDate") : t("aw.before"); }
+  }
+}
+window.majCompteRebours=majCompteRebours;
+try{ setInterval(function(){ if(window.majCompteRebours) majCompteRebours(); }, 30000); }catch(e){}
 function rendreAwardsExtra(){
   const s=document.getElementById("secAwardsExtra"); if(!s)return;
-  AWARDS_BD.cands=AWARDS_BD.cands||{}; AWARDS_BD.votes=AWARDS_BD.votes||{};
-  s.innerHTML=AWARD_CATS.map(cat=>{
-    const cands=AWARDS_BD.cands[cat.id]||[], vv=AWARDS_BD.votes[cat.id], monVote=(vv&&vv.d===aujourdhuiAw())?vv.i:undefined;
-    const totalCat=cands.reduce((s,c)=>s+(+c.v||0),0);
-    const lignes = cands.length
-      ? cands.map((c,i)=>`<div class="option-vote"${i===cands.length-1?' style="border-bottom:none"':''}><span>${echapAw(c.n)}<small>${c.d?echapAw(c.d)+" · ":""}${c.v} ${ta("votes")}</small></span><button class="btn-vote${monVote===i?" vote":""}" data-cat="${cat.id}" data-i="${i}">${monVote===i?t("aw.voted"):t("aw.vote")}</button></div>`).join("")
-      : `<p style="color:var(--beige);font-size:.8rem;margin:6px 0 4px">${ta("aucun")}</p>`;
-    const ligneTotal = cands.length
-      ? `<p style="text-align:right;font-size:.74rem;color:var(--rose);font-weight:600;margin:8px 0 0">${ta("total")} : ${totalCat} ${ta("votes")}</p>`
-      : "";
-    return `<div class="verre categorie-vote"><h3 class="accent">${t(cat.cle)}</h3>${lignes}${ligneTotal}<button class="btn-apercu" data-role="proposerAw" data-cat="${cat.id}" style="display:inline-block;margin-top:10px">${ta("proposer")}</button></div>`;
+  var admin=(typeof estAdmin==="function"&&estAdmin());
+  var connecte=!!(window.MON_USER && window.MON_PROFIL_ID);
+  var ouvert=awardsOuverts();
+  var cfg=window.AWARDS_CONFIG||{};
+  var panneauAdmin = admin ? `<div class="verre" style="margin-bottom:14px;border-color:var(--bordeaux)">
+      <h3 style="color:var(--rose)">🛡️ ${t("aw.adminTitle")}</h3>
+      <label style="display:flex;align-items:center;gap:8px;margin-top:8px;font-size:.86rem"><input type="checkbox" id="aw-ouvert" ${cfg.ouvert?"checked":""} style="width:auto"> ${t("aw.adminOpen")}</label>
+      <label style="display:block;font-size:.7rem;color:var(--beige);margin:10px 0 4px">${t("aw.adminFin")}</label>
+      <input type="date" id="aw-fin" value="${cfg.fin?String(cfg.fin).slice(0,10):""}" style="width:100%">
+      <button class="btn" style="margin-top:10px;font-size:.82rem;padding:8px 14px" onclick="enregistrerConfigAwards()">💾 ${t("aw.adminSave")}</button>
+    </div>` : "";
+  var etat = ouvert ? "" : `<p style="text-align:center;font-size:.82rem;color:var(--beige);margin:0 0 14px">🔒 ${t("aw.closedNote")}</p>`;
+  var form = connecte ? `<details class="verre" style="margin-bottom:14px">
+      <summary style="cursor:pointer;color:var(--rose);font-weight:600;list-style:none">➕ ${t("aw.propose")}</summary>
+      <select id="aw-cat" style="width:100%;margin-top:10px">${AWARD_CATS.map(function(c){return '<option value="'+c.id+'">'+t(c.cle)+'</option>';}).join("")}</select>
+      <input type="text" id="aw-nom" placeholder="${t("aw.phNom")}" style="width:100%;margin-top:8px">
+      <input type="text" id="aw-detail" placeholder="${t("aw.phDetail")}" style="width:100%;margin-top:8px">
+      <button class="btn btn-large" style="margin-top:10px" onclick="envoyerAward()">📤 ${t("prj.send")}</button>
+      <p style="font-size:.68rem;color:var(--beige);margin-top:6px">${t("prj.modNote")}</p>
+    </details>` : `<p style="font-size:.8rem;color:var(--beige);margin-bottom:10px">${t("prj.needLogin")}</p>`;
+  var dis = ouvert ? "" : "disabled", opa = ouvert ? "" : "opacity:.4";
+  var cats = AWARD_CATS.map(function(cat){
+    var cands=(window.AWARDS_CANDS[cat.id]||[]).slice().sort(function(a,b){return (window.AWARDS_COMPTE[b.id]||0)-(window.AWARDS_COMPTE[a.id]||0);});
+    var monVote=(window.AWARDS_MES_VOTES||{})[cat.id];
+    var total=cands.reduce(function(s,c){return s+(window.AWARDS_COMPTE[c.id]||0);},0);
+    var lignes = cands.length ? cands.map(function(c){
+        var n=window.AWARDS_COMPTE[c.id]||0, vote=(monVote===c.id);
+        return `<div class="option-vote"><span>${echapAw(c.nom)}<small>${c.detail?echapAw(c.detail)+" · ":""}${c.pseudo?"✦ "+echapAw(c.pseudo)+" · ":""}${n} ${ta("votes")}</small></span>
+          <span style="display:flex;align-items:center;gap:6px">
+            <button class="btn-vote${vote?" vote":""}" ${dis} style="${opa}" onclick="voterAwardSb('${cat.id}',${c.id})">${vote?t("aw.voted"):t("aw.vote")}</button>
+            ${admin?'<button class="mm-retirer" style="position:static" onclick="retirerAward('+c.id+')" title="'+t("med.remove")+'">🗑️</button>':""}
+          </span></div>`;
+      }).join("") : `<p style="color:var(--beige);font-size:.8rem;margin:6px 0 4px">${ta("aucun")}</p>`;
+    var ltotal = cands.length ? `<p style="text-align:right;font-size:.74rem;color:var(--rose);font-weight:600;margin:8px 0 0">${ta("total")} : ${total} ${ta("votes")}</p>` : "";
+    return `<div class="verre categorie-vote"><h3 class="accent">${t(cat.cle)}</h3>${lignes}${ltotal}</div>`;
   }).join("");
-  s.querySelectorAll(".btn-vote").forEach(b=>b.addEventListener("click",()=>voterAward(b.dataset.cat,+b.dataset.i)));
-  s.querySelectorAll('[data-role="proposerAw"]').forEach(b=>b.addEventListener("click",()=>proposerAward(b.dataset.cat)));
-}
-function voterAward(cat,i){
-  const cands=AWARDS_BD.cands[cat]||[]; if(!cands[i])return;
-  const auj=aujourdhuiAw();
-  const cur=AWARDS_BD.votes[cat];
-  /* vote éventuel déjà posé AUJOURD'HUI dans cette catégorie (les votes des jours précédents restent acquis) */
-  const voteAuj=(cur&&cur.d===auj)?cur.i:undefined;
-  if(voteAuj===i){
-    /* on reclique sur le même choix → on retire le vote du jour */
-    cands[i].v=Math.max(0,cands[i].v-1);
-    delete AWARDS_BD.votes[cat];
-  }else{
-    /* on change de choix dans la même journée → on retire d'abord le vote du jour */
-    if(voteAuj!==undefined&&cands[voteAuj]) cands[voteAuj].v=Math.max(0,cands[voteAuj].v-1);
-    cands[i].v++; AWARDS_BD.votes[cat]={i:i,d:auj};
-    toast(t("toast.vote"));
-  }
-  sauverBD(); rendreAwardsExtra();
-}
-function proposerAward(cat){
-  const n=prompt(ta("qui")); if(!n||!n.trim())return;
-  const d=prompt(ta("detail"))||"";
-  (AWARDS_BD.cands[cat]=AWARDS_BD.cands[cat]||[]).push({n:n.trim().slice(0,60),d:(d||"").trim().slice(0,90),v:0});
-  sauverBD(); rendreAwardsExtra(); toast(ta("ajoute"));
+  s.innerHTML=panneauAdmin+etat+form+cats;
+  if(window.majCompteRebours) majCompteRebours();
 }
 
 /* filtre galerie par année, combiné au filtre catégorie */
@@ -7587,6 +7693,7 @@ chargerFansSupabase();
 if(window.chargerMediasSupabase) chargerMediasSupabase();
 if(window.chargerGroupesSupabase) chargerGroupesSupabase();
 if(window.chargerProjetsSupabase) chargerProjetsSupabase();
+if(window.chargerAwardsSupabase) chargerAwardsSupabase();
 
 /* ================= COMPTES FANS (connexion email + mot de passe) =================
    Étape 1 : créer un compte / se connecter / se déconnecter.
@@ -7693,6 +7800,7 @@ function majPanneauCompte(session){
     chargerMonProfil();
     if(window.chargerMediasSupabase) chargerMediasSupabase();
     if(window.chargerProjetsSupabase) chargerProjetsSupabase();
+    if(window.chargerAwardsSupabase) chargerAwardsSupabase();
   } else {
     window.MON_USER=null; window.MON_PROFIL_ID=null;
     if(d) d.style.display=""; if(c) c.style.display="none";
