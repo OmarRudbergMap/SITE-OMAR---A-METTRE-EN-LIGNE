@@ -540,7 +540,7 @@ footer .marque{font-family:'Bebas Neue';font-size:1.1rem;letter-spacing:.15em;co
         <p style="margin:4px 0"><span data-i18n="acc.connected">Connected:</span> <b id="auth-qui"></b></p>
         <button type="button" class="btn fantome" onclick="seDeconnecter()" data-i18n="acc.logout">Log out</button>
       </div>
-      <div style="font-size:.66rem;opacity:.5;margin-top:8px">version : COMPTES-48</div>
+      <div style="font-size:.66rem;opacity:.5;margin-top:8px">version : COMPTES-49</div>
     </div>
     <div class="verre" id="dejaFiche" style="display:none;margin-bottom:16px">
       <h3 class="accent" data-i18n="acc.haveCard">Your card is created ✓</h3>
@@ -1157,6 +1157,8 @@ const FLAGS={en:"🇬🇧",fr:"🇫🇷",es:"🇪🇸",sv:"🇸🇪",de:"🇩�
 let LANG = "en";
 const I18N = {
 en:{
+  "bdg.engage":"Engaged",
+  "x.actionErr":"Action failed, try again ✦",
   "sto.translate":"Translate",
   "sto.original":"Show original",
   "sto.translating":"Translating…",
@@ -1308,6 +1310,8 @@ en:{
   "contDetected":(c)=>`Continent detected: <b>${c}</b> 🌍`,"contOther":"We will add your country to the map ✦",
 },
 fr:{
+  "bdg.engage":"Engagé·e",
+  "x.actionErr":"Action impossible, réessaie ✦",
   "sto.translate":"Traduire",
   "sto.original":"Voir l'original",
   "sto.translating":"Traduction…",
@@ -1544,6 +1548,8 @@ fr:{
   "contDetected":(c)=>`Continent détecté : <b>${c}</b> 🌍`,"contOther":"Nous ajouterons ton pays à la carte ✦",
 },
 es:{
+  "bdg.engage":"Participativo·a",
+  "x.actionErr":"Acción imposible, inténtalo de nuevo ✦",
   "sto.translate":"Traducir",
   "sto.original":"Ver original",
   "sto.translating":"Traduciendo…",
@@ -1748,6 +1754,8 @@ es:{
   "contDetected":(c)=>`Continente detectado: <b>${c}</b> 🌍`,"contOther":"Añadiremos tu país al mapa ✦",
 },
 sv:{
+  "bdg.engage":"Engagerad",
+  "x.actionErr":"Åtgärden misslyckades, försök igen ✦",
   "sto.translate":"Översätt",
   "sto.original":"Visa original",
   "sto.translating":"Översätter…",
@@ -1952,6 +1960,8 @@ sv:{
   "contDetected":(c)=>`Kontinent: <b>${c}</b> 🌍`,"contOther":"Vi lägger till ditt land på kartan ✦",
 },
 de:{
+  "bdg.engage":"Engagiert",
+  "x.actionErr":"Aktion fehlgeschlagen, versuch es erneut ✦",
   "sto.translate":"Übersetzen",
   "sto.original":"Original anzeigen",
   "sto.translating":"Übersetze…",
@@ -2156,6 +2166,8 @@ de:{
   "contDetected":(c)=>`Erkannter Kontinent: <b>${c}</b> 🌍`,"contOther":"Wir fügen dein Land der Karte hinzu ✦",
 },
 pt:{
+  "bdg.engage":"Participativo·a",
+  "x.actionErr":"Ação impossível, tenta de novo ✦",
   "sto.translate":"Traduzir",
   "sto.original":"Ver original",
   "sto.translating":"A traduzir…",
@@ -3391,6 +3403,9 @@ function badgesFan(fn){
   if(((fn.nbPhotos||0)+(fn.nbVideos||0))>0) b.push(["📸","bdg.photos"]);
   if((fn.nbDessins||0)>0) b.push(["🎨","bdg.dessinateur"]);
   if((fn.nbSelfies||0)>0) b.push(["🤳","bdg.selfie"]);
+  var _egl=(window.LIKES_PAR_USER&&fn.user_id)?(window.LIKES_PAR_USER[fn.user_id]||0):0;
+  var _egc=(window.COMS_PAR_USER&&fn.user_id)?(window.COMS_PAR_USER[fn.user_id]||0):0;
+  if(_egl+_egc>0) b.push(["💬","bdg.engage"]);
   /* badges-photo des tournées vues (depuis les concerts cochés) */
   var tours={}; (fn.concertsVus||[]).forEach(function(cle){ if(cle!=="YR"){ var tid=String(cle).split("#")[0]; tours[tid]=1; } });
   ["solo24","f24","enf24","enf25","f25","ms25"].forEach(function(tid){ if(tours[tid]&&TB[tid]) b.push(["🎤",TB[tid].label,{photo:TB[tid].img}]); });
@@ -3433,7 +3448,10 @@ function detailPoints(fn){
   if(fn.assoRencontre) d.push(["🤝","pt.rencontre",15]);
   var an=anneesFidelite(fn);
   if(an>0) d.push(["💙","pt.fidelite",an*50, an]);                 /* +50 par année de fan */
-  if(fn.pointsEngagement) d.push(["💬","pt.engagement",fn.pointsEngagement]);
+  var _nl=(window.LIKES_PAR_USER&&fn.user_id)?(window.LIKES_PAR_USER[fn.user_id]||0):0;
+  var _nc=(window.COMS_PAR_USER&&fn.user_id)?(window.COMS_PAR_USER[fn.user_id]||0):0;
+  var _eng=_nl*1+_nc*2;                                            /* +1 par like donné, +2 par commentaire */
+  if(_eng>0) d.push(["💬","pt.engagement",_eng]);
   var nb=badgesFan(fn).length;
   if(nb>0) d.push(["🏅","pt.badges",nb*10, nb]);                   /* +10 par badge gagné */
   return d;
@@ -3770,8 +3788,8 @@ function rendreHistoires(){
           </div>
         </div>`:``}
         <div class="actions-sociales">
-          <button onclick="aimer(this)"><span class="coeur">♡</span> <span class="nb-likes">${h.likes||0}</span></button>
-          <button onclick="toast(t('toast.demoComments'))">💬 ${h.coms||0}</button>
+          <button onclick="aimerMedia('histoire-${h.fanId||('s'+i)}',this)">${(window.MES_LIKES&&window.MES_LIKES.has('histoire-'+(h.fanId||('s'+i))))?"❤":"♡"} <b data-likes="histoire-${h.fanId||('s'+i)}">${(window.MEDIA_LIKES&&window.MEDIA_LIKES['histoire-'+(h.fanId||('s'+i))])||0}</b></button>
+          <button onclick="ouvrirComs('histoire-${h.fanId||('s'+i)}')">💬 <b data-coms="histoire-${h.fanId||('s'+i)}">${((window.MEDIA_COMS&&window.MEDIA_COMS['histoire-'+(h.fanId||('s'+i))])||[]).length}</b></button>
           <span class="langue-note">${h.langue}</span>
         </div>
       </div>
@@ -5953,33 +5971,84 @@ function magasin(store){return store==="fan"?APERCUS_FANS:APERCUS_MODO;}
 /* interactions sur chaque média : vues, ❤, commentaires (session · base de données plus tard) */
 const INTERACTIONS={};
 function I(mid){return INTERACTIONS[mid]||(INTERACTIONS[mid]={v:0,l:0,aime:false,com:[]});}
+/* ===== LIKES & COMMENTAIRES PARTAGÉS (base Supabase, visibles par tous) =====
+   · media_likes : un like = une ligne (media_id, user_id)
+   · media_commentaires : (media_id, user_id, pseudo, texte)
+   · le même système sert pour les photos/vidéos ET pour les histoires
+     (cible "histoire-<fanId>"). Les likes/commentaires donnés alimentent
+     les points d'engagement et un badge. */
+window.MEDIA_LIKES={};        /* media_id -> nombre de likes */
+window.MES_LIKES=new Set();   /* media_id que J'AI aimés */
+window.MEDIA_COMS={};         /* media_id -> [commentaires] */
+window.LIKES_PAR_USER={};     /* user_id -> nb de likes donnés (pour les points) */
+window.COMS_PAR_USER={};      /* user_id -> nb de commentaires écrits (pour les points) */
+async function chargerInteractionsSupabase(){
+  if(!window._sb) return;
+  try{
+    var rl=await window._sb.from("media_likes").select("media_id,user_id");
+    if(rl && !rl.error){
+      var cpt={}, mine=new Set(), parU={};
+      (rl.data||[]).forEach(function(x){
+        cpt[x.media_id]=(cpt[x.media_id]||0)+1;
+        parU[x.user_id]=(parU[x.user_id]||0)+1;
+        if(window.MON_USER && x.user_id===window.MON_USER.id) mine.add(x.media_id);
+      });
+      window.MEDIA_LIKES=cpt; window.MES_LIKES=mine; window.LIKES_PAR_USER=parU;
+    }
+    var rc=await window._sb.from("media_commentaires").select("id,media_id,user_id,pseudo,texte,cree_le").order("cree_le",{ascending:true});
+    if(rc && !rc.error){
+      var byM={}, byU={};
+      (rc.data||[]).forEach(function(c){ (byM[c.media_id]=byM[c.media_id]||[]).push(c); byU[c.user_id]=(byU[c.user_id]||0)+1; });
+      window.MEDIA_COMS=byM; window.COMS_PAR_USER=byU;
+    }
+  }catch(e){ console.warn("interactions:",e); }
+  /* recalcul points/badges + rafraîchissement de l'affichage */
+  try{ if(window.toutMettreAJour) toutMettreAJour(false); }catch(e){}
+  try{ if(window.rendreConcerts) rendreConcerts(); }catch(e){}
+}
+window.chargerInteractionsSupabase=chargerInteractionsSupabase;
 function statsMediaHTML(mid){
   const s=I(mid);
+  var l=(window.MEDIA_LIKES&&window.MEDIA_LIKES[mid])||0;
+  var aime=!!(window.MES_LIKES&&window.MES_LIKES.has(mid));
+  var nc=((window.MEDIA_COMS&&window.MEDIA_COMS[mid])||[]).length;
   return `<div class="stats-media">
     <span>👁 <b data-vue="${mid}">${s.v}</b></span>
-    <button onclick="aimerMedia('${mid}',this)">${s.aime?"❤":"♡"} <b>${s.l}</b></button>
-    <button onclick="ouvrirComs('${mid}')">💬 <b data-coms="${mid}">${s.com.length}</b></button>
+    <button onclick="aimerMedia('${mid}',this)">${aime?"❤":"♡"} <b data-likes="${mid}">${l}</b></button>
+    <button onclick="ouvrirComs('${mid}')">💬 <b data-coms="${mid}">${nc}</b></button>
   </div>`;
 }
-function aimerMedia(mid,btn){
-  const s=I(mid); s.aime=!s.aime; s.l+=s.aime?1:-1; if(s.l<0)s.l=0;
-  btn.innerHTML=(s.aime?"❤":"♡")+" <b>"+s.l+"</b>";
-  sauverBD();
+async function aimerMedia(mid,btn){
+  if(!window.MON_USER){ toast(t("prj.needLogin")); return; }
+  var deja=!!(window.MES_LIKES && window.MES_LIKES.has(mid));
+  try{
+    var r = deja
+      ? await window._sb.from("media_likes").delete().eq("media_id",mid).eq("user_id",window.MON_USER.id)
+      : await window._sb.from("media_likes").insert({media_id:mid,user_id:window.MON_USER.id});
+    if(r&&r.error){ console.warn("like:",r.error); if(typeof diag==="function")diag(t("x.actionErr"),false); return; }
+    window.MES_LIKES=window.MES_LIKES||new Set(); window.MEDIA_LIKES=window.MEDIA_LIKES||{};
+    if(deja){ window.MES_LIKES.delete(mid); window.MEDIA_LIKES[mid]=Math.max(0,(window.MEDIA_LIKES[mid]||1)-1); }
+    else { window.MES_LIKES.add(mid); window.MEDIA_LIKES[mid]=(window.MEDIA_LIKES[mid]||0)+1; }
+    var aime=window.MES_LIKES.has(mid), n=window.MEDIA_LIKES[mid]||0;
+    if(btn) btn.innerHTML=(aime?"❤":"♡")+' <b data-likes="'+mid+'">'+n+"</b>";
+    document.querySelectorAll('[data-likes="'+mid+'"]').forEach(function(el){el.textContent=n;});
+  }catch(e){ console.warn(e); }
 }
 function vueMedia(mid){
   const s=I(mid); s.v++;
   document.querySelectorAll(`[data-vue="${mid}"]`).forEach(el=>el.textContent=s.v);
 }
+function _escCom(s){ return (typeof escapeHtmlM==="function") ? escapeHtmlM(s||"") : String(s||"").replace(/</g,"&lt;"); }
 function ouvrirComs(mid){
   fermerComs();
-  const s=I(mid);
+  var coms=(window.MEDIA_COMS&&window.MEDIA_COMS[mid])||[];
   const boite=document.createElement("div");
   boite.id="boiteComs"; boite.className="verre boite-coms";
   boite.innerHTML=`<div style="display:flex;justify-content:space-between;align-items:center">
       <h3 style="color:var(--rose)">💬 ${t("x.comTitle")}</h3>
       <button onclick="fermerComs()" style="background:none;border:none;color:var(--blanc);font-size:1.05rem">✕</button></div>
     <div style="max-height:36vh;overflow-y:auto;margin:10px 0">${
-      s.com.length ? s.com.map(c=>`<div class="bulle"><b>${c.qui}</b>${c.txt}</div>`).join("")
+      coms.length ? coms.map(c=>`<div class="bulle"><b>${_escCom(c.pseudo||"✦")} </b>${_escCom(c.texte)}</div>`).join("")
       : `<p style="font-size:.75rem;color:var(--beige)">${t("x.comEmpty")}</p>`}</div>
     <div class="rangee-chat">
       <input id="comMsg" type="text" placeholder="${t("x.comPh")}">
@@ -5988,11 +6057,18 @@ function ouvrirComs(mid){
   document.body.appendChild(boite);
 }
 function fermerComs(){const b=document.getElementById("boiteComs"); if(b)b.remove();}
-function envoyerCom(mid){
-  const i=document.getElementById("comMsg"); const v=i.value.trim(); if(!v)return;
-  I(mid).com.push({qui:"Moi ✦",txt:v});
-  sauverBD();
-  document.querySelectorAll(`[data-coms="${mid}"]`).forEach(el=>el.textContent=I(mid).com.length);
+async function envoyerCom(mid){
+  if(!window.MON_USER){ toast(t("prj.needLogin")); return; }
+  const i=document.getElementById("comMsg"); const v=(i&&i.value||"").trim(); if(!v)return;
+  var pseudo=(typeof MOI!=="undefined"&&MOI&&MOI.prenom)?MOI.prenom:"✦";
+  try{
+    var r=await window._sb.from("media_commentaires").insert({media_id:mid,user_id:window.MON_USER.id,pseudo:pseudo,texte:v});
+    if(r&&r.error){ console.warn("com:",r.error); if(typeof diag==="function")diag(t("x.actionErr"),false); return; }
+  }catch(e){ console.warn(e); if(typeof diag==="function")diag(t("x.actionErr"),false); return; }
+  window.MEDIA_COMS=window.MEDIA_COMS||{};
+  (window.MEDIA_COMS[mid]=window.MEDIA_COMS[mid]||[]).push({media_id:mid,user_id:window.MON_USER.id,pseudo:pseudo,texte:v});
+  window.COMS_PAR_USER=window.COMS_PAR_USER||{}; window.COMS_PAR_USER[window.MON_USER.id]=(window.COMS_PAR_USER[window.MON_USER.id]||0)+1;
+  document.querySelectorAll(`[data-coms="${mid}"]`).forEach(el=>el.textContent=window.MEDIA_COMS[mid].length);
   ouvrirComs(mid);
 }
 function diapoMedia(m,cle,i,store){
@@ -8342,6 +8418,7 @@ if(window.chargerMediasSupabase) chargerMediasSupabase();
 if(window.chargerGroupesSupabase) chargerGroupesSupabase();
 if(window.chargerProjetsSupabase) chargerProjetsSupabase();
 if(window.chargerAwardsSupabase) chargerAwardsSupabase();
+if(window.chargerInteractionsSupabase) chargerInteractionsSupabase();
 
 /* ================= COMPTES FANS (connexion email + mot de passe) =================
    Étape 1 : créer un compte / se connecter / se déconnecter.
@@ -8449,6 +8526,7 @@ function majPanneauCompte(session){
     if(window.chargerMediasSupabase) chargerMediasSupabase();
     if(window.chargerProjetsSupabase) chargerProjetsSupabase();
     if(window.chargerAwardsSupabase) chargerAwardsSupabase();
+    if(window.chargerInteractionsSupabase) chargerInteractionsSupabase();
   } else {
     window.MON_USER=null; window.MON_PROFIL_ID=null;
     if(d) d.style.display=""; if(c) c.style.display="none";
