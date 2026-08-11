@@ -540,7 +540,7 @@ footer .marque{font-family:'Bebas Neue';font-size:1.1rem;letter-spacing:.15em;co
         <p style="margin:4px 0"><span data-i18n="acc.connected">Connected:</span> <b id="auth-qui"></b></p>
         <button type="button" class="btn fantome" onclick="seDeconnecter()" data-i18n="acc.logout">Log out</button>
       </div>
-      <div style="font-size:.66rem;opacity:.5;margin-top:8px">version : COMPTES-49</div>
+      <div style="font-size:.66rem;opacity:.5;margin-top:8px">version : COMPTES-50</div>
     </div>
     <div class="verre" id="dejaFiche" style="display:none;margin-bottom:16px">
       <h3 class="accent" data-i18n="acc.haveCard">Your card is created ✓</h3>
@@ -3734,20 +3734,40 @@ function avatarHTML(prenom){
 }
 /* Traduction automatique d'une histoire vers la langue affichée (service Google gratuit) */
 async function traduireHistoire(i, btn){
-  var p=document.getElementById("histoire-"+i); if(!p||!window.HISTOIRES||!HISTOIRES[i]) return;
-  var orig=HISTOIRES[i].texte||p.textContent||"";
-  if(btn && btn.dataset.montre==="trad"){ p.textContent=orig; btn.dataset.montre="orig"; btn.textContent="🌐 "+t("sto.translate"); return; }
+  var p=document.getElementById("histoire-"+i); if(!p) return;
+  if(p.dataset.orig===undefined) p.dataset.orig = p.textContent||"";
+  var orig=p.dataset.orig||"";
+  if(btn && btn.dataset.montre==="trad"){ p.textContent=orig; if(orig.length>200)p.classList.add("replie"); btn.dataset.montre="orig"; btn.textContent="🌐 "+t("sto.translate"); return; }
   if(!orig.trim()) return;
   if(btn) btn.textContent="⏳ "+t("sto.translating");
+  var tl=(LANG||"en");
+  async function essai(u, parse){ var r=await fetch(u); var d=await r.json(); return parse(d); }
+  var trad="";
   try{
-    var tl=(LANG||"en");
-    var url="https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl="+encodeURIComponent(tl)+"&dt=t&q="+encodeURIComponent(orig);
-    var res=await fetch(url);
-    var data=await res.json();
-    var trad=(data && data[0]) ? data[0].map(function(s){return s[0];}).join("") : "";
-    if(trad){ p.classList.remove("replie"); p.textContent=trad; if(btn){btn.dataset.montre="trad"; btn.textContent="↩ "+t("sto.original");} }
-    else { if(btn) btn.textContent="🌐 "+t("sto.translate"); toast(t("sto.translateErr")); }
-  }catch(e){ if(btn) btn.textContent="🌐 "+t("sto.translate"); toast(t("sto.translateErr")); }
+    trad=await essai(
+      "https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl="+encodeURIComponent(tl)+"&dt=t&q="+encodeURIComponent(orig),
+      function(d){ return (d && d[0]) ? d[0].map(function(s){return (s&&s[0])||"";}).join("") : ""; }
+    );
+  }catch(e){}
+  if(!trad){
+    try{
+      trad=await essai(
+        "https://clients5.google.com/translate_a/t?client=dict-chrome-ex&sl=auto&tl="+encodeURIComponent(tl)+"&q="+encodeURIComponent(orig),
+        function(d){
+          if(!d) return "";
+          if(typeof d==="string") return d;
+          if(Array.isArray(d)){
+            if(typeof d[0]==="string") return d.join(" ");
+            if(Array.isArray(d[0])) return d.map(function(x){return (x&&x[0])||"";}).join("");
+          }
+          if(d.sentences) return d.sentences.map(function(s){return s.trans||"";}).join("");
+          return "";
+        }
+      );
+    }catch(e2){}
+  }
+  if(trad){ p.classList.remove("replie"); p.textContent=trad; if(btn){btn.dataset.montre="trad"; btn.textContent="↩ "+t("sto.original");} }
+  else { if(btn) btn.textContent="🌐 "+t("sto.translate"); toast(t("sto.translateErr")); }
 }
 window.traduireHistoire=traduireHistoire;
 function rendreHistoires(){
