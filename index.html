@@ -503,16 +503,7 @@ footer .marque{font-family:'Bebas Neue';font-size:1.1rem;letter-spacing:.15em;co
       <div class="barres" id="barresContinents"></div>
       <details class="pays">
         <summary data-i18n="stats.perCountry">See fans per country</summary>
-        <div class="liste-pays">
-          <span>🇸🇪 <span data-i18n="c.se">Sweden</span> <b>184</b></span><span>🇫🇷 France <b>142</b></span>
-          <span>🇧🇷 <span data-i18n="c.br">Brazil</span> <b>121</b></span><span>🇩🇪 <span data-i18n="c.de">Germany</span> <b>96</b></span>
-          <span>🇺🇸 <span data-i18n="c.us">United States</span> <b>88</b></span><span>🇵🇭 Philippines <b>74</b></span>
-          <span>🇬🇧 <span data-i18n="c.uk">United Kingdom</span> <b>67</b></span><span>🇲🇽 <span data-i18n="c.mx">Mexico</span> <b>58</b></span>
-          <span>🇪🇸 <span data-i18n="c.es">Spain</span> <b>55</b></span><span>🇵🇱 <span data-i18n="c.pl">Poland</span> <b>49</b></span>
-          <span>🇻🇪 Venezuela <b>44</b></span><span>🇮🇹 <span data-i18n="c.it">Italy</span> <b>41</b></span>
-          <span>🇦🇷 <span data-i18n="c.ar">Argentina</span> <b>33</b></span><span>🇦🇺 <span data-i18n="c.au">Australia</span> <b>31</b></span>
-          <span>🇳🇱 <span data-i18n="c.nl">Netherlands</span> <b>28</b></span><span data-i18n="stats.others">… and 32 more countries</span>
-        </div>
+        <div class="liste-pays" id="listePays"></div>
       </details>
     </div>
   </section>
@@ -549,7 +540,7 @@ footer .marque{font-family:'Bebas Neue';font-size:1.1rem;letter-spacing:.15em;co
         <p style="margin:4px 0"><span data-i18n="acc.connected">Connected:</span> <b id="auth-qui"></b></p>
         <button type="button" class="btn fantome" onclick="seDeconnecter()" data-i18n="acc.logout">Log out</button>
       </div>
-      <div style="font-size:.66rem;opacity:.5;margin-top:8px">version : COMPTES-46</div>
+      <div style="font-size:.66rem;opacity:.5;margin-top:8px">version : COMPTES-48</div>
     </div>
     <div class="verre" id="dejaFiche" style="display:none;margin-bottom:16px">
       <h3 class="accent" data-i18n="acc.haveCard">Your card is created ✓</h3>
@@ -1166,6 +1157,10 @@ const FLAGS={en:"🇬🇧",fr:"🇫🇷",es:"🇪🇸",sv:"🇸🇪",de:"🇩�
 let LANG = "en";
 const I18N = {
 en:{
+  "sto.translate":"Translate",
+  "sto.original":"Show original",
+  "sto.translating":"Translating…",
+  "sto.translateErr":"Translation unavailable, try again ✦",
   "form.parentalTitle":"👪 Parental consent *",
   "cf.title":"Privacy policy",
   "cf.updated":"Last updated: August 2026. This policy is available in all the site's languages.",
@@ -1313,6 +1308,10 @@ en:{
   "contDetected":(c)=>`Continent detected: <b>${c}</b> 🌍`,"contOther":"We will add your country to the map ✦",
 },
 fr:{
+  "sto.translate":"Traduire",
+  "sto.original":"Voir l'original",
+  "sto.translating":"Traduction…",
+  "sto.translateErr":"Traduction indisponible, réessaie ✦",
   "form.parentalTitle":"👪 Accord parental *",
   "cf.title":"Politique de confidentialité",
   "cf.updated":"Dernière mise à jour : août 2026. Cette politique est disponible dans toutes les langues du site.",
@@ -1545,6 +1544,10 @@ fr:{
   "contDetected":(c)=>`Continent détecté : <b>${c}</b> 🌍`,"contOther":"Nous ajouterons ton pays à la carte ✦",
 },
 es:{
+  "sto.translate":"Traducir",
+  "sto.original":"Ver original",
+  "sto.translating":"Traduciendo…",
+  "sto.translateErr":"Traducción no disponible, inténtalo de nuevo ✦",
   "form.parentalTitle":"👪 Consentimiento parental *",
   "cf.title":"Política de privacidad",
   "cf.updated":"Última actualización: agosto de 2026. Esta política está disponible en todos los idiomas del sitio.",
@@ -1745,6 +1748,10 @@ es:{
   "contDetected":(c)=>`Continente detectado: <b>${c}</b> 🌍`,"contOther":"Añadiremos tu país al mapa ✦",
 },
 sv:{
+  "sto.translate":"Översätt",
+  "sto.original":"Visa original",
+  "sto.translating":"Översätter…",
+  "sto.translateErr":"Översättning ej tillgänglig, försök igen ✦",
   "form.parentalTitle":"👪 Föräldrarnas samtycke *",
   "cf.title":"Integritetspolicy",
   "cf.updated":"Senast uppdaterad: augusti 2026. Denna policy finns på alla sajtens språk.",
@@ -1945,6 +1952,10 @@ sv:{
   "contDetected":(c)=>`Kontinent: <b>${c}</b> 🌍`,"contOther":"Vi lägger till ditt land på kartan ✦",
 },
 de:{
+  "sto.translate":"Übersetzen",
+  "sto.original":"Original anzeigen",
+  "sto.translating":"Übersetze…",
+  "sto.translateErr":"Übersetzung nicht verfügbar, versuch es erneut ✦",
   "form.parentalTitle":"👪 Elterliche Zustimmung *",
   "cf.title":"Datenschutzerklärung",
   "cf.updated":"Zuletzt aktualisiert: August 2026. Diese Erklärung ist in allen Sprachen der Seite verfügbar.",
@@ -2145,6 +2156,10 @@ de:{
   "contDetected":(c)=>`Erkannter Kontinent: <b>${c}</b> 🌍`,"contOther":"Wir fügen dein Land der Karte hinzu ✦",
 },
 pt:{
+  "sto.translate":"Traduzir",
+  "sto.original":"Ver original",
+  "sto.translating":"A traduzir…",
+  "sto.translateErr":"Tradução indisponível, tenta de novo ✦",
   "form.parentalTitle":"👪 Consentimento parental *",
   "cf.title":"Política de privacidade",
   "cf.updated":"Última atualização: agosto de 2026. Esta política está disponível em todos os idiomas do site.",
@@ -3499,6 +3514,16 @@ function toutMettreAJour(anime){
   for(const fn of R){const d=PAYS_DATA.find(x=>x[0]===fn.code); if(d&&cpt[d[1]]!==undefined)cpt[d[1]]++;}
   CONTINENTS_STATS=Object.entries(cpt).sort((a,b)=>b[1]-a[1]);
   rendreBarres(!anime);
+  /* liste "fans par pays" (vraies inscriptions, plus d'exemples codés en dur) */
+  var _lp=document.getElementById("listePays");
+  if(_lp){
+    var _pp={};
+    for(const fn of R){ _pp[fn.code]=(_pp[fn.code]||0)+1; }
+    var _arr=Object.entries(_pp).sort(function(a,b){return b[1]-a[1];});
+    _lp.innerHTML = _arr.length
+      ? _arr.map(function(e){ return '<span>'+drapeauISO(e[0])+' '+((noms&&noms.of)?noms.of(e[0]):e[0])+' <b>'+e[1]+'</b></span>'; }).join("")
+      : '<span style="color:var(--beige)">—</span>';
+  }
   /* redessins */
   dessinerCartePlate();
   if(typeof rendreClassement==="function")rendreClassement();
@@ -3689,6 +3714,24 @@ function avatarHTML(prenom){
     ? `<div class="avatar" style="background:url(${AVATARS[fi.photo]}) center/cover"></div>`
     : `<div class="avatar">${prenom[0]}</div>`;
 }
+/* Traduction automatique d'une histoire vers la langue affichée (service Google gratuit) */
+async function traduireHistoire(i, btn){
+  var p=document.getElementById("histoire-"+i); if(!p||!window.HISTOIRES||!HISTOIRES[i]) return;
+  var orig=HISTOIRES[i].texte||p.textContent||"";
+  if(btn && btn.dataset.montre==="trad"){ p.textContent=orig; btn.dataset.montre="orig"; btn.textContent="🌐 "+t("sto.translate"); return; }
+  if(!orig.trim()) return;
+  if(btn) btn.textContent="⏳ "+t("sto.translating");
+  try{
+    var tl=(LANG||"en");
+    var url="https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl="+encodeURIComponent(tl)+"&dt=t&q="+encodeURIComponent(orig);
+    var res=await fetch(url);
+    var data=await res.json();
+    var trad=(data && data[0]) ? data[0].map(function(s){return s[0];}).join("") : "";
+    if(trad){ p.classList.remove("replie"); p.textContent=trad; if(btn){btn.dataset.montre="trad"; btn.textContent="↩ "+t("sto.original");} }
+    else { if(btn) btn.textContent="🌐 "+t("sto.translate"); toast(t("sto.translateErr")); }
+  }catch(e){ if(btn) btn.textContent="🌐 "+t("sto.translate"); toast(t("sto.translateErr")); }
+}
+window.traduireHistoire=traduireHistoire;
 function rendreHistoires(){
   if(!HISTOIRES.length){
     document.getElementById("listeHistoires").innerHTML=
@@ -3714,6 +3757,7 @@ function rendreHistoires(){
         </div>
         <p class="texte-histoire replie" id="histoire-${i}">${h.texte}</p>
         <button class="lire-plus" id="btnLire-${i}" onclick="basculerHistoire(${i},this)">${t("sto.readMore")}</button>
+        <button class="lire-plus" onclick="traduireHistoire(${i},this)">🌐 ${t("sto.translate")}</button>
         ${estMaHistoire(h)?`<div class="outils-histoire">
           <label>${t("sto.changeBg")}<input type="file" accept="image/*" onchange="changerFondHistoire(event,${i})"></label>
           <button onclick="basculerEdition(${i})">${t("sto.editText")}</button>
@@ -7401,6 +7445,8 @@ function rendreProfil(){
   var monClsChansons = (typeof monClassementComplet==="function") ? monClassementComplet() : [];
   var clsCommunaute = (typeof classementChansonsCommunaute==="function") ? classementChansonsCommunaute() : [];
   var mesBadges = (monFan && typeof badgesFan==="function") ? badgesFan(monFan) : [];
+  /* mes projets = ceux que J'AI créés (non rejetés), comptés depuis la table projets */
+  var mesProjets = (window.PROJETS_VALIDES||[]).filter(function(p){ return p && p.fan_id && window.MON_PROFIL_ID && p.fan_id===window.MON_PROFIL_ID; }).length;
   /* --- Médias (photos/vidéos) : modération (admin), envoi, galerie --- */
   var htmlMesMedias = window.MON_PROFIL_ID ? `<div class="verre" style="margin-top:14px">
       <h3 style="color:var(--rose)">📸 ${t("med.title")}</h3>
@@ -7439,8 +7485,8 @@ function rendreProfil(){
       <div style="font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--beige)">${t("x.prSince")}</div>
       <p style="font-size:.7rem;color:var(--beige);margin-top:6px">${libelleFanDepuis()?t("x.prSinceLbl")+" "+libelleFanDepuis():"✦"}</p>
       <div class="compteurs-profil">
-        ${[["🎤",MOI.concerts,"x.prConcerts"],["📸",MOI.photos,"x.prPhotos"],["🎬",MOI.videos,"x.prVideos"],
-           ["🏅",MOI.badges,"x.prBadges"],["✨",MOI.projets,"x.prProjects"],["❤️",MOI.dons,"x.prDons"]]
+        ${[["🎤",(monFan?(monFan.tampons||0):0),"x.prConcerts"],["📸",(monFan?(monFan.nbPhotos||0):0),"x.prPhotos"],["🎬",(monFan?(monFan.nbVideos||0):0),"x.prVideos"],
+           ["🏅",mesBadges.length,"x.prBadges"],["✨",mesProjets,"x.prProjects"],["❤️",(monFan?(monFan.assoDons||0):0),"x.prDons"]]
           .map(([e,v,k])=>`<div class="stat verre" style="padding:12px 8px"><div class="valeur" style="font-size:1.5rem">${e} ${v}</div><div class="label">${t(k)}</div></div>`).join("")}
       </div>
     </div>
