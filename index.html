@@ -540,7 +540,7 @@ footer .marque{font-family:'Bebas Neue';font-size:1.1rem;letter-spacing:.15em;co
         <p style="margin:4px 0"><span data-i18n="acc.connected">Connected:</span> <b id="auth-qui"></b></p>
         <button type="button" class="btn fantome" onclick="seDeconnecter()" data-i18n="acc.logout">Log out</button>
       </div>
-      <div style="font-size:.66rem;opacity:.5;margin-top:8px">version : COMPTES-50</div>
+      <div style="font-size:.66rem;opacity:.5;margin-top:8px">version : COMPTES-52</div>
     </div>
     <div class="verre" id="dejaFiche" style="display:none;margin-bottom:16px">
       <h3 class="accent" data-i18n="acc.haveCard">Your card is created ✓</h3>
@@ -1157,6 +1157,12 @@ const FLAGS={en:"🇬🇧",fr:"🇫🇷",es:"🇪🇸",sv:"🇸🇪",de:"🇩�
 let LANG = "en";
 const I18N = {
 en:{
+  "x.comAuthor":"author",
+  "x.comReply":"Reply",
+  "x.comReplyPh":"Your reply…",
+  "x.comOnStory":"on your story",
+  "x.comNew":"new",
+  "eng.projetNb":"How many fan projects have you organised?",
   "bdg.engage":"Engaged",
   "x.actionErr":"Action failed, try again ✦",
   "sto.translate":"Translate",
@@ -1310,6 +1316,12 @@ en:{
   "contDetected":(c)=>`Continent detected: <b>${c}</b> 🌍`,"contOther":"We will add your country to the map ✦",
 },
 fr:{
+  "x.comAuthor":"auteur·e",
+  "x.comReply":"Répondre",
+  "x.comReplyPh":"Ta réponse…",
+  "x.comOnStory":"sur ton histoire",
+  "x.comNew":"nouveaux",
+  "eng.projetNb":"Combien de projets de fans as-tu organisés ?",
   "bdg.engage":"Engagé·e",
   "x.actionErr":"Action impossible, réessaie ✦",
   "sto.translate":"Traduire",
@@ -1548,6 +1560,12 @@ fr:{
   "contDetected":(c)=>`Continent détecté : <b>${c}</b> 🌍`,"contOther":"Nous ajouterons ton pays à la carte ✦",
 },
 es:{
+  "x.comAuthor":"autor·a",
+  "x.comReply":"Responder",
+  "x.comReplyPh":"Tu respuesta…",
+  "x.comOnStory":"en tu historia",
+  "x.comNew":"nuevos",
+  "eng.projetNb":"¿Cuántos proyectos de fans has organizado?",
   "bdg.engage":"Participativo·a",
   "x.actionErr":"Acción imposible, inténtalo de nuevo ✦",
   "sto.translate":"Traducir",
@@ -1754,6 +1772,12 @@ es:{
   "contDetected":(c)=>`Continente detectado: <b>${c}</b> 🌍`,"contOther":"Añadiremos tu país al mapa ✦",
 },
 sv:{
+  "x.comAuthor":"författare",
+  "x.comReply":"Svara",
+  "x.comReplyPh":"Ditt svar…",
+  "x.comOnStory":"på din berättelse",
+  "x.comNew":"nya",
+  "eng.projetNb":"Hur många fanprojekt har du organiserat?",
   "bdg.engage":"Engagerad",
   "x.actionErr":"Åtgärden misslyckades, försök igen ✦",
   "sto.translate":"Översätt",
@@ -1960,6 +1984,12 @@ sv:{
   "contDetected":(c)=>`Kontinent: <b>${c}</b> 🌍`,"contOther":"Vi lägger till ditt land på kartan ✦",
 },
 de:{
+  "x.comAuthor":"Autor·in",
+  "x.comReply":"Antworten",
+  "x.comReplyPh":"Deine Antwort…",
+  "x.comOnStory":"zu deiner Story",
+  "x.comNew":"neu",
+  "eng.projetNb":"Wie viele Fan-Projekte hast du organisiert?",
   "bdg.engage":"Engagiert",
   "x.actionErr":"Aktion fehlgeschlagen, versuch es erneut ✦",
   "sto.translate":"Übersetzen",
@@ -2166,6 +2196,12 @@ de:{
   "contDetected":(c)=>`Erkannter Kontinent: <b>${c}</b> 🌍`,"contOther":"Wir fügen dein Land der Karte hinzu ✦",
 },
 pt:{
+  "x.comAuthor":"autor·a",
+  "x.comReply":"Responder",
+  "x.comReplyPh":"A tua resposta…",
+  "x.comOnStory":"na tua história",
+  "x.comNew":"novos",
+  "eng.projetNb":"Quantos projetos de fãs organizaste?",
   "bdg.engage":"Participativo·a",
   "x.actionErr":"Ação impossível, tenta de novo ✦",
   "sto.translate":"Traduzir",
@@ -3411,7 +3447,7 @@ function badgesFan(fn){
   ["solo24","f24","enf24","enf25","f25","ms25"].forEach(function(tid){ if(tours[tid]&&TB[tid]) b.push(["🎤",TB[tid].label,{photo:TB[tid].img}]); });
   if(fn.lieuYR) b.push(["📍","bdg.lieuYR",{photo:"photos/BADGE_LIEUYR.webp"}]);
   if(fn.vuSerie) b.push(["📺","Young Royals",{photo:"photos/BADGE_YR.webp"}]);
-  if(fn.projetConcert) b.push(["🎉","bdg.projet"]);
+  if((fn.projetsOrganises||0)>0 || fn.projetConcert) b.push(["🎉","bdg.projet"]);
   (fn.omrProduits||[]).forEach(function(pr){ b.push(["💄","OMR Beauty · "+pr]); });
   if(fn.vetementDiy) b.push(["👕","bdg.diy"]);
   (fn.merchTournees||[]).forEach(function(tid){ var mt=(window.MERCH_TOURNEES||[]).find(function(x){return x.id===tid;}); if(mt) b.push(["👕",mt.label,{tshirt:mt.img}]); });
@@ -6015,7 +6051,7 @@ async function chargerInteractionsSupabase(){
       });
       window.MEDIA_LIKES=cpt; window.MES_LIKES=mine; window.LIKES_PAR_USER=parU;
     }
-    var rc=await window._sb.from("media_commentaires").select("id,media_id,user_id,pseudo,texte,cree_le").order("cree_le",{ascending:true});
+    var rc=await window._sb.from("media_commentaires").select("id,media_id,user_id,pseudo,texte,parent_id,cree_le").order("cree_le",{ascending:true});
     if(rc && !rc.error){
       var byM={}, byU={};
       (rc.data||[]).forEach(function(c){ (byM[c.media_id]=byM[c.media_id]||[]).push(c); byU[c.user_id]=(byU[c.user_id]||0)+1; });
@@ -6059,38 +6095,77 @@ function vueMedia(mid){
   document.querySelectorAll(`[data-vue="${mid}"]`).forEach(el=>el.textContent=s.v);
 }
 function _escCom(s){ return (typeof escapeHtmlM==="function") ? escapeHtmlM(s||"") : String(s||"").replace(/</g,"&lt;"); }
+/* commentaires vus (par navigateur) — pour la notification à l'auteure */
+function _comsVus(){ try{ return JSON.parse(localStorage.getItem("orwm_coms_vus")||"{}"); }catch(e){ return {}; } }
+function _marquerComsVus(mid){ try{ var v=_comsVus(); v[mid]=new Date().toISOString(); localStorage.setItem("orwm_coms_vus",JSON.stringify(v)); }catch(e){} }
+/* user_id de l'auteur d'une histoire (cible "histoire-<fanId>") pour l'étiquette « auteur·e » */
+function _auteurUid(mid){
+  try{
+    if(String(mid).indexOf("histoire-")===0){
+      var fid=String(mid).slice(9);
+      var f=(window.REGISTRE_FANS||[]).find(function(x){return String(x.fanId)===fid;});
+      return f?f.user_id:null;
+    }
+  }catch(e){}
+  return null;
+}
 function ouvrirComs(mid){
   fermerComs();
   var coms=(window.MEDIA_COMS&&window.MEDIA_COMS[mid])||[];
+  var auteurUid=_auteurUid(mid);
+  var racines=coms.filter(function(c){return !c.parent_id;});
+  var reponses={}; coms.forEach(function(c){ if(c.parent_id){ (reponses[c.parent_id]=reponses[c.parent_id]||[]).push(c); } });
+  function bulle(c, estRep){
+    var estAuteur = auteurUid && c.user_id===auteurUid;
+    var tag = estAuteur ? ' <span style="background:var(--bordeaux);color:#fff;border-radius:10px;padding:1px 7px;font-size:.58rem;margin-left:4px">✨ '+t("x.comAuthor")+'</span>' : '';
+    var rep = (!estRep && c.id) ? '<div><button style="background:none;border:none;color:var(--rose);font-size:.68rem;cursor:pointer;padding:3px 0 0" onclick="ouvrirReponse(\''+mid+'\','+c.id+')">↩ '+t("x.comReply")+'</button></div>' : '';
+    var fils = (c.id && reponses[c.id]) ? reponses[c.id].map(function(r){return bulle(r,true);}).join("") : '';
+    return '<div class="bulle"'+(estRep?' style="margin-left:22px"':'')+'><b>'+_escCom(c.pseudo||"✦")+'</b>'+tag+' '+_escCom(c.texte)+rep+'</div>'
+      + (c.id?'<div id="repZone-'+c.id+'"></div>':'') + fils;
+  }
   const boite=document.createElement("div");
   boite.id="boiteComs"; boite.className="verre boite-coms";
   boite.innerHTML=`<div style="display:flex;justify-content:space-between;align-items:center">
       <h3 style="color:var(--rose)">💬 ${t("x.comTitle")}</h3>
       <button onclick="fermerComs()" style="background:none;border:none;color:var(--blanc);font-size:1.05rem">✕</button></div>
-    <div style="max-height:36vh;overflow-y:auto;margin:10px 0">${
-      coms.length ? coms.map(c=>`<div class="bulle"><b>${_escCom(c.pseudo||"✦")} </b>${_escCom(c.texte)}</div>`).join("")
+    <div style="max-height:40vh;overflow-y:auto;margin:10px 0">${
+      racines.length ? racines.map(function(c){return bulle(c,false);}).join("")
       : `<p style="font-size:.75rem;color:var(--beige)">${t("x.comEmpty")}</p>`}</div>
     <div class="rangee-chat">
       <input id="comMsg" type="text" placeholder="${t("x.comPh")}">
       <button class="btn" style="padding:10px 16px;font-size:.9rem" onclick="envoyerCom('${mid}')">${t("x.cSend")}</button>
     </div>`;
   document.body.appendChild(boite);
+  _marquerComsVus(mid);
+  if(window.rendreProfil) try{rendreProfil();}catch(e){}
+}
+function ouvrirReponse(mid,parentId){
+  var z=document.getElementById("repZone-"+parentId); if(!z) return;
+  if(z.dataset.ouvert){ z.innerHTML=""; z.dataset.ouvert=""; return; }
+  z.dataset.ouvert="1";
+  z.innerHTML='<div class="rangee-chat" style="margin:6px 0 6px 22px"><input id="repMsg-'+parentId+'" type="text" placeholder="'+t("x.comReplyPh")+'"><button class="btn" style="padding:8px 12px;font-size:.82rem" onclick="envoyerCom(\''+mid+'\','+parentId+')">'+t("x.cSend")+'</button></div>';
+  var inp=document.getElementById("repMsg-"+parentId); if(inp) inp.focus();
 }
 function fermerComs(){const b=document.getElementById("boiteComs"); if(b)b.remove();}
-async function envoyerCom(mid){
+async function envoyerCom(mid, parentId){
   if(!window.MON_USER){ toast(t("prj.needLogin")); return; }
-  const i=document.getElementById("comMsg"); const v=(i&&i.value||"").trim(); if(!v)return;
+  var champId = parentId ? ("repMsg-"+parentId) : "comMsg";
+  const i=document.getElementById(champId); const v=(i&&i.value||"").trim(); if(!v)return;
   var pseudo=(typeof MOI!=="undefined"&&MOI&&MOI.prenom)?MOI.prenom:"✦";
+  var ligne={media_id:mid,user_id:window.MON_USER.id,pseudo:pseudo,texte:v};
+  if(parentId) ligne.parent_id=parentId;
   try{
-    var r=await window._sb.from("media_commentaires").insert({media_id:mid,user_id:window.MON_USER.id,pseudo:pseudo,texte:v});
+    var r=await window._sb.from("media_commentaires").insert(ligne).select("id,media_id,user_id,pseudo,texte,parent_id,cree_le");
     if(r&&r.error){ console.warn("com:",r.error); if(typeof diag==="function")diag(t("x.actionErr"),false); return; }
+    var cree=(r&&r.data&&r.data[0])?r.data[0]:ligne;
+    window.MEDIA_COMS=window.MEDIA_COMS||{};
+    (window.MEDIA_COMS[mid]=window.MEDIA_COMS[mid]||[]).push(cree);
   }catch(e){ console.warn(e); if(typeof diag==="function")diag(t("x.actionErr"),false); return; }
-  window.MEDIA_COMS=window.MEDIA_COMS||{};
-  (window.MEDIA_COMS[mid]=window.MEDIA_COMS[mid]||[]).push({media_id:mid,user_id:window.MON_USER.id,pseudo:pseudo,texte:v});
   window.COMS_PAR_USER=window.COMS_PAR_USER||{}; window.COMS_PAR_USER[window.MON_USER.id]=(window.COMS_PAR_USER[window.MON_USER.id]||0)+1;
-  document.querySelectorAll(`[data-coms="${mid}"]`).forEach(el=>el.textContent=window.MEDIA_COMS[mid].length);
+  document.querySelectorAll(`[data-coms="${mid}"]`).forEach(el=>el.textContent=(window.MEDIA_COMS[mid]||[]).length);
   ouvrirComs(mid);
 }
+window.ouvrirReponse=ouvrirReponse;
 function diapoMedia(m,cle,i,store){
   const mid=(store==="fan"?"fan-":"")+cle+"-s"+i;
   return `<div class="diapo media" data-mid="${mid}"${m.type==="video"?' data-type="video"':""}>
@@ -6963,7 +7038,7 @@ function ouvrirEditeurEngagement(){
   var prod=e.omrProduits||[], merch=e.merchTournees||[];
   var html=
     '<label class="eng-l"><input type="checkbox" id="eng-serie" '+(e.vuSerie?'checked':'')+'><span>'+t("eng.serie")+'</span></label>'
-   +'<label class="eng-l"><input type="checkbox" id="eng-projet" '+(e.projetConcert?'checked':'')+'><span>'+t("eng.projet")+'</span></label>'
+   +'<label class="eng-l" style="align-items:center;gap:8px"><input type="number" min="0" id="eng-projet-nb" value="'+(e.projetsOrganises!=null?e.projetsOrganises:(e.projetConcert?1:0))+'" style="width:64px"><span>'+t("eng.projetNb")+'</span></label>'
    +'<label class="eng-l"><input type="checkbox" id="eng-diy" '+(e.vetementDiy?'checked':'')+'><span>'+t("eng.diy")+'</span></label>'
    +'<p style="font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;color:var(--rose);margin:16px 0 4px">👕 '+t("eng.merchTitle")+'</p>';
   (window.MERCH_TOURNEES||[]).forEach(function(mt){
@@ -6979,17 +7054,19 @@ function ouvrirEditeurEngagement(){
 async function enregistrerEngagement(){
   var prod=[]; document.querySelectorAll(".eng-omr:checked").forEach(function(c){ prod.push(c.value); });
   var merch=[]; document.querySelectorAll(".eng-merch:checked").forEach(function(c){ merch.push(c.value); });
+  var nbProj=Math.max(0,parseInt((document.getElementById("eng-projet-nb")||{}).value,10)||0);
   var champs={
     vu_serie: document.getElementById("eng-serie").checked,
-    projet_concert: document.getElementById("eng-projet").checked,
+    projet_concert: nbProj>0,
+    projets_organises: nbProj,
     vetement_diy: document.getElementById("eng-diy").checked,
     merch_tournees: merch,
     omr_produits: prod
   };
   var ok=await majFicheSupabase(champs); if(ok===false) return;
-  window.MON_ENGAGEMENT={ vuSerie:champs.vu_serie, projetConcert:champs.projet_concert, vetementDiy:champs.vetement_diy, merchTournees:merch, omrProduits:prod };
+  window.MON_ENGAGEMENT={ vuSerie:champs.vu_serie, projetConcert:champs.projet_concert, projetsOrganises:nbProj, vetementDiy:champs.vetement_diy, merchTournees:merch, omrProduits:prod };
   var mf=(window.REGISTRE_FANS||[]).find(function(f){return f.fanId===window.MON_PROFIL_ID;});
-  if(mf){ mf.vuSerie=champs.vu_serie; mf.projetConcert=champs.projet_concert; mf.vetementDiy=champs.vetement_diy; mf.merchTournees=merch; mf.omrProduits=prod; }
+  if(mf){ mf.vuSerie=champs.vu_serie; mf.projetConcert=champs.projet_concert; mf.projetsOrganises=nbProj; mf.vetementDiy=champs.vetement_diy; mf.merchTournees=merch; mf.omrProduits=prod; }
   var box=document.getElementById("editeurEngagement"); if(box) box.style.display="none";
   toast(t("eng.saved"));
   if(window.rendreProfil) rendreProfil();
@@ -7542,7 +7619,14 @@ function rendreProfil(){
   var clsCommunaute = (typeof classementChansonsCommunaute==="function") ? classementChansonsCommunaute() : [];
   var mesBadges = (monFan && typeof badgesFan==="function") ? badgesFan(monFan) : [];
   /* mes projets = ceux que J'AI créés (non rejetés), comptés depuis la table projets */
-  var mesProjets = (window.PROJETS_VALIDES||[]).filter(function(p){ return p && p.fan_id && window.MON_PROFIL_ID && p.fan_id===window.MON_PROFIL_ID; }).length;
+  var mesProjets = (monFan?(monFan.projetsOrganises||0):0) + (window.PROJETS_VALIDES||[]).filter(function(p){ return p && p.fan_id && window.MON_PROFIL_ID && p.fan_id===window.MON_PROFIL_ID; }).length;
+  /* notification : commentaires reçus sur MON histoire */
+  var _maCible = window.MON_PROFIL_ID ? ("histoire-"+window.MON_PROFIL_ID) : null;
+  var _mesComs = (_maCible && window.MEDIA_COMS) ? (window.MEDIA_COMS[_maCible]||[]) : [];
+  var _vus = _maCible ? _comsVus()[_maCible] : null;
+  var _monUid = (window.MON_USER&&window.MON_USER.id)||null;
+  var _nNew = _mesComs.filter(function(c){ return c.user_id!==_monUid && (!_vus || (c.cree_le && c.cree_le>_vus)); }).length;
+  var banniereComs = (_maCible && _mesComs.length) ? '<div class="verre" style="margin-top:12px;border:1px solid var(--rose);cursor:pointer" onclick="ouvrirComs(\''+_maCible+'\')"><b style="color:var(--rose)">💬 '+_mesComs.length+' '+t("x.comOnStory")+'</b>'+(_nNew>0?' <span style="background:var(--bordeaux);color:#fff;border-radius:10px;padding:1px 9px;font-size:.66rem;margin-left:6px">'+_nNew+' '+t("x.comNew")+'</span>':'')+'</div>' : '';
   /* --- Médias (photos/vidéos) : modération (admin), envoi, galerie --- */
   var htmlMesMedias = window.MON_PROFIL_ID ? `<div class="verre" style="margin-top:14px">
       <h3 style="color:var(--rose)">📸 ${t("med.title")}</h3>
@@ -7586,6 +7670,7 @@ function rendreProfil(){
           .map(([e,v,k])=>`<div class="stat verre" style="padding:12px 8px"><div class="valeur" style="font-size:1.5rem">${e} ${v}</div><div class="label">${t(k)}</div></div>`).join("")}
       </div>
     </div>
+    ${banniereComs}
     ${window.MON_PROFIL_ID?`<div class="verre" style="margin-top:14px">
       <h3 style="color:var(--rose)">✏️ ${t("fiche.title")}</h3>
       <p style="font-size:.78rem;color:var(--beige)">${t("fiche.intro")}</p>
@@ -8394,7 +8479,7 @@ async function chargerFansSupabase(){
   if(!window._sb) return;
   try{
     const rep=await window._sb.from("fans")
-      .select("id,user_id,pseudo,ville,pays,date_naissance,histoire,photo,photo_histoire,chanson,insta,annee,concert,rencontre,concerts_vus,classement_chansons,vu_serie,projet_concert,omr_beauty,omr_produits,vetement_diy,merch_tournee,merch_tournees,asso_adherent,asso_dons,asso_concours,asso_rencontre,radio_day,fan_depuis,lat,lon").eq("valide",true);
+      .select("id,user_id,pseudo,ville,pays,date_naissance,histoire,photo,photo_histoire,chanson,insta,annee,concert,rencontre,concerts_vus,classement_chansons,vu_serie,projet_concert,omr_beauty,omr_produits,vetement_diy,merch_tournee,merch_tournees,asso_adherent,asso_dons,asso_concours,asso_rencontre,radio_day,fan_depuis,lat,lon,projets_organises").eq("valide",true);
     if(rep.error){ console.warn("Supabase lecture fans:",rep.error.message); return; }
     const data=rep.data||[];
     if(!data.length) return;
@@ -8422,7 +8507,7 @@ async function chargerFansSupabase(){
         chanson:row.chanson||"", insta:row.insta||"", concert:row.concert||"",
         rencontre:!!row.rencontre, histoire:row.histoire||"",
         photo:row.photo||null, photoHistoire:row.photo_histoire||null, tampons:nbConcerts(row.concerts_vus), lieuYR:aLieuYR(row.concerts_vus), concertsVus:row.concerts_vus||[], classementChansons:row.classement_chansons||[],
-        vuSerie:!!row.vu_serie, projetConcert:!!row.projet_concert, omrProduits:row.omr_produits||[], vetementDiy:!!row.vetement_diy, merchTournees:row.merch_tournees||[],
+        vuSerie:!!row.vu_serie, projetConcert:!!row.projet_concert, projetsOrganises:(row.projets_organises||0), omrProduits:row.omr_produits||[], vetementDiy:!!row.vetement_diy, merchTournees:row.merch_tournees||[],
         assoAdherent:!!row.asso_adherent, assoDons:row.asso_dons||0, assoConcours:row.asso_concours||0, assoRencontre:!!row.asso_rencontre, radioDay:!!row.radio_day,
         naissance:row.date_naissance||"", fanDepuis:row.fan_depuis||"", lat:(row.lat!=null?row.lat:null), lon:(row.lon!=null?row.lon:null), inscritLe:(new Date()).toISOString() });
     });
@@ -8489,7 +8574,7 @@ async function chargerMonProfil(){
   if(!window._sb || !window.MON_USER){ return; }
   try{
     var r=await window._sb.from("fans")
-      .select("id,user_id,pseudo,ville,pays,date_naissance,histoire,photo,photo_histoire,chanson,insta,annee,concert,rencontre,concerts_vus,classement_chansons,vu_serie,projet_concert,omr_beauty,omr_produits,vetement_diy,merch_tournee,merch_tournees,asso_adherent,asso_dons,asso_concours,asso_rencontre,radio_day,fan_depuis,lat,lon")
+      .select("id,user_id,pseudo,ville,pays,date_naissance,histoire,photo,photo_histoire,chanson,insta,annee,concert,rencontre,concerts_vus,classement_chansons,vu_serie,projet_concert,omr_beauty,omr_produits,vetement_diy,merch_tournee,merch_tournees,asso_adherent,asso_dons,asso_concours,asso_rencontre,radio_day,fan_depuis,lat,lon,projets_organises")
       .eq("user_id", window.MON_USER.id).limit(1);
     if(r.error){ console.warn("mon profil:",r.error.message); return; }
     var row=(r.data&&r.data[0])||null;
@@ -8503,7 +8588,7 @@ async function chargerMonProfil(){
       if(row.photo_histoire) existe.photoHistoire=row.photo_histoire;
       existe.tampons=nbConcerts(row.concerts_vus); existe.lieuYR=aLieuYR(row.concerts_vus); existe.concertsVus=row.concerts_vus||[];
       existe.classementChansons=row.classement_chansons||[];
-      existe.vuSerie=!!row.vu_serie; existe.projetConcert=!!row.projet_concert; existe.omrProduits=row.omr_produits||[]; existe.vetementDiy=!!row.vetement_diy; existe.merchTournees=row.merch_tournees||[];
+      existe.vuSerie=!!row.vu_serie; existe.projetConcert=!!row.projet_concert; existe.projetsOrganises=(row.projets_organises||0); existe.omrProduits=row.omr_produits||[]; existe.vetementDiy=!!row.vetement_diy; existe.merchTournees=row.merch_tournees||[];
       existe.assoAdherent=!!row.asso_adherent; existe.assoDons=row.asso_dons||0; existe.assoConcours=row.asso_concours||0; existe.assoRencontre=!!row.asso_rencontre; existe.radioDay=!!row.radio_day;
       if(row.date_naissance) existe.naissance=row.date_naissance;
       /* mettre à jour aussi l'entrée d'histoire (pour que les boutons de modif s'affichent) */
@@ -8521,13 +8606,13 @@ async function chargerMonProfil(){
         drapeau:drapeauISO(code), age:age, depuis:(row.annee?String(row.annee):""), annee:row.annee||(new Date()).getFullYear(),
         chanson:row.chanson||"", insta:row.insta||"", concert:row.concert||"", rencontre:!!row.rencontre,
         histoire:row.histoire||"", photo:row.photo||null, photoHistoire:row.photo_histoire||null, tampons:nbConcerts(row.concerts_vus), lieuYR:aLieuYR(row.concerts_vus), concertsVus:row.concerts_vus||[], classementChansons:row.classement_chansons||[],
-        vuSerie:!!row.vu_serie, projetConcert:!!row.projet_concert, omrProduits:row.omr_produits||[], vetementDiy:!!row.vetement_diy, merchTournees:row.merch_tournees||[],
+        vuSerie:!!row.vu_serie, projetConcert:!!row.projet_concert, projetsOrganises:(row.projets_organises||0), omrProduits:row.omr_produits||[], vetementDiy:!!row.vetement_diy, merchTournees:row.merch_tournees||[],
         assoAdherent:!!row.asso_adherent, assoDons:row.asso_dons||0, assoConcours:row.asso_concours||0, assoRencontre:!!row.asso_rencontre, radioDay:!!row.radio_day,
         naissance:row.date_naissance||"", fanDepuis:row.fan_depuis||"", lat:(row.lat!=null?row.lat:null), lon:(row.lon!=null?row.lon:null), inscritLe:(new Date()).toISOString() });
     }
     window.MES_CONCERTS_VUS = row.concerts_vus||[];
     window.MON_CLASSEMENT_CHANSONS = row.classement_chansons||[];
-    window.MON_ENGAGEMENT = { vuSerie:!!row.vu_serie, projetConcert:!!row.projet_concert, omrProduits:row.omr_produits||[], vetementDiy:!!row.vetement_diy, merchTournees:row.merch_tournees||[] };
+    window.MON_ENGAGEMENT = { vuSerie:!!row.vu_serie, projetConcert:!!row.projet_concert, projetsOrganises:(row.projets_organises||0), omrProduits:row.omr_produits||[], vetementDiy:!!row.vetement_diy, merchTournees:row.merch_tournees||[] };
     PASSEPORT = passeportDepuisCles(window.MES_CONCERTS_VUS);
     if(typeof MOI!=="undefined"&&MOI){ MOI.fanId=row.id; MOI.prenom=row.pseudo; MOI.ville=row.ville; MOI.code=(row.pays||MOI.code||"XX"); MOI.naissance=row.date_naissance||MOI.naissance||""; MOI.chanson=row.chanson||MOI.chanson||""; MOI.insta=row.insta||MOI.insta||""; MOI.concertFav=row.concert||MOI.concertFav||""; MOI.concerts=nbConcerts(window.MES_CONCERTS_VUS); if(row.annee) MOI.fanDepuisAnnee=row.annee; MOI.fanDepuis=row.fan_depuis||MOI.fanDepuis||""; if(window.sauverBD) sauverBD(); }
     if(window.toutMettreAJour) toutMettreAJour(true);
