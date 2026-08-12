@@ -540,7 +540,7 @@ footer .marque{font-family:'Bebas Neue';font-size:1.1rem;letter-spacing:.15em;co
         <p style="margin:4px 0"><span data-i18n="acc.connected">Connected:</span> <b id="auth-qui"></b></p>
         <button type="button" class="btn fantome" onclick="seDeconnecter()" data-i18n="acc.logout">Log out</button>
       </div>
-      <div style="font-size:.66rem;opacity:.5;margin-top:8px">version : COMPTES-52</div>
+      <div style="font-size:.66rem;opacity:.5;margin-top:8px">version : COMPTES-53</div>
     </div>
     <div class="verre" id="dejaFiche" style="display:none;margin-bottom:16px">
       <h3 class="accent" data-i18n="acc.haveCard">Your card is created ✓</h3>
@@ -1157,6 +1157,11 @@ const FLAGS={en:"🇬🇧",fr:"🇫🇷",es:"🇪🇸",sv:"🇸🇪",de:"🇩�
 let LANG = "en";
 const I18N = {
 en:{
+  "x.cGoing":"Are you going to this concert?",
+  "x.cGoingIntro":"Tap if you plan to go — it helps other fans get organised.",
+  "x.cGoingBtn":"I'm going!",
+  "x.cGoingYes":"You're going",
+  "x.cGoingCount":"fans going",
   "x.comAuthor":"author",
   "x.comReply":"Reply",
   "x.comReplyPh":"Your reply…",
@@ -1316,6 +1321,11 @@ en:{
   "contDetected":(c)=>`Continent detected: <b>${c}</b> 🌍`,"contOther":"We will add your country to the map ✦",
 },
 fr:{
+  "x.cGoing":"Tu vas à ce concert ?",
+  "x.cGoingIntro":"Clique si tu comptes y aller — ça aide les autres fans à s'organiser.",
+  "x.cGoingBtn":"J'y vais !",
+  "x.cGoingYes":"Tu y vas",
+  "x.cGoingCount":"fans y vont",
   "x.comAuthor":"auteur·e",
   "x.comReply":"Répondre",
   "x.comReplyPh":"Ta réponse…",
@@ -1560,6 +1570,11 @@ fr:{
   "contDetected":(c)=>`Continent détecté : <b>${c}</b> 🌍`,"contOther":"Nous ajouterons ton pays à la carte ✦",
 },
 es:{
+  "x.cGoing":"¿Vas a este concierto?",
+  "x.cGoingIntro":"Haz clic si piensas ir — ayuda a los demás fans a organizarse.",
+  "x.cGoingBtn":"¡Voy!",
+  "x.cGoingYes":"Vas",
+  "x.cGoingCount":"fans van",
   "x.comAuthor":"autor·a",
   "x.comReply":"Responder",
   "x.comReplyPh":"Tu respuesta…",
@@ -1772,6 +1787,11 @@ es:{
   "contDetected":(c)=>`Continente detectado: <b>${c}</b> 🌍`,"contOther":"Añadiremos tu país al mapa ✦",
 },
 sv:{
+  "x.cGoing":"Ska du på den här konserten?",
+  "x.cGoingIntro":"Klicka om du tänker gå — det hjälper andra fans att organisera sig.",
+  "x.cGoingBtn":"Jag går!",
+  "x.cGoingYes":"Du går",
+  "x.cGoingCount":"fans går",
   "x.comAuthor":"författare",
   "x.comReply":"Svara",
   "x.comReplyPh":"Ditt svar…",
@@ -1984,6 +2004,11 @@ sv:{
   "contDetected":(c)=>`Kontinent: <b>${c}</b> 🌍`,"contOther":"Vi lägger till ditt land på kartan ✦",
 },
 de:{
+  "x.cGoing":"Gehst du zu diesem Konzert?",
+  "x.cGoingIntro":"Klick, wenn du hingehen willst — das hilft anderen Fans bei der Planung.",
+  "x.cGoingBtn":"Ich komme!",
+  "x.cGoingYes":"Du kommst",
+  "x.cGoingCount":"Fans kommen",
   "x.comAuthor":"Autor·in",
   "x.comReply":"Antworten",
   "x.comReplyPh":"Deine Antwort…",
@@ -2196,6 +2221,11 @@ de:{
   "contDetected":(c)=>`Erkannter Kontinent: <b>${c}</b> 🌍`,"contOther":"Wir fügen dein Land der Karte hinzu ✦",
 },
 pt:{
+  "x.cGoing":"Vais a este concerto?",
+  "x.cGoingIntro":"Clica se pensas ir — ajuda os outros fãs a organizarem-se.",
+  "x.cGoingBtn":"Eu vou!",
+  "x.cGoingYes":"Vais",
+  "x.cGoingCount":"fãs vão",
   "x.comAuthor":"autor·a",
   "x.comReply":"Responder",
   "x.comReplyPh":"A tua resposta…",
@@ -6063,6 +6093,37 @@ async function chargerInteractionsSupabase(){
   try{ if(window.rendreConcerts) rendreConcerts(); }catch(e){}
 }
 window.chargerInteractionsSupabase=chargerInteractionsSupabase;
+/* ===== PARTICIPATIONS aux concerts à venir (« J'y vais », base partagée) ===== */
+window.PARTICIPATIONS={};             /* concert_cle -> nombre de participants */
+window.MES_PARTICIPATIONS=new Set();  /* concerts où JE participe */
+async function chargerParticipationsSupabase(){
+  if(!window._sb) return;
+  try{
+    var r=await window._sb.from("participations").select("concert_cle,user_id");
+    if(r && !r.error){
+      var cpt={}, mine=new Set();
+      (r.data||[]).forEach(function(x){ cpt[x.concert_cle]=(cpt[x.concert_cle]||0)+1; if(window.MON_USER && x.user_id===window.MON_USER.id) mine.add(x.concert_cle); });
+      window.PARTICIPATIONS=cpt; window.MES_PARTICIPATIONS=mine;
+    }
+  }catch(e){ console.warn("participations:",e); }
+  try{ if(window.rendreConcerts) rendreConcerts(); }catch(e){}
+}
+window.chargerParticipationsSupabase=chargerParticipationsSupabase;
+async function basculerParticipation(cle, btn){
+  if(!window.MON_USER){ toast(t("prj.needLogin")); return; }
+  var deja=!!(window.MES_PARTICIPATIONS && window.MES_PARTICIPATIONS.has(cle));
+  try{
+    var r = deja
+      ? await window._sb.from("participations").delete().eq("concert_cle",cle).eq("user_id",window.MON_USER.id)
+      : await window._sb.from("participations").insert({concert_cle:cle,user_id:window.MON_USER.id});
+    if(r&&r.error){ console.warn("participation:",r.error); if(typeof diag==="function")diag(t("x.actionErr"),false); return; }
+    window.MES_PARTICIPATIONS=window.MES_PARTICIPATIONS||new Set(); window.PARTICIPATIONS=window.PARTICIPATIONS||{};
+    if(deja){ window.MES_PARTICIPATIONS.delete(cle); window.PARTICIPATIONS[cle]=Math.max(0,(window.PARTICIPATIONS[cle]||1)-1); }
+    else { window.MES_PARTICIPATIONS.add(cle); window.PARTICIPATIONS[cle]=(window.PARTICIPATIONS[cle]||0)+1; }
+    if(window.rendreConcerts) rendreConcerts();
+  }catch(e){ console.warn(e); }
+}
+window.basculerParticipation=basculerParticipation;
 function statsMediaHTML(mid){
   const s=I(mid);
   var l=(window.MEDIA_LIKES&&window.MEDIA_LIKES[mid])||0;
@@ -6426,6 +6487,8 @@ function rendrePageConcertTour(s){
   const qui=Object.entries(_cptPays).sort((a,b)=>b[1]-a[1]).slice(0,6);
   const total=qui.reduce((a,b)=>a+b[1],0), max=Math.max(1,...qui.map(q=>q[1]));
   const messages=CHATS[cle]||(CHATS[cle]=[]);
+  var jyVais = !!(window.MES_PARTICIPATIONS && window.MES_PARTICIPATIONS.has(cle));
+  var nbPart = (window.PARTICIPATIONS && window.PARTICIPATIONS[cle]) || 0;
   s.innerHTML=`
     <button class="lire-plus" onclick="fermerConcert()">${t("x.cBack")}</button>
     <h2 style="margin-top:8px">${dte.f} ${dte.v}</h2>
@@ -6441,15 +6504,11 @@ function rendrePageConcertTour(s){
       ${carrouselFansHTML(cle)}
     </div>`
     :`
-    <div class="verre" style="margin-top:12px">
-      <h3 style="color:var(--rose)">${t("x.cWho")} · ${total} fans</h3>
-      <div class="barres">${qui.map(([code,n])=>`
-        <div class="barre-ligne">
-          <span class="nomc">${FLAGS_PAYS[code]||""} ${noms.of(code)}</span>
-          <div class="barre-fond"><div class="barre-remplie" style="width:${n/max*100}%"></div></div>
-          <span class="nb">${n}</span>
-        </div>`).join("")}
-      </div>
+    <div class="verre" style="margin-top:12px;text-align:center">
+      <h3 style="color:var(--rose)">✋ ${t("x.cGoing")}</h3>
+      <p style="font-size:.78rem;color:var(--beige);margin:4px 0 12px">${t("x.cGoingIntro")}</p>
+      <button class="btn btn-large" onclick="basculerParticipation('${cle}',this)" style="${jyVais?'background:linear-gradient(145deg,#4caf7d,#2e8b57)':''}">${jyVais?("✓ "+t("x.cGoingYes")):("✋ "+t("x.cGoingBtn"))}</button>
+      <p style="font-size:.95rem;color:var(--blanc);margin-top:12px">🎉 <b data-part="${cle}">${nbPart}</b> ${t("x.cGoingCount")}</p>
     </div>
     ${blocGroupeInstagram(cle)}
     <p style="font-size:.68rem;color:var(--beige);margin-top:12px">✦ ${t("x.cAfterOnly")}</p>`}
@@ -8524,6 +8583,7 @@ if(window.chargerGroupesSupabase) chargerGroupesSupabase();
 if(window.chargerProjetsSupabase) chargerProjetsSupabase();
 if(window.chargerAwardsSupabase) chargerAwardsSupabase();
 if(window.chargerInteractionsSupabase) chargerInteractionsSupabase();
+    if(window.chargerParticipationsSupabase) chargerParticipationsSupabase();
 
 /* ================= COMPTES FANS (connexion email + mot de passe) =================
    Étape 1 : créer un compte / se connecter / se déconnecter.
@@ -8632,6 +8692,7 @@ function majPanneauCompte(session){
     if(window.chargerProjetsSupabase) chargerProjetsSupabase();
     if(window.chargerAwardsSupabase) chargerAwardsSupabase();
     if(window.chargerInteractionsSupabase) chargerInteractionsSupabase();
+    if(window.chargerParticipationsSupabase) chargerParticipationsSupabase();
   } else {
     window.MON_USER=null; window.MON_PROFIL_ID=null;
     if(d) d.style.display=""; if(c) c.style.display="none";

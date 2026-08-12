@@ -46,4 +46,19 @@ create policy mc_insertion on media_commentaires for insert to authenticated wit
 create policy mc_suppr     on media_commentaires for delete to authenticated using (auth.uid() = user_id);
 create policy mc_admin_maj on media_commentaires for delete to authenticated using ((auth.jwt() ->> 'email') = 'elisabeth.sikora@orange.fr');
 
+-- 4) PARTICIPATIONS aux concerts à venir (« J'y vais »)
+create table if not exists participations (
+  concert_cle text,
+  user_id     uuid references auth.users(id),
+  cree_le     timestamptz default now(),
+  primary key (concert_cle, user_id)
+);
+alter table participations enable row level security;
+drop policy if exists pa_lecture   on participations;
+drop policy if exists pa_insertion on participations;
+drop policy if exists pa_suppr     on participations;
+create policy pa_lecture   on participations for select using (true);
+create policy pa_insertion on participations for insert to authenticated with check (auth.uid() = user_id);
+create policy pa_suppr     on participations for delete to authenticated using (auth.uid() = user_id);
+
 -- ✅ Terminé. Tu peux tout pousser dans GitHub ensuite.
