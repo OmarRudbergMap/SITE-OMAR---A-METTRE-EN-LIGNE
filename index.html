@@ -540,7 +540,7 @@ footer .marque{font-family:'Bebas Neue';font-size:1.1rem;letter-spacing:.15em;co
         <p style="margin:4px 0"><span data-i18n="acc.connected">Connected:</span> <b id="auth-qui"></b></p>
         <button type="button" class="btn fantome" onclick="seDeconnecter()" data-i18n="acc.logout">Log out</button>
       </div>
-      <div style="font-size:.66rem;opacity:.5;margin-top:8px">version : COMPTES-54</div>
+      <div style="font-size:.66rem;opacity:.5;margin-top:8px">version : COMPTES-55</div>
     </div>
     <div class="verre" id="dejaFiche" style="display:none;margin-bottom:16px">
       <h3 class="accent" data-i18n="acc.haveCard">Your card is created ✓</h3>
@@ -1157,6 +1157,7 @@ const FLAGS={en:"🇬🇧",fr:"🇫🇷",es:"🇪🇸",sv:"🇸🇪",de:"🇩�
 let LANG = "en";
 const I18N = {
 en:{
+  "x.cWatchInsta":"Watch on Instagram",
   "x.cGoing":"Are you going to this concert?",
   "x.cGoingIntro":"Tap if you plan to go, it helps other fans get organised.",
   "x.cGoingBtn":"I'm going!",
@@ -1321,6 +1322,7 @@ en:{
   "contDetected":(c)=>`Continent detected: <b>${c}</b> 🌍`,"contOther":"We will add your country to the map ✦",
 },
 fr:{
+  "x.cWatchInsta":"Voir la vidéo sur Instagram",
   "x.cGoing":"Tu vas à ce concert ?",
   "x.cGoingIntro":"Clique si tu comptes y aller, ça aide les autres fans à s'organiser.",
   "x.cGoingBtn":"J'y vais !",
@@ -1570,6 +1572,7 @@ fr:{
   "contDetected":(c)=>`Continent détecté : <b>${c}</b> 🌍`,"contOther":"Nous ajouterons ton pays à la carte ✦",
 },
 es:{
+  "x.cWatchInsta":"Ver el vídeo en Instagram",
   "x.cGoing":"¿Vas a este concierto?",
   "x.cGoingIntro":"Haz clic si piensas ir, ayuda a los demás fans a organizarse.",
   "x.cGoingBtn":"¡Voy!",
@@ -1787,6 +1790,7 @@ es:{
   "contDetected":(c)=>`Continente detectado: <b>${c}</b> 🌍`,"contOther":"Añadiremos tu país al mapa ✦",
 },
 sv:{
+  "x.cWatchInsta":"Se videon på Instagram",
   "x.cGoing":"Ska du på den här konserten?",
   "x.cGoingIntro":"Klicka om du tänker gå, det hjälper andra fans att organisera sig.",
   "x.cGoingBtn":"Jag går!",
@@ -2004,6 +2008,7 @@ sv:{
   "contDetected":(c)=>`Kontinent: <b>${c}</b> 🌍`,"contOther":"Vi lägger till ditt land på kartan ✦",
 },
 de:{
+  "x.cWatchInsta":"Video auf Instagram ansehen",
   "x.cGoing":"Gehst du zu diesem Konzert?",
   "x.cGoingIntro":"Klick, wenn du hingehen willst, das hilft anderen Fans bei der Planung.",
   "x.cGoingBtn":"Ich komme!",
@@ -2221,6 +2226,7 @@ de:{
   "contDetected":(c)=>`Erkannter Kontinent: <b>${c}</b> 🌍`,"contOther":"Wir fügen dein Land der Karte hinzu ✦",
 },
 pt:{
+  "x.cWatchInsta":"Ver o vídeo no Instagram",
   "x.cGoing":"Vais a este concerto?",
   "x.cGoingIntro":"Clica se pensas ir, ajuda os outros fãs a organizarem-se.",
   "x.cGoingBtn":"Eu vou!",
@@ -6251,6 +6257,20 @@ function diapoMediaFixe(m,mid){
     ${statsMediaHTML(mid)}
   </div>`;
 }
+/* ===== Vidéos externes par concert (Dailymotion / Instagram) — au lieu de fichiers lourds hébergés ===== */
+const VIDEOS_CONCERT = {
+  "solo24-0":[{url:"https://dai.ly/xaxrarq", type:"dailymotion"}]   /* Cirkus · First Solo Show · 17.02.2024 (exemple) */
+};
+function _idDailymotion(u){ var m=String(u||"").match(/(?:dai\.ly\/|dailymotion\.com\/(?:embed\/)?video\/)([A-Za-z0-9]+)/); return m?m[1]:null; }
+function videoExterneHTML(v){
+  var url=(v&&v.url)||"";
+  var dm=_idDailymotion(url);
+  if(dm){
+    return '<div class="diapo media" data-type="video" style="min-width:min(92vw,440px)">'
+      +'<iframe src="https://www.dailymotion.com/embed/video/'+dm+'" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen frameborder="0" style="width:100%;aspect-ratio:16/9;border:0;border-radius:12px;display:block"></iframe></div>';
+  }
+  return '<a class="diapo media" href="'+url+'" target="_blank" rel="noopener" style="display:flex;align-items:center;justify-content:center;text-align:center;text-decoration:none;color:#fff;background:linear-gradient(145deg,#c2456a,#b33533);min-width:200px;min-height:130px;border-radius:12px;font-weight:600;padding:12px">🎬 '+t("x.cWatchInsta")+' ↗</a>';
+}
 /* ---- Instagram d'un fan : normalisation + recherche par média ---- */
 function normInsta(raw){
   raw=String(raw||"").trim(); if(!raw) return null;
@@ -6287,7 +6307,9 @@ function rangGalerie(cleBase,type,store,titre,placeholders){
       return {url:(m.type==="video"?(m.lien||""):(m.contenu||"")), type:(m.type==="video"?"video":"photo"), _id:m.id, _insta:instaDuMedia(m)};
     });
   }
-  const contenu = fixes.map((m,i)=>diapoMediaFixe(m,cle+"-f"+i)).join("")
+  var externes = (store==="modo" && type==="v" && typeof VIDEOS_CONCERT!=="undefined") ? (VIDEOS_CONCERT[cleBase]||[]) : [];
+  const contenu = externes.map(videoExterneHTML).join("")
+                + (externes.length ? "" : fixes.map((m,i)=>diapoMediaFixe(m,cle+"-f"+i)).join(""))
                 + valides.map((m)=>diapoMediaFanConcert(m,"fan-"+cle+"-sb"+m._id)).join("")
                 + persos.map((m,i)=>diapoMedia(m,cle,i,store)).join("");
   return `<p style="font-size:.6rem;letter-spacing:.14em;text-transform:uppercase;color:var(--beige);margin:12px 0 4px">${titre}</p>
