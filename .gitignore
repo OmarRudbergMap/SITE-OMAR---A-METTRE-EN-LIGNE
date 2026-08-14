@@ -17,3 +17,4 @@ omarrudberg-site/
 # La clé "anon public" de Supabase est faite pour être publique
 # (elle est de toute façon visible dans le site en ligne).
 # La sécurité est assurée par les règles RLS dans Supabase.
+videos/
