@@ -541,7 +541,7 @@ footer .marque{font-family:'Bebas Neue';font-size:1.1rem;letter-spacing:.15em;co
         <p style="margin:4px 0"><span data-i18n="acc.connected">Connected:</span> <b id="auth-qui"></b></p>
         <button type="button" class="btn fantome" onclick="seDeconnecter()" data-i18n="acc.logout">Log out</button>
       </div>
-      <div style="font-size:.66rem;opacity:.5;margin-top:8px">version : COMPTES-78</div>
+      <div style="font-size:.66rem;opacity:.5;margin-top:8px">version : COMPTES-79</div>
     </div>
     <div class="verre" id="dejaFiche" style="display:none;margin-bottom:16px">
       <h3 class="accent" data-i18n="acc.haveCard">Your card is created ✓</h3>
@@ -8324,7 +8324,7 @@ function rendreCommunaute(){
   s.innerHTML=`<p class="eyebrow">${t("x.cmEyebrow")}</p><h2>${t("x.cmTitle")}</h2>
     <div class="verre" style="margin-top:12px">
       <label style="display:block;font-size:.66rem;letter-spacing:.18em;text-transform:uppercase;color:var(--rose);margin-bottom:6px">${(t("form.country")||"Country").replace(/<[^>]*>/g,"").replace(" *","")}</label>
-      <select id="ffPays">${PAYS_DATA.map(d=>`<option value="${d[0]}">${noms.of(d[0])}</option>`).join("")}</select>
+      <select id="ffPays">${PAYS_DATA.map(d=>[d[0],noms.of(d[0])||d[0]]).sort((a,b)=>a[1].localeCompare(b[1],LANG)).map(pr=>`<option value="${pr[0]}">${pr[1]}</option>`).join("")}</select>
       <label style="display:block;font-size:.66rem;letter-spacing:.18em;text-transform:uppercase;color:var(--rose);margin:14px 0 6px">${(t("form.city")||"City").replace(" *","")}</label>
       <input type="text" id="ffVille" placeholder="Paris…">
       <button class="btn btn-large" style="margin-top:14px" onclick="chercherFans()">🔎 ${t("x.ffFind")}</button>
