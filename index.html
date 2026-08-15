@@ -447,11 +447,12 @@ footer .marque{font-family:'Bebas Neue';font-size:1.1rem;letter-spacing:.15em;co
   <a href="#timeline" data-page="timeline"><span class="num">02</span> <span data-i18n="nav.timeline">Omar</span></a>
   <a href="#inscription" data-page="inscription"><span class="num">03</span> <span data-i18n="nav.join">Fan Space</span></a>
   <a href="#histoires" data-page="histoires"><span class="num">04</span> <span data-i18n="nav.stories">Fan stories</span></a>
-  <a href="#concerts" data-page="concerts"><span class="num">05</span> <span data-i18n="nav.concerts">Concerts & Festivals</span></a>
-  <a href="#galerie" data-page="galerie"><span class="num">06</span> <span data-i18n="nav.gallery">Photos & Videos</span></a>
-  <a href="#projets" data-page="projets"><span class="num">07</span> <span data-i18n="nav.projects">Fan Projects</span></a>
-  <a href="#awards" data-page="awards"><span class="num">08</span> <span data-i18n="nav.awards">Awards</span></a>
-  <a href="#guide" data-page="guide"><span class="num">09</span> <span data-i18n="nav.guide">Guide des fans</span></a>
+  <a href="#pourquoi" data-page="pourquoi"><span class="num">05</span> <span data-i18n="nav.pourquoi">Why I love Omar</span><span class="nav-neuf" id="badgePourquoiNav" data-i18n="q.new" style="display:none">Nouveau</span></a>
+  <a href="#concerts" data-page="concerts"><span class="num">06</span> <span data-i18n="nav.concerts">Concerts & Festivals</span></a>
+  <a href="#galerie" data-page="galerie"><span class="num">07</span> <span data-i18n="nav.gallery">Photos & Videos</span></a>
+  <a href="#projets" data-page="projets"><span class="num">08</span> <span data-i18n="nav.projects">Fan Projects</span></a>
+  <a href="#awards" data-page="awards"><span class="num">09</span> <span data-i18n="nav.awards">Awards</span></a>
+  <a href="#guide" data-page="guide"><span class="num">10</span> <span data-i18n="nav.guide">Guide des fans</span></a>
   <a href="#moderation" data-page="moderation" id="lienModeration" style="display:none;color:var(--rose)">🛡️ <span data-i18n="nav.moderation">Moderation</span> <span id="badgeModeration" class="badge-modo" style="display:none">0</span></a>
   <a href="https://www.orworldassociation.com/adh%C3%A9sions-dons-contact" target="_blank" rel="noopener" style="border-bottom:none;font-size:1rem;color:var(--rose)">🤝 <span data-i18n="foot.partner">Partner of the O.R. WORLD ASSOCIATION</span> ↗</a>
 </nav>
@@ -540,7 +541,7 @@ footer .marque{font-family:'Bebas Neue';font-size:1.1rem;letter-spacing:.15em;co
         <p style="margin:4px 0"><span data-i18n="acc.connected">Connected:</span> <b id="auth-qui"></b></p>
         <button type="button" class="btn fantome" onclick="seDeconnecter()" data-i18n="acc.logout">Log out</button>
       </div>
-      <div style="font-size:.66rem;opacity:.5;margin-top:8px">version : COMPTES-66</div>
+      <div style="font-size:.66rem;opacity:.5;margin-top:8px">version : COMPTES-67</div>
     </div>
     <div class="verre" id="dejaFiche" style="display:none;margin-bottom:16px">
       <h3 class="accent" data-i18n="acc.haveCard">Your card is created ✓</h3>
@@ -708,6 +709,17 @@ footer .marque{font-family:'Bebas Neue';font-size:1.1rem;letter-spacing:.15em;co
     <p class="citation" style="margin-bottom:18px" data-i18n="sto.quote">Because behind every fan there is a story that deserves to be told.</p>
     <button class="btn btn-large" onclick="allerA('inscription')" style="margin-bottom:24px" data-i18n="sto.tellBtn">Tell my story ✦</button>
     <div id="listeHistoires"></div>
+  </section>
+</div>
+
+<!-- ==================== PAGE : POURQUOI J'AIME OMAR ==================== -->
+<div class="page" id="page-pourquoi">
+  <section>
+    <p class="eyebrow" data-i18n="po.eyebrow">The wall of hearts</p>
+    <h2 data-i18n="po.title">Why do you love Omar?</h2>
+    <p class="citation" style="margin:12px 0 16px" data-i18n="po.intro">In just one sentence, say why Omar matters to you.</p>
+    <div id="pourquoiForm"></div>
+    <div id="murPourquoi" style="margin-top:16px"></div>
   </section>
 </div>
 
@@ -1158,6 +1170,17 @@ const FLAGS={en:"🇬🇧",fr:"🇫🇷",es:"🇪🇸",sv:"🇸🇪",de:"🇩�
 let LANG = "en";
 const I18N = {
 en:{
+  "nav.pourquoi":"Why I love Omar",
+  "po.eyebrow":"The wall of hearts",
+  "po.title":"Why do you love Omar?",
+  "po.intro":"In just one sentence, say why Omar matters to you. Write from the heart — your words will join the wall, anonymously.",
+  "po.ph":"Your sentence, a few words from the heart…",
+  "po.myPhrase":"My sentence",
+  "po.save":"Share my sentence",
+  "po.saved":"Thank you ✦ your sentence is on the wall",
+  "po.needText":"Write your sentence first ✦",
+  "po.empty":"Be the first to write why you love Omar 💛",
+  "po.count":"messages from the heart",
   "q.title":"My firsts",
   "q.new":"New",
   "q.intro":"Tell us your fan firsts — each answer earns +5 points and shows on your passport.",
@@ -1346,6 +1369,17 @@ en:{
   "contDetected":(c)=>`Continent detected: <b>${c}</b> 🌍`,"contOther":"We will add your country to the map ✦",
 },
 fr:{
+  "nav.pourquoi":"Pourquoi j'aime Omar",
+  "po.eyebrow":"Le mur des cœurs",
+  "po.title":"Pourquoi aimes-tu Omar ?",
+  "po.intro":"En une seule phrase, dis pourquoi Omar compte pour toi. Écris avec ton cœur — ta phrase rejoindra le mur, en toute discrétion.",
+  "po.ph":"Ta phrase, quelques mots venus du cœur…",
+  "po.myPhrase":"Ma phrase",
+  "po.save":"Publier ma phrase",
+  "po.saved":"Merci ✦ ta phrase est sur le mur",
+  "po.needText":"Écris ta phrase d'abord ✦",
+  "po.empty":"Sois le premier à écrire pourquoi tu aimes Omar 💛",
+  "po.count":"messages du cœur",
   "q.title":"Mes premières fois",
   "q.new":"Nouveau",
   "q.intro":"Raconte tes premières fois de fan — chaque réponse te rapporte +5 points et s'affiche sur ton passeport.",
@@ -1619,6 +1653,17 @@ fr:{
   "contDetected":(c)=>`Continent détecté : <b>${c}</b> 🌍`,"contOther":"Nous ajouterons ton pays à la carte ✦",
 },
 es:{
+  "nav.pourquoi":"Por qué quiero a Omar",
+  "po.eyebrow":"El muro de los corazones",
+  "po.title":"¿Por qué quieres a Omar?",
+  "po.intro":"En una sola frase, di por qué Omar te importa. Escribe con el corazón: tu frase se unirá al muro, de forma anónima.",
+  "po.ph":"Tu frase, unas palabras del corazón…",
+  "po.myPhrase":"Mi frase",
+  "po.save":"Publicar mi frase",
+  "po.saved":"Gracias ✦ tu frase está en el muro",
+  "po.needText":"Escribe tu frase primero ✦",
+  "po.empty":"Sé el primero en escribir por qué quieres a Omar 💛",
+  "po.count":"mensajes del corazón",
   "q.title":"Mis primeras veces",
   "q.new":"Nuevo",
   "q.intro":"Cuéntanos tus primeras veces como fan: cada respuesta suma +5 puntos y aparece en tu pasaporte.",
@@ -1860,6 +1905,17 @@ es:{
   "contDetected":(c)=>`Continente detectado: <b>${c}</b> 🌍`,"contOther":"Añadiremos tu país al mapa ✦",
 },
 sv:{
+  "nav.pourquoi":"Varför jag älskar Omar",
+  "po.eyebrow":"Hjärteväggen",
+  "po.title":"Varför älskar du Omar?",
+  "po.intro":"Säg med en enda mening varför Omar betyder något för dig. Skriv från hjärtat – din mening hamnar på väggen, anonymt.",
+  "po.ph":"Din mening, några ord från hjärtat…",
+  "po.myPhrase":"Min mening",
+  "po.save":"Publicera min mening",
+  "po.saved":"Tack ✦ din mening är på väggen",
+  "po.needText":"Skriv din mening först ✦",
+  "po.empty":"Bli först med att skriva varför du älskar Omar 💛",
+  "po.count":"meddelanden från hjärtat",
   "q.title":"Mina första gånger",
   "q.new":"Nytt",
   "q.intro":"Berätta om dina första gånger som fan – varje svar ger +5 poäng och visas i ditt pass.",
@@ -2101,6 +2157,17 @@ sv:{
   "contDetected":(c)=>`Kontinent: <b>${c}</b> 🌍`,"contOther":"Vi lägger till ditt land på kartan ✦",
 },
 de:{
+  "nav.pourquoi":"Warum ich Omar liebe",
+  "po.eyebrow":"Die Wand der Herzen",
+  "po.title":"Warum liebst du Omar?",
+  "po.intro":"Sag in einem einzigen Satz, warum Omar dir wichtig ist. Schreib aus dem Herzen – dein Satz kommt an die Wand, anonym.",
+  "po.ph":"Dein Satz, ein paar Worte von Herzen…",
+  "po.myPhrase":"Mein Satz",
+  "po.save":"Meinen Satz teilen",
+  "po.saved":"Danke ✦ dein Satz ist an der Wand",
+  "po.needText":"Schreib zuerst deinen Satz ✦",
+  "po.empty":"Sei der Erste, der schreibt, warum du Omar liebst 💛",
+  "po.count":"Botschaften von Herzen",
   "q.title":"Meine ersten Male",
   "q.new":"Neu",
   "q.intro":"Erzähl von deinen ersten Malen als Fan – jede Antwort bringt +5 Punkte und erscheint in deinem Pass.",
@@ -2342,6 +2409,17 @@ de:{
   "contDetected":(c)=>`Erkannter Kontinent: <b>${c}</b> 🌍`,"contOther":"Wir fügen dein Land der Karte hinzu ✦",
 },
 pt:{
+  "nav.pourquoi":"Porque amo o Omar",
+  "po.eyebrow":"O mural dos corações",
+  "po.title":"Porque amas o Omar?",
+  "po.intro":"Numa só frase, diz porque o Omar é importante para ti. Escreve com o coração — a tua frase juntar-se-á ao mural, anonimamente.",
+  "po.ph":"A tua frase, umas palavras do coração…",
+  "po.myPhrase":"A minha frase",
+  "po.save":"Publicar a minha frase",
+  "po.saved":"Obrigada ✦ a tua frase está no mural",
+  "po.needText":"Escreve primeiro a tua frase ✦",
+  "po.empty":"Sê o primeiro a escrever porque amas o Omar 💛",
+  "po.count":"mensagens do coração",
   "q.title":"As minhas primeiras vezes",
   "q.new":"Novo",
   "q.intro":"Conta as tuas primeiras vezes como fã — cada resposta dá +5 pontos e aparece no teu passaporte.",
@@ -2646,7 +2724,7 @@ function changerLangue(l){
 }
 
 /* ---------------- NAVIGATION ---------------- */
-const pages = ["accueil","timeline","inscription","histoires","concerts","galerie","projets","awards","guide","confidentialite","moderation"];
+const pages = ["accueil","timeline","inscription","histoires","pourquoi","concerts","galerie","projets","awards","guide","confidentialite","moderation"];
 function allerA(p,sansScroll){
   if(!pages.includes(p)) p = "accueil";
   /* onglet Modération : réservé à l'admin (la modératrice), un fan ne peut pas y accéder */
@@ -3997,6 +4075,96 @@ async function traduireHistoire(i, btn){
   else { if(btn) btn.textContent="🌐 "+t("sto.translate"); toast(t("sto.translateErr")); }
 }
 window.traduireHistoire=traduireHistoire;
+/* =============== POURQUOI J'AIME OMAR (mur anonyme) =============== */
+window.POURQUOI=[]; window.MA_PHRASE="";
+function _escPo(x){ return (typeof escapeHtmlM==="function")?escapeHtmlM(x||""):String(x||"").replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c];}); }
+async function chargerPourquoiSupabase(){
+  if(!window._sb) return;
+  try{
+    var r=await window._sb.from("pourquoi_omar").select("user_id,texte,cree_le").order("cree_le",{ascending:false});
+    if(!r.error){
+      window.POURQUOI=(r.data||[]).filter(function(x){return x.texte && x.texte.trim();});
+      if(window.MON_USER){ var mine=window.POURQUOI.find(function(x){return x.user_id===window.MON_USER.id;}); window.MA_PHRASE=mine?mine.texte:""; }
+    }
+    if(window.rendrePourquoi) rendrePourquoi();
+  }catch(e){ console.warn("pourquoi:",e); }
+}
+window.chargerPourquoiSupabase=chargerPourquoiSupabase;
+function rendrePourquoi(){
+  try{ var bn=document.getElementById("badgePourquoiNav"); if(bn) bn.style.display=(typeof qEstNouveau==="function"&&qEstNouveau())?"":"none"; }catch(e){}
+  var f=document.getElementById("pourquoiForm");
+  if(f){
+    if(window.MON_USER && window.MON_PROFIL_ID){
+      f.innerHTML='<div class="verre" style="border:1px solid var(--rose)">'
+        +'<p style="font-size:.82rem;color:var(--rose);font-weight:600;margin-bottom:6px">✍️ '+t("po.myPhrase")+'</p>'
+        +'<textarea id="po-input" maxlength="240" class="q-ta" style="min-height:70px" placeholder="'+t("po.ph")+'">'+_escPo(window.MA_PHRASE||"")+'</textarea>'
+        +'<button class="btn btn-large" style="margin-top:8px" onclick="envoyerPourquoi()">💛 '+t("po.save")+'</button>'
+        +'</div>';
+    } else {
+      f.innerHTML='<p style="font-size:.85rem;color:var(--beige);text-align:center;margin:10px 0 8px">'+t("prj.needLogin")+'</p>'
+        +'<div style="text-align:center"><button class="btn btn-large" onclick="allerA(\'inscription\')">'+t("sto.tellBtn")+'</button></div>';
+    }
+  }
+  var s=document.getElementById("murPourquoi"); if(!s) return;
+  var arr=(window.POURQUOI||[]);
+  if(!arr.length){ s.innerHTML='<p style="text-align:center;color:var(--beige);font-size:.9rem;margin-top:24px">'+t("po.empty")+'</p>'; return; }
+  var admin=(typeof estAdmin==="function"&&estAdmin());
+  var cartes=arr.map(function(row,i){
+    return '<figure class="carte-pourquoi">'
+      +'<blockquote id="phrase-'+i+'">'+_escPo(row.texte||"")+'</blockquote>'
+      +'<div class="cp-actions">'
+      +'<button class="cp-trad" onclick="traduirePhrase('+i+',this)">🌐 '+t("sto.translate")+'</button>'
+      +(admin?'<button class="cp-suppr" onclick="supprimerPourquoi(\''+row.user_id+'\')" title="'+t("med.remove")+'">🗑️</button>':'')
+      +'</div></figure>';
+  }).join("");
+  s.innerHTML='<p style="text-align:center;font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;color:var(--rose);margin:0 0 12px">💛 '+arr.length+' '+t("po.count")+'</p><div class="mur-pourquoi">'+cartes+'</div>';
+}
+window.rendrePourquoi=rendrePourquoi;
+async function envoyerPourquoi(){
+  if(!window.MON_USER || !window.MON_PROFIL_ID){ toast(t("med.needProfile")); return; }
+  var el=document.getElementById("po-input"); var txt=(el?el.value:"").trim();
+  if(!txt){ toast(t("po.needText")); return; }
+  var r=await window._sb.from("pourquoi_omar").upsert({user_id:window.MON_USER.id, texte:txt},{onConflict:"user_id"});
+  if(r&&r.error){ diag("L'envoi n'a pas fonctionné, réessaie dans un instant ✦",false); console.warn("pourquoi insert:",r.error); return; }
+  window.MA_PHRASE=txt; toast(t("po.saved"));
+  if(window.chargerPourquoiSupabase) chargerPourquoiSupabase();
+}
+window.envoyerPourquoi=envoyerPourquoi;
+async function supprimerPourquoi(uid){
+  if(!window._sb) return;
+  var r=await window._sb.from("pourquoi_omar").delete().eq("user_id",uid);
+  if(r&&r.error){ diag("Action impossible ✦",false); console.warn(r.error); return; }
+  if(window.MON_USER && uid===window.MON_USER.id) window.MA_PHRASE="";
+  toast(t("med.removed")); if(window.chargerPourquoiSupabase) chargerPourquoiSupabase();
+}
+window.supprimerPourquoi=supprimerPourquoi;
+async function traduirePhrase(i, btn){
+  var p=document.getElementById("phrase-"+i); if(!p) return;
+  if(p.dataset.orig===undefined) p.dataset.orig=p.textContent||"";
+  var orig=p.dataset.orig||"";
+  if(btn && btn.dataset.montre==="trad"){ p.textContent=orig; btn.dataset.montre="orig"; btn.textContent="🌐 "+t("sto.translate"); return; }
+  if(!orig.trim()) return;
+  if(btn) btn.textContent="⏳ "+t("sto.translating");
+  var tl=(LANG||"en"), trad="";
+  async function essai(u,parse){ var r=await fetch(u); var d=await r.json(); return parse(d); }
+  try{ trad=await essai("https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl="+encodeURIComponent(tl)+"&dt=t&q="+encodeURIComponent(orig),
+    function(d){ return (d && d[0])?d[0].map(function(s){return (s&&s[0])||"";}).join(""):""; }); }catch(e){}
+  if(!trad){ try{ trad=await essai("https://clients5.google.com/translate_a/t?client=dict-chrome-ex&sl=auto&tl="+encodeURIComponent(tl)+"&q="+encodeURIComponent(orig),
+    function(d){ if(!d)return ""; if(typeof d==="string")return d; if(Array.isArray(d)){ if(typeof d[0]==="string")return d.join(" "); if(Array.isArray(d[0]))return d.map(function(x){return (x&&x[0])||"";}).join("");} if(d.sentences)return d.sentences.map(function(s){return s.trans||"";}).join(""); return ""; }); }catch(e2){} }
+  if(trad){ p.textContent=trad; if(btn){btn.dataset.montre="trad"; btn.textContent="↩ "+t("sto.original");} }
+  else { if(btn) btn.textContent="🌐 "+t("sto.translate"); toast(t("sto.translateErr")); }
+}
+window.traduirePhrase=traduirePhrase;
+(function(){ try{ var s=document.createElement("style");
+  s.textContent=`.nav-neuf{background:var(--bordeaux);color:#fff;font-size:.5rem;padding:1px 6px;border-radius:8px;letter-spacing:.06em;text-transform:uppercase;margin-left:6px;vertical-align:middle}
+.mur-pourquoi{display:grid;grid-template-columns:repeat(auto-fill,minmax(238px,1fr));gap:14px;margin-top:8px}
+.carte-pourquoi{margin:0;position:relative;background:linear-gradient(155deg,rgba(239,143,176,.15),rgba(179,53,51,.07));border:1px solid var(--verre-bord);border-radius:16px;padding:24px 18px 12px;overflow:hidden}
+.carte-pourquoi::before{content:"“";position:absolute;top:2px;left:12px;font-family:Georgia,serif;font-size:46px;line-height:1;color:var(--rose);opacity:.5}
+.carte-pourquoi blockquote{margin:0;font-size:.98rem;line-height:1.55;color:var(--blanc);font-style:italic}
+.cp-actions{display:flex;justify-content:flex-end;align-items:center;gap:8px;margin-top:12px}
+.cp-trad{background:none;border:none;color:var(--rose);font-size:.7rem;cursor:pointer;padding:0}
+.cp-suppr{background:none;border:none;color:var(--beige);font-size:.82rem;cursor:pointer;padding:0}`;
+  document.head.appendChild(s); }catch(e){} })();
 function rendreHistoires(){
   if(!HISTOIRES.length){
     document.getElementById("listeHistoires").innerHTML=
@@ -8302,6 +8470,7 @@ function imprimerPasseport(){
   var repChanson=(moiFan&&moiFan.qChanson)||"", repConcertV=(moiFan&&moiFan.qConcertVoyage)||"", repProjet=(moiFan&&moiFan.qProjet)||"";
   var repYr1=(moiFan&&moiFan.yrPremiereFois)||"", repYr2=(moiFan&&moiFan.yrNbVu)||"", repYr3=(moiFan&&moiFan.yrRencontre)||"", repYr4=(moiFan&&moiFan.yrTatouage)||"", repYr5=(moiFan&&moiFan.yrScene)||"";
   var aDesReponses=!!(repChanson||repConcertV||repProjet||repYr1||repYr2||repYr3||repYr4||repYr5);
+  var maPhrase=(window.MA_PHRASE||"");
   var nbC=nbConcerts(window.MES_CONCERTS_VUS||[]);
   var drapeauF=drapeauISO(codeF);
   var paysNom=""; try{ paysNom=nomsRegion().of(codeF==="XX"?"UN":codeF)||""; }catch(e){}
@@ -8465,6 +8634,13 @@ function imprimerPasseport(){
     <div class="histoire">${histoireF?esc(histoireF):"(Ton histoire s'affichera ici, exactement comme tu l'as écrite dans ton espace fan.)"}</div>
     <span class="num-page">· 3 ·</span>
   </div>
+
+  ${maPhrase?`<div class="page">
+    <p class="titre-p">✦ Pourquoi j'aime Omar ✦</p>
+    <p class="ss-titre">ma phrase, du fond du cœur</p>
+    <div style="max-width:480px;margin:44px auto 0;text-align:center;font-size:20px;color:#b33533;font-style:italic;line-height:1.6">« ${esc(maPhrase)} »</div>
+    <span class="num-page">· ♥ ·</span>
+  </div>`:``}
 
   ${aDesReponses?`<div class="page">
     <p class="titre-p">✦ Mes premières fois & Young Royals ✦</p>
@@ -8966,7 +9142,9 @@ if(window.chargerMediasSupabase) chargerMediasSupabase();
 if(window.chargerGroupesSupabase) chargerGroupesSupabase();
 if(window.chargerProjetsSupabase) chargerProjetsSupabase();
 if(window.chargerAwardsSupabase) chargerAwardsSupabase();
+if(window.chargerPourquoiSupabase) chargerPourquoiSupabase();
 if(window.chargerInteractionsSupabase) chargerInteractionsSupabase();
+
     if(window.chargerParticipationsSupabase) chargerParticipationsSupabase();
 
 /* ================= COMPTES FANS (connexion email + mot de passe) =================
@@ -9077,7 +9255,9 @@ function majPanneauCompte(session){
     if(window.chargerMediasSupabase) chargerMediasSupabase();
     if(window.chargerProjetsSupabase) chargerProjetsSupabase();
     if(window.chargerAwardsSupabase) chargerAwardsSupabase();
+    if(window.chargerPourquoiSupabase) chargerPourquoiSupabase();
     if(window.chargerInteractionsSupabase) chargerInteractionsSupabase();
+    
     if(window.chargerParticipationsSupabase) chargerParticipationsSupabase();
   } else {
     window.MON_USER=null; window.MON_PROFIL_ID=null;
