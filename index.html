@@ -541,7 +541,7 @@ footer .marque{font-family:'Bebas Neue';font-size:1.1rem;letter-spacing:.15em;co
         <p style="margin:4px 0"><span data-i18n="acc.connected">Connected:</span> <b id="auth-qui"></b></p>
         <button type="button" class="btn fantome" onclick="seDeconnecter()" data-i18n="acc.logout">Log out</button>
       </div>
-      <div style="font-size:.66rem;opacity:.5;margin-top:8px">version : COMPTES-71</div>
+      <div style="font-size:.66rem;opacity:.5;margin-top:8px">version : COMPTES-72</div>
     </div>
     <div class="verre" id="dejaFiche" style="display:none;margin-bottom:16px">
       <h3 class="accent" data-i18n="acc.haveCard">Your card is created ✓</h3>
@@ -1186,6 +1186,11 @@ const FLAGS={en:"🇬🇧",fr:"🇫🇷",es:"🇪🇸",sv:"🇸🇪",de:"🇩�
 let LANG = "en";
 const I18N = {
 en:{
+  "anv.ph":"Your birthday message…",
+  "anv.send":"Send",
+  "anv.sent":"Message sent 🎉",
+  "anv.first":"Be the first to wish them a happy birthday 💛",
+  "anv.hide":"Hide messages",
   "fmod.title":"New fans to review",
   "fmod.intro":"Approve or reject new sign-ups. Once approved, the fan appears on the map.",
   "nav.pourquoi":"Why I love Omar",
@@ -1387,6 +1392,11 @@ en:{
   "contDetected":(c)=>`Continent detected: <b>${c}</b> 🌍`,"contOther":"We will add your country to the map ✦",
 },
 fr:{
+  "anv.ph":"Ton message d'anniversaire…",
+  "anv.send":"Envoyer",
+  "anv.sent":"Message envoyé 🎉",
+  "anv.first":"Sois le premier à lui souhaiter un joyeux anniversaire 💛",
+  "anv.hide":"Masquer les messages",
   "fmod.title":"Nouveaux fans à valider",
   "fmod.intro":"Approuve ou refuse les nouvelles inscriptions. Une fois validé, le fan apparaît sur la carte.",
   "nav.pourquoi":"Pourquoi j'aime Omar",
@@ -1673,6 +1683,11 @@ fr:{
   "contDetected":(c)=>`Continent détecté : <b>${c}</b> 🌍`,"contOther":"Nous ajouterons ton pays à la carte ✦",
 },
 es:{
+  "anv.ph":"Tu mensaje de cumpleaños…",
+  "anv.send":"Enviar",
+  "anv.sent":"Mensaje enviado 🎉",
+  "anv.first":"Sé el primero en desearle un feliz cumpleaños 💛",
+  "anv.hide":"Ocultar mensajes",
   "fmod.title":"Nuevos fans por validar",
   "fmod.intro":"Aprueba o rechaza las nuevas inscripciones. Una vez validado, el fan aparece en el mapa.",
   "nav.pourquoi":"Por qué quiero a Omar",
@@ -1927,6 +1942,11 @@ es:{
   "contDetected":(c)=>`Continente detectado: <b>${c}</b> 🌍`,"contOther":"Añadiremos tu país al mapa ✦",
 },
 sv:{
+  "anv.ph":"Din födelsedagshälsning…",
+  "anv.send":"Skicka",
+  "anv.sent":"Meddelande skickat 🎉",
+  "anv.first":"Bli först att önska grattis på födelsedagen 💛",
+  "anv.hide":"Dölj meddelanden",
   "fmod.title":"Nya fans att granska",
   "fmod.intro":"Godkänn eller avvisa nya registreringar. När det godkänts visas fanet på kartan.",
   "nav.pourquoi":"Varför jag älskar Omar",
@@ -2181,6 +2201,11 @@ sv:{
   "contDetected":(c)=>`Kontinent: <b>${c}</b> 🌍`,"contOther":"Vi lägger till ditt land på kartan ✦",
 },
 de:{
+  "anv.ph":"Deine Geburtstagsnachricht…",
+  "anv.send":"Senden",
+  "anv.sent":"Nachricht gesendet 🎉",
+  "anv.first":"Sei der Erste, der zum Geburtstag gratuliert 💛",
+  "anv.hide":"Nachrichten ausblenden",
   "fmod.title":"Neue Fans zu prüfen",
   "fmod.intro":"Genehmige oder lehne neue Anmeldungen ab. Nach der Freigabe erscheint der Fan auf der Karte.",
   "nav.pourquoi":"Warum ich Omar liebe",
@@ -2435,6 +2460,11 @@ de:{
   "contDetected":(c)=>`Erkannter Kontinent: <b>${c}</b> 🌍`,"contOther":"Wir fügen dein Land der Karte hinzu ✦",
 },
 pt:{
+  "anv.ph":"A tua mensagem de aniversário…",
+  "anv.send":"Enviar",
+  "anv.sent":"Mensagem enviada 🎉",
+  "anv.first":"Sê o primeiro a desejar feliz aniversário 💛",
+  "anv.hide":"Ocultar mensagens",
   "fmod.title":"Novos fãs para validar",
   "fmod.intro":"Aprova ou rejeita as novas inscrições. Depois de validado, o fã aparece no mapa.",
   "nav.pourquoi":"Porque amo o Omar",
@@ -3894,6 +3924,7 @@ function anniversairesAujourdhui(){
   });
 }
 /* Encart d'anniversaires du jour, mis en avant à l'ouverture du site (page d'accueil) */
+window.MSG_ANNIV={};
 function majBanniereAnniv(){
   var el=document.getElementById("banniereAnniv"); if(!el)return;
   var liste=(typeof anniversairesAujourdhui==="function")?anniversairesAujourdhui():[];
@@ -3902,10 +3933,59 @@ function majBanniereAnniv(){
   var noms = (prenoms.length<=6) ? prenoms.join(" · ")
            : prenoms.slice(0,6).join(" · ")+" · "+(t("x.bdayMore")||"et {n} autres").replace("{n}", prenoms.length-6);
   var fin = (liste.length>1) ? (t("x.bdayBannerEndP")||t("x.bdayBannerEnd")) : t("x.bdayBannerEnd");
+  var ouvert=!!window._annivOuvert;
+  var G=window.MSG_ANNIV||{};
+  var connecte=!!(window.MON_USER && window.MON_PROFIL_ID);
+  var cartes = ouvert ? liste.map(function(fn){
+    var fid=fn.fanId;
+    var msgs=(fid?(G[String(fid)]||[]):[]);
+    var lignes = msgs.length
+      ? msgs.map(function(m){return '<div class="anv-msg"><b>'+escapeHtmlM(m.pseudo||"✦")+'</b> '+escapeHtmlM(m.texte||"")+'</div>';}).join("")
+      : '<div class="anv-vide">'+t("anv.first")+'</div>';
+    var formulaire = connecte
+      ? (fid ? '<div class="anv-form"><input type="text" id="annivInput-'+fid+'" maxlength="220" placeholder="'+t("anv.ph")+'"><button class="btn" onclick="envoyerMessageAnniv(\''+fid+'\')">💌 '+t("anv.send")+'</button></div>' : '')
+      : '<div class="anv-connecte">'+t("prj.needLogin")+'</div>';
+    return '<div class="anv-carte"><div class="anv-nom">🎂 '+escapeHtmlM(fn.prenom||"")+'</div>'+lignes+formulaire+'</div>';
+  }).join("") : "";
   el.style.display="";
-  el.innerHTML='<div class="banniere-anniv"><span class="ba-emo">🎂</span><div style="flex:1"><b>'+t("x.bdayBanner")+'</b><span class="ba-noms">'+noms+'</span><span class="ba-fin">'+fin+'</span><button class="btn fantome" style="margin-top:10px;font-size:.82rem;padding:8px 18px;border-color:rgba(255,255,255,.6);color:#fff" onclick="toast(t(\'x.demoAction\'))">💌 '+t("x.bdayMsg")+'</button></div></div>';
+  el.innerHTML='<div class="banniere-anniv"><span class="ba-emo">🎂</span><div style="flex:1"><b>'+t("x.bdayBanner")+'</b><span class="ba-noms">'+noms+'</span><span class="ba-fin">'+fin+'</span><button class="btn fantome" style="margin-top:10px;font-size:.82rem;padding:8px 18px;border-color:rgba(255,255,255,.6);color:#fff" onclick="ouvrirMessagesAnniv()">💌 '+(ouvert?t("anv.hide"):t("x.bdayMsg"))+'</button></div></div>'
+    + (ouvert ? '<div class="anv-zone">'+cartes+'</div>' : '');
 }
 window.majBanniereAnniv=majBanniereAnniv;
+function ouvrirMessagesAnniv(){
+  window._annivOuvert=!window._annivOuvert;
+  majBanniereAnniv();
+  if(window._annivOuvert && window.chargerMessagesAnnivSupabase) chargerMessagesAnnivSupabase();
+}
+window.ouvrirMessagesAnniv=ouvrirMessagesAnniv;
+async function chargerMessagesAnnivSupabase(){
+  if(!window._sb) return;
+  var liste=(typeof anniversairesAujourdhui==="function")?anniversairesAujourdhui():[];
+  var ids=liste.map(function(f){return f.fanId;}).filter(Boolean).map(String);
+  if(!ids.length){ window.MSG_ANNIV={}; return; }
+  try{
+    var r=await window._sb.from("messages_anniv").select("id,destinataire_fan_id,pseudo,texte,user_id").in("destinataire_fan_id",ids).order("id",{ascending:true});
+    if(!r.error){ var g={}; (r.data||[]).forEach(function(m){ var k=String(m.destinataire_fan_id); (g[k]=g[k]||[]).push(m); }); window.MSG_ANNIV=g; }
+    else console.warn("msg anniv:",r.error);
+    if(window.majBanniereAnniv) majBanniereAnniv();
+  }catch(e){ console.warn("msg anniv:",e); }
+}
+window.chargerMessagesAnnivSupabase=chargerMessagesAnnivSupabase;
+async function envoyerMessageAnniv(fanId){
+  if(!window.MON_USER || !window.MON_PROFIL_ID){ toast(t("med.needProfile")); return; }
+  var el=document.getElementById("annivInput-"+fanId);
+  var txt=(el?el.value:"").trim(); if(!txt) return;
+  var champs={ destinataire_fan_id:String(fanId), user_id:window.MON_USER.id, pseudo:(typeof MOI!=="undefined"&&MOI?MOI.prenom:"")||"", texte:txt };
+  var r=await window._sb.from("messages_anniv").insert(champs);
+  if(r&&r.error){ diag("L'envoi n'a pas fonctionné, réessaie dans un instant ✦",false); console.warn("msg anniv insert:",r.error); return; }
+  if(el) el.value="";
+  toast(t("anv.sent"));
+  if(window.chargerMessagesAnnivSupabase) chargerMessagesAnnivSupabase();
+}
+window.envoyerMessageAnniv=envoyerMessageAnniv;
+(function(){ try{ var s=document.createElement("style");
+  s.textContent=".anv-zone{max-width:640px;margin:10px auto 0;display:flex;flex-direction:column;gap:12px}.anv-carte{background:rgba(255,255,255,.05);border:1px solid var(--verre-bord);border-radius:14px;padding:14px 16px}.anv-nom{color:var(--rose);font-weight:600;margin-bottom:8px}.anv-msg{font-size:.86rem;color:var(--blanc);padding:6px 0;border-bottom:1px solid rgba(243,235,233,.06);line-height:1.45}.anv-msg b{color:var(--rose);font-weight:600}.anv-vide{font-size:.82rem;color:var(--beige);font-style:italic;padding:4px 0}.anv-form{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}.anv-form input{flex:1;min-width:160px;padding:9px 12px;border-radius:10px;border:1px solid var(--verre-bord);background:rgba(255,255,255,.05);color:var(--blanc);font-family:inherit;font-size:.88rem}.anv-connecte{font-size:.82rem;color:var(--beige);margin-top:8px}";
+  document.head.appendChild(s); }catch(e){} })();
 (function(){var st=document.createElement("style");st.textContent=`
 .banniere-anniv{display:flex;align-items:center;gap:14px;max-width:640px;margin:18px auto 0;padding:14px 20px;border-radius:16px;background:linear-gradient(135deg,var(--bordeaux),var(--rose));color:#fff;box-shadow:0 6px 20px rgba(125,31,58,.3);animation:pulseAnniv 2.6s ease-in-out infinite;text-align:left}
 .banniere-anniv .ba-emo{font-size:2rem;flex:0 0 auto}
