@@ -540,7 +540,7 @@ footer .marque{font-family:'Bebas Neue';font-size:1.1rem;letter-spacing:.15em;co
         <p style="margin:4px 0"><span data-i18n="acc.connected">Connected:</span> <b id="auth-qui"></b></p>
         <button type="button" class="btn fantome" onclick="seDeconnecter()" data-i18n="acc.logout">Log out</button>
       </div>
-      <div style="font-size:.66rem;opacity:.5;margin-top:8px">version : COMPTES-59</div>
+      <div style="font-size:.66rem;opacity:.5;margin-top:8px">version : COMPTES-60</div>
     </div>
     <div class="verre" id="dejaFiche" style="display:none;margin-bottom:16px">
       <h3 class="accent" data-i18n="acc.haveCard">Your card is created ✓</h3>
@@ -6494,6 +6494,11 @@ function carteTournee(tr){
           : `<button class="btn-mini" onclick="ouvrirConcertTour('${tr.id}',${i})">${t("x.cOpen")}</button>`}
       </div>
       ${passee?`<div id="photos-${tr.id}-${i}" style="display:${ouverte?"block":"none"};padding:8px 4px 12px">
+        ${(!finie&&dte.setlist)?`<div class="verre" style="margin-bottom:12px">
+          <h3 style="color:var(--rose)">🎶 ${t("x.cSetlist")}</h3>
+          ${dte.setlist.map((ch,n)=>`<div class="setlist-ligne"><span>${n+1}</span><span>${ch}</span></div>`).join("")}
+          ${dte.slNote?`<p style="font-size:.72rem;color:var(--beige);margin:10px 0 0;font-style:italic">✦ ${dte.slNote}</p>`:""}
+        </div>`:""}
         ${carrouselHTML(tr.id+"-"+i)}
         <p style="font-size:.68rem;color:var(--beige);margin:10px 0 8px">${t("x.cPhotosHere")}</p>
         ${carrouselFansHTML(tr.id+"-"+i)}
