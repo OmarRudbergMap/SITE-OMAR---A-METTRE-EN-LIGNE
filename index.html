@@ -541,7 +541,7 @@ footer .marque{font-family:'Bebas Neue';font-size:1.1rem;letter-spacing:.15em;co
         <p style="margin:4px 0"><span data-i18n="acc.connected">Connected:</span> <b id="auth-qui"></b></p>
         <button type="button" class="btn fantome" onclick="seDeconnecter()" data-i18n="acc.logout">Log out</button>
       </div>
-      <div style="font-size:.66rem;opacity:.5;margin-top:8px">version : COMPTES-72</div>
+      <div style="font-size:.66rem;opacity:.5;margin-top:8px">version : COMPTES-73</div>
     </div>
     <div class="verre" id="dejaFiche" style="display:none;margin-bottom:16px">
       <h3 class="accent" data-i18n="acc.haveCard">Your card is created ✓</h3>
@@ -1186,6 +1186,8 @@ const FLAGS={en:"🇬🇧",fr:"🇫🇷",es:"🇪🇸",sv:"🇸🇪",de:"🇩�
 let LANG = "en";
 const I18N = {
 en:{
+  "anv.yourName":"Your name",
+  "anv.needName":"Enter your name first ✦",
   "anv.ph":"Your birthday message…",
   "anv.send":"Send",
   "anv.sent":"Message sent 🎉",
@@ -1392,6 +1394,8 @@ en:{
   "contDetected":(c)=>`Continent detected: <b>${c}</b> 🌍`,"contOther":"We will add your country to the map ✦",
 },
 fr:{
+  "anv.yourName":"Ton prénom",
+  "anv.needName":"Écris ton prénom d'abord ✦",
   "anv.ph":"Ton message d'anniversaire…",
   "anv.send":"Envoyer",
   "anv.sent":"Message envoyé 🎉",
@@ -1683,6 +1687,8 @@ fr:{
   "contDetected":(c)=>`Continent détecté : <b>${c}</b> 🌍`,"contOther":"Nous ajouterons ton pays à la carte ✦",
 },
 es:{
+  "anv.yourName":"Tu nombre",
+  "anv.needName":"Escribe tu nombre primero ✦",
   "anv.ph":"Tu mensaje de cumpleaños…",
   "anv.send":"Enviar",
   "anv.sent":"Mensaje enviado 🎉",
@@ -1942,6 +1948,8 @@ es:{
   "contDetected":(c)=>`Continente detectado: <b>${c}</b> 🌍`,"contOther":"Añadiremos tu país al mapa ✦",
 },
 sv:{
+  "anv.yourName":"Ditt namn",
+  "anv.needName":"Skriv ditt namn först ✦",
   "anv.ph":"Din födelsedagshälsning…",
   "anv.send":"Skicka",
   "anv.sent":"Meddelande skickat 🎉",
@@ -2201,6 +2209,8 @@ sv:{
   "contDetected":(c)=>`Kontinent: <b>${c}</b> 🌍`,"contOther":"Vi lägger till ditt land på kartan ✦",
 },
 de:{
+  "anv.yourName":"Dein Name",
+  "anv.needName":"Gib zuerst deinen Namen ein ✦",
   "anv.ph":"Deine Geburtstagsnachricht…",
   "anv.send":"Senden",
   "anv.sent":"Nachricht gesendet 🎉",
@@ -2460,6 +2470,8 @@ de:{
   "contDetected":(c)=>`Erkannter Kontinent: <b>${c}</b> 🌍`,"contOther":"Wir fügen dein Land der Karte hinzu ✦",
 },
 pt:{
+  "anv.yourName":"O teu nome",
+  "anv.needName":"Escreve o teu nome primeiro ✦",
   "anv.ph":"A tua mensagem de aniversário…",
   "anv.send":"Enviar",
   "anv.sent":"Mensagem enviada 🎉",
@@ -3942,9 +3954,11 @@ function majBanniereAnniv(){
     var lignes = msgs.length
       ? msgs.map(function(m){return '<div class="anv-msg"><b>'+escapeHtmlM(m.pseudo||"✦")+'</b> '+escapeHtmlM(m.texte||"")+'</div>';}).join("")
       : '<div class="anv-vide">'+t("anv.first")+'</div>';
-    var formulaire = connecte
-      ? (fid ? '<div class="anv-form"><input type="text" id="annivInput-'+fid+'" maxlength="220" placeholder="'+t("anv.ph")+'"><button class="btn" onclick="envoyerMessageAnniv(\''+fid+'\')">💌 '+t("anv.send")+'</button></div>' : '')
-      : '<div class="anv-connecte">'+t("prj.needLogin")+'</div>';
+    var formulaire = fid
+      ? (connecte
+          ? '<div class="anv-form"><input type="text" id="annivInput-'+fid+'" maxlength="220" placeholder="'+t("anv.ph")+'"><button class="btn" onclick="envoyerMessageAnniv(\''+fid+'\')">💌 '+t("anv.send")+'</button></div>'
+          : '<div class="anv-form"><input type="text" id="annivNom-'+fid+'" maxlength="40" placeholder="'+t("anv.yourName")+'" style="flex:0 0 130px;min-width:110px"><input type="text" id="annivInput-'+fid+'" maxlength="220" placeholder="'+t("anv.ph")+'"><button class="btn" onclick="envoyerMessageAnniv(\''+fid+'\')">💌 '+t("anv.send")+'</button></div>')
+      : '';
     return '<div class="anv-carte"><div class="anv-nom">🎂 '+escapeHtmlM(fn.prenom||"")+'</div>'+lignes+formulaire+'</div>';
   }).join("") : "";
   el.style.display="";
@@ -3972,10 +3986,20 @@ async function chargerMessagesAnnivSupabase(){
 }
 window.chargerMessagesAnnivSupabase=chargerMessagesAnnivSupabase;
 async function envoyerMessageAnniv(fanId){
-  if(!window.MON_USER || !window.MON_PROFIL_ID){ toast(t("med.needProfile")); return; }
   var el=document.getElementById("annivInput-"+fanId);
   var txt=(el?el.value:"").trim(); if(!txt) return;
-  var champs={ destinataire_fan_id:String(fanId), user_id:window.MON_USER.id, pseudo:(typeof MOI!=="undefined"&&MOI?MOI.prenom:"")||"", texte:txt };
+  var connecte=!!(window.MON_USER && window.MON_PROFIL_ID);
+  var champs={ destinataire_fan_id:String(fanId), texte:txt };
+  if(connecte){
+    champs.user_id=window.MON_USER.id;
+    champs.pseudo=(typeof MOI!=="undefined"&&MOI?MOI.prenom:"")||"";
+  } else {
+    var elN=document.getElementById("annivNom-"+fanId);
+    var nom=(elN?elN.value:"").trim();
+    if(!nom){ toast(t("anv.needName")); return; }
+    champs.user_id=null;
+    champs.pseudo=nom;
+  }
   var r=await window._sb.from("messages_anniv").insert(champs);
   if(r&&r.error){ diag("L'envoi n'a pas fonctionné, réessaie dans un instant ✦",false); console.warn("msg anniv insert:",r.error); return; }
   if(el) el.value="";
