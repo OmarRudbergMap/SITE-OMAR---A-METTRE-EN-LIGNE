@@ -541,7 +541,7 @@ footer .marque{font-family:'Bebas Neue';font-size:1.1rem;letter-spacing:.15em;co
         <p style="margin:4px 0"><span data-i18n="acc.connected">Connected:</span> <b id="auth-qui"></b></p>
         <button type="button" class="btn fantome" onclick="seDeconnecter()" data-i18n="acc.logout">Log out</button>
       </div>
-      <div style="font-size:.66rem;opacity:.5;margin-top:8px">version : COMPTES-73</div>
+      <div style="font-size:.66rem;opacity:.5;margin-top:8px">version : COMPTES-75</div>
     </div>
     <div class="verre" id="dejaFiche" style="display:none;margin-bottom:16px">
       <h3 class="accent" data-i18n="acc.haveCard">Your card is created ✓</h3>
@@ -3758,6 +3758,22 @@ function drapeauISO(code){
   if(!code||code==="XX")return "✦";
   return String.fromCodePoint(...[...code.toUpperCase()].map(c=>0x1F1E6+c.charCodeAt(0)-65));
 }
+/* Vraie image de drapeau (s'affiche partout, y compris sur les ordinateurs Windows
+   qui ne rendent pas les drapeaux emoji). */
+function drapeauImg(code){
+  if(!code||code==="XX") return "✦";
+  var c=String(code).trim().toLowerCase();
+  if(c.length!==2) return "✦";   /* code invalide (ex. "BLR", nom complet) → pas d'image cassée */
+  return '<img src="https://flagcdn.com/20x15/'+c+'.png" width="20" height="15" alt="" loading="lazy" style="vertical-align:-3px;border-radius:2px;box-shadow:0 0 2px rgba(0,0,0,.35)" onerror="this.style.display=\'none\'">';
+}
+window.drapeauImg=drapeauImg;
+/* Nom du pays, sans jamais planter même si le code est mal saisi */
+function nomPaysSafe(code, noms){
+  if(!code) return "";
+  try{ if(noms&&noms.of) return noms.of(code)||code; }catch(e){}
+  return code;
+}
+window.nomPaysSafe=nomPaysSafe;
 /* ---------- BARÈME DE POINTS (validé) ----------
    profil créé +50 · histoire +30 · photo profil +15 · photo de fond +10
    chaque concert +5 · lieu Young Royals +20 · bonus fidélité +50 / année de fan
@@ -3913,7 +3929,7 @@ function toutMettreAJour(anime){
     for(const fn of R){ _pp[fn.code]=(_pp[fn.code]||0)+1; }
     var _arr=Object.entries(_pp).sort(function(a,b){return b[1]-a[1];});
     _lp.innerHTML = _arr.length
-      ? _arr.map(function(e){ return '<span>'+drapeauISO(e[0])+' '+((noms&&noms.of)?noms.of(e[0]):e[0])+' <b>'+e[1]+'</b></span>'; }).join("")
+      ? _arr.map(function(e){ return '<span>'+drapeauImg(e[0])+' '+nomPaysSafe(e[0],noms)+' <b>'+e[1]+'</b></span>'; }).join("")
       : '<span style="color:var(--beige)">—</span>';
   }
   /* redessins */
