@@ -541,7 +541,7 @@ footer .marque{font-family:'Bebas Neue';font-size:1.1rem;letter-spacing:.15em;co
         <p style="margin:4px 0"><span data-i18n="acc.connected">Connected:</span> <b id="auth-qui"></b></p>
         <button type="button" class="btn fantome" onclick="seDeconnecter()" data-i18n="acc.logout">Log out</button>
       </div>
-      <div style="font-size:.66rem;opacity:.5;margin-top:8px">version : COMPTES-80</div>
+      <div style="font-size:.66rem;opacity:.5;margin-top:8px">version : COMPTES-81</div>
     </div>
     <div class="verre" id="dejaFiche" style="display:none;margin-bottom:16px">
       <h3 class="accent" data-i18n="acc.haveCard">Your card is created ✓</h3>
@@ -972,6 +972,8 @@ footer .marque{font-family:'Bebas Neue';font-size:1.1rem;letter-spacing:.15em;co
   <p style="margin-top:4px;font-size:.62rem;letter-spacing:.18em;text-transform:uppercase;color:var(--rose)">🤝 <span data-i18n="foot.partner">Partner of the O.R. WORLD ASSOCIATION</span></p>
   <p style="margin-top:8px"><a href="https://www.orworldassociation.com/adh%C3%A9sions-dons-contact" target="_blank" rel="noopener" style="color:var(--bordeaux);text-decoration:none">❤️ orworldassociation.com · <span data-i18n="x.asDon">Make a donation</span> · <span data-i18n="x.asJoin">Become a member</span> · <span data-i18n="x.asShop">Official merch</span></a></p>
   <p style="margin-top:6px" data-i18n="foot.l1">Together, let's draw the biggest worldwide map of Omar Rudberg's fans.</p>
+  <p style="margin-top:10px;font-size:.72rem;color:var(--beige)">📷 <span data-i18n="foot.instaContact">To contact me on Instagram:</span> <a href="https://www.instagram.com/omarrudberg_world/" target="_blank" rel="noopener" style="color:var(--rose);text-decoration:none;font-weight:600">@omarrudberg_world</a></p>
+  <p style="margin-top:2px;font-size:.72rem;color:var(--beige)">📷 <span data-i18n="foot.instaAsso">The association's Instagram:</span> <a href="https://www.instagram.com/or.world.association/" target="_blank" rel="noopener" style="color:var(--rose);text-decoration:none;font-weight:600">@or.world.association</a></p>
   <p style="margin-top:8px;opacity:.7" data-i18n="foot.l2"></p>
   <p style="margin-top:10px;font-size:.66rem;opacity:.8;max-width:520px;margin-left:auto;margin-right:auto" data-i18n-html="notice.medias">The photos and videos on this site do not belong to me, they are shared by the fan community. If you are the author and would like your name added, or your content removed, please contact me and I'll take care of it right away. 💛</p>
   <p style="margin-top:10px"><a href="#guide" onclick="allerA('guide');return false" style="color:var(--rose);text-decoration:underline;font-size:.7rem" data-i18n="nav.guide">Guide des fans</a> · <a href="#confidentialite" onclick="allerA('confidentialite');return false" style="color:var(--rose);text-decoration:underline;font-size:.7rem" data-i18n="foot.privacy">Privacy policy</a></p>
@@ -1186,6 +1188,8 @@ const FLAGS={en:"🇬🇧",fr:"🇫🇷",es:"🇪🇸",sv:"🇸🇪",de:"🇩�
 let LANG = "en";
 const I18N = {
 en:{
+  "foot.instaContact":"To contact me on Instagram:",
+  "foot.instaAsso":"The association's Instagram:",
   "po.needLogin":"Log in (in the Fan Space) to share your sentence 💛",
   "po.loginBtn":"Go to the Fan Space",
   "anv.yourName":"Your name",
@@ -1396,6 +1400,8 @@ en:{
   "contDetected":(c)=>`Continent detected: <b>${c}</b> 🌍`,"contOther":"We will add your country to the map ✦",
 },
 fr:{
+  "foot.instaContact":"Pour me contacter sur Instagram :",
+  "foot.instaAsso":"Instagram de l'association :",
   "po.needLogin":"Connecte-toi (dans l'Espace Fan) pour laisser ta phrase 💛",
   "po.loginBtn":"Aller à l'Espace Fan",
   "anv.yourName":"Ton prénom",
@@ -1691,6 +1697,8 @@ fr:{
   "contDetected":(c)=>`Continent détecté : <b>${c}</b> 🌍`,"contOther":"Nous ajouterons ton pays à la carte ✦",
 },
 es:{
+  "foot.instaContact":"Para contactarme en Instagram:",
+  "foot.instaAsso":"Instagram de la asociación:",
   "po.needLogin":"Inicia sesión (en el Espacio Fan) para dejar tu frase 💛",
   "po.loginBtn":"Ir al Espacio Fan",
   "anv.yourName":"Tu nombre",
@@ -1954,6 +1962,8 @@ es:{
   "contDetected":(c)=>`Continente detectado: <b>${c}</b> 🌍`,"contOther":"Añadiremos tu país al mapa ✦",
 },
 sv:{
+  "foot.instaContact":"Kontakta mig på Instagram:",
+  "foot.instaAsso":"Föreningens Instagram:",
   "po.needLogin":"Logga in (i Fan Space) för att dela din mening 💛",
   "po.loginBtn":"Till Fan Space",
   "anv.yourName":"Ditt namn",
@@ -2217,6 +2227,8 @@ sv:{
   "contDetected":(c)=>`Kontinent: <b>${c}</b> 🌍`,"contOther":"Vi lägger till ditt land på kartan ✦",
 },
 de:{
+  "foot.instaContact":"Um mich auf Instagram zu kontaktieren:",
+  "foot.instaAsso":"Instagram des Vereins:",
   "po.needLogin":"Melde dich an (im Fan Space), um deinen Satz zu teilen 💛",
   "po.loginBtn":"Zum Fan Space",
   "anv.yourName":"Dein Name",
@@ -2480,6 +2492,8 @@ de:{
   "contDetected":(c)=>`Erkannter Kontinent: <b>${c}</b> 🌍`,"contOther":"Wir fügen dein Land der Karte hinzu ✦",
 },
 pt:{
+  "foot.instaContact":"Para me contactar no Instagram:",
+  "foot.instaAsso":"Instagram da associação:",
   "po.needLogin":"Inicia sessão (no Espaço Fã) para deixar a tua frase 💛",
   "po.loginBtn":"Ir para o Espaço Fã",
   "anv.yourName":"O teu nome",
