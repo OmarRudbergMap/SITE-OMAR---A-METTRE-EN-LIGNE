@@ -541,7 +541,7 @@ footer .marque{font-family:'Bebas Neue';font-size:1.1rem;letter-spacing:.15em;co
         <p style="margin:4px 0"><span data-i18n="acc.connected">Connected:</span> <b id="auth-qui"></b></p>
         <button type="button" class="btn fantome" onclick="seDeconnecter()" data-i18n="acc.logout">Log out</button>
       </div>
-      <div style="font-size:.66rem;opacity:.5;margin-top:8px">version : COMPTES-68</div>
+      <div style="font-size:.66rem;opacity:.5;margin-top:8px">version : COMPTES-69</div>
     </div>
     <div class="verre" id="dejaFiche" style="display:none;margin-bottom:16px">
       <h3 class="accent" data-i18n="acc.haveCard">Your card is created ✓</h3>
@@ -1186,6 +1186,8 @@ const FLAGS={en:"🇬🇧",fr:"🇫🇷",es:"🇪🇸",sv:"🇸🇪",de:"🇩�
 let LANG = "en";
 const I18N = {
 en:{
+  "fmod.title":"New fans to review",
+  "fmod.intro":"Approve or reject new sign-ups. Once approved, the fan appears on the map.",
   "nav.pourquoi":"Why I love Omar",
   "po.eyebrow":"The wall of hearts",
   "po.title":"Why do you love Omar?",
@@ -1385,6 +1387,8 @@ en:{
   "contDetected":(c)=>`Continent detected: <b>${c}</b> 🌍`,"contOther":"We will add your country to the map ✦",
 },
 fr:{
+  "fmod.title":"Nouveaux fans à valider",
+  "fmod.intro":"Approuve ou refuse les nouvelles inscriptions. Une fois validé, le fan apparaît sur la carte.",
   "nav.pourquoi":"Pourquoi j'aime Omar",
   "po.eyebrow":"Le mur des cœurs",
   "po.title":"Pourquoi aimes-tu Omar ?",
@@ -1669,6 +1673,8 @@ fr:{
   "contDetected":(c)=>`Continent détecté : <b>${c}</b> 🌍`,"contOther":"Nous ajouterons ton pays à la carte ✦",
 },
 es:{
+  "fmod.title":"Nuevos fans por validar",
+  "fmod.intro":"Aprueba o rechaza las nuevas inscripciones. Una vez validado, el fan aparece en el mapa.",
   "nav.pourquoi":"Por qué quiero a Omar",
   "po.eyebrow":"El muro de los corazones",
   "po.title":"¿Por qué quieres a Omar?",
@@ -1921,6 +1927,8 @@ es:{
   "contDetected":(c)=>`Continente detectado: <b>${c}</b> 🌍`,"contOther":"Añadiremos tu país al mapa ✦",
 },
 sv:{
+  "fmod.title":"Nya fans att granska",
+  "fmod.intro":"Godkänn eller avvisa nya registreringar. När det godkänts visas fanet på kartan.",
   "nav.pourquoi":"Varför jag älskar Omar",
   "po.eyebrow":"Hjärteväggen",
   "po.title":"Varför älskar du Omar?",
@@ -2173,6 +2181,8 @@ sv:{
   "contDetected":(c)=>`Kontinent: <b>${c}</b> 🌍`,"contOther":"Vi lägger till ditt land på kartan ✦",
 },
 de:{
+  "fmod.title":"Neue Fans zu prüfen",
+  "fmod.intro":"Genehmige oder lehne neue Anmeldungen ab. Nach der Freigabe erscheint der Fan auf der Karte.",
   "nav.pourquoi":"Warum ich Omar liebe",
   "po.eyebrow":"Die Wand der Herzen",
   "po.title":"Warum liebst du Omar?",
@@ -2425,6 +2435,8 @@ de:{
   "contDetected":(c)=>`Erkannter Kontinent: <b>${c}</b> 🌍`,"contOther":"Wir fügen dein Land der Karte hinzu ✦",
 },
 pt:{
+  "fmod.title":"Novos fãs para validar",
+  "fmod.intro":"Aprova ou rejeita as novas inscrições. Depois de validado, o fã aparece no mapa.",
   "nav.pourquoi":"Porque amo o Omar",
   "po.eyebrow":"O mural dos corações",
   "po.title":"Porque amas o Omar?",
@@ -7932,20 +7944,70 @@ function rendreModeration(){
     ? '<div class="verre" style="margin-top:14px;border-color:var(--bordeaux)"><h3 style="color:var(--rose)">🏆 '+t("aw.modTitle")+' ('+awAtt.length+')</h3>'
       +'<p style="font-size:.78rem;color:var(--beige)">'+t("aw.modIntro")+'</p>'+awAtt.map(unItemAwardModo).join("")+'</div>'
     : '';
+  var fansAtt=window.FANS_MODERER||[];
+  var htmlFans = fansAtt.length
+    ? '<div class="verre" style="margin-top:12px;border-color:var(--bordeaux)"><h3 style="color:var(--rose)">🧍 '+t("fmod.title")+' ('+fansAtt.length+')</h3>'
+      +'<p style="font-size:.78rem;color:var(--beige)">'+t("fmod.intro")+'</p>'+fansAtt.map(unItemFanModo).join("")+'</div>'
+    : '';
   s.innerHTML='<p class="eyebrow">🛡️ '+t("med.nav")+'</p><h2>'+t("med.modTitle")+'</h2>'
+    +htmlFans
     +'<div class="verre" style="margin-top:12px;border-color:var(--bordeaux)">'
     +'<h3 style="color:var(--rose)">⏳ '+t("med.modSection")+' ('+enAttente.length+')</h3>'
     +'<p style="font-size:.78rem;color:var(--beige)">'+t("med.modIntro")+'</p>'
     +htmlAttente+'</div>'+htmlProjets+htmlAwards+htmlTraites;
 }
 window.rendreModeration=rendreModeration;
+/* ===== Modération des NOUVEAUX FANS (réservé admin) ===== */
+window.FANS_MODERER=[];
+async function chargerFansModeration(){
+  if(!window._sb || !(typeof estAdmin==="function" && estAdmin())) return;
+  try{
+    var r=await window._sb.from("fans").select("id,pseudo,ville,pays,date_naissance,chanson,insta,annee,photo,user_id").eq("valide",false).eq("rejete",false).order("id",{ascending:true});
+    if(!r.error){ window.FANS_MODERER=r.data||[]; }
+    else console.warn("fans modo:",r.error);
+    if(window.rendreModeration) rendreModeration();
+    if(window.majAccesAdmin) majAccesAdmin();
+  }catch(e){ console.warn("fans modo:",e); }
+}
+window.chargerFansModeration=chargerFansModeration;
+async function approuverFan(id){
+  var r=await window._sb.from("fans").update({valide:true,rejete:false}).eq("id",id);
+  if(r&&r.error){ diag("Action impossible ✦",false); console.warn(r.error); return; }
+  toast(t("med.approved"));
+  chargerFansModeration();
+  if(window.chargerFansSupabase) chargerFansSupabase();
+}
+window.approuverFan=approuverFan;
+async function rejeterFan(id){
+  var r=await window._sb.from("fans").update({rejete:true}).eq("id",id);
+  if(r&&r.error){ diag("Action impossible ✦",false); console.warn(r.error); return; }
+  toast(t("med.rejected"));
+  chargerFansModeration();
+}
+window.rejeterFan=rejeterFan;
+function unItemFanModo(f){
+  var noms=(typeof nomsRegion==="function")?nomsRegion():null;
+  var pays=(noms&&noms.of&&f.pays)?noms.of(f.pays):(f.pays||"");
+  var drap=(typeof drapeauISO==="function")?drapeauISO(f.pays||"XX"):"";
+  var vign = f.photo
+    ? '<div class="mod-img" style="background-image:url('+f.photo+')"></div>'
+    : '<div class="mod-img" style="display:flex;align-items:center;justify-content:center;font-size:22px">🧍</div>';
+  var infos='<b>'+escapeHtmlM(f.pseudo||"Fan")+'</b>'
+    +'<span>'+drap+' '+escapeHtmlM(f.ville||"")+(pays?' · '+escapeHtmlM(pays):'')+(f.annee?' · '+escapeHtmlM(String(f.annee)):'')+'</span>'
+    +(f.chanson?'<span>🎵 '+escapeHtmlM(f.chanson)+'</span>':'')
+    +(f.insta?'<span>📷 @'+escapeHtmlM(String(f.insta).replace(/^@/,""))+'</span>':'');
+  return '<div class="mod-item">'+vign+'<div class="mod-info" style="flex:1">'+infos+'</div>'
+    +'<div class="mod-btns"><button class="btn" onclick="approuverFan('+f.id+')">✅ '+t("med.approve")+'</button>'
+    +'<button class="btn fantome" onclick="rejeterFan('+f.id+')">✕ '+t("med.reject")+'</button></div></div>';
+}
+window.unItemFanModo=unItemFanModo;
 /* Affiche/masque l'onglet Modération + la pastille du nombre en attente, selon admin */
 function majAccesAdmin(){
   var lien=document.getElementById("lienModeration"); if(!lien) return;
   var admin=(typeof estAdmin==="function" && estAdmin());
   lien.style.display=admin?"":"none";
   var badge=document.getElementById("badgeModeration");
-  var n=(window.MEDIAS_MODERER||[]).length+(window.PROJETS_MODERER||[]).length+(window.AWARDS_MODERER||[]).length;
+  var n=(window.MEDIAS_MODERER||[]).length+(window.PROJETS_MODERER||[]).length+(window.AWARDS_MODERER||[]).length+(window.FANS_MODERER||[]).length;
   if(badge){ if(admin && n>0){ badge.style.display=""; badge.textContent=n; } else { badge.style.display="none"; } }
   if(admin) rendreModeration();
 }
@@ -9272,6 +9334,7 @@ function majPanneauCompte(session){
     if(window.chargerProjetsSupabase) chargerProjetsSupabase();
     if(window.chargerAwardsSupabase) chargerAwardsSupabase();
     if(window.chargerPourquoiSupabase) chargerPourquoiSupabase();
+    if(window.chargerFansModeration) chargerFansModeration();
     if(window.chargerInteractionsSupabase) chargerInteractionsSupabase();
     
     if(window.chargerParticipationsSupabase) chargerParticipationsSupabase();
