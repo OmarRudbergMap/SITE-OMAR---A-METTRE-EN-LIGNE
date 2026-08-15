@@ -540,7 +540,7 @@ footer .marque{font-family:'Bebas Neue';font-size:1.1rem;letter-spacing:.15em;co
         <p style="margin:4px 0"><span data-i18n="acc.connected">Connected:</span> <b id="auth-qui"></b></p>
         <button type="button" class="btn fantome" onclick="seDeconnecter()" data-i18n="acc.logout">Log out</button>
       </div>
-      <div style="font-size:.66rem;opacity:.5;margin-top:8px">version : COMPTES-57</div>
+      <div style="font-size:.66rem;opacity:.5;margin-top:8px">version : COMPTES-58</div>
     </div>
     <div class="verre" id="dejaFiche" style="display:none;margin-bottom:16px">
       <h3 class="accent" data-i18n="acc.haveCard">Your card is created ✓</h3>
@@ -1158,6 +1158,7 @@ const FLAGS={en:"🇬🇧",fr:"🇫🇷",es:"🇪🇸",sv:"🇸🇪",de:"🇩�
 let LANG = "en";
 const I18N = {
 en:{
+  "med.needFileOrLink":"Add a photo (file) or a video link",
   "med.typeYR":"Young Royals location",
   "gal.fYR":"👑 Young Royals",
   "yr.title":"👑 Young Royals",
@@ -1327,6 +1328,7 @@ en:{
   "contDetected":(c)=>`Continent detected: <b>${c}</b> 🌍`,"contOther":"We will add your country to the map ✦",
 },
 fr:{
+  "med.needFileOrLink":"Ajoute une photo (fichier) ou un lien vidéo",
   "med.typeYR":"Lieu Young Royals",
   "gal.fYR":"👑 Young Royals",
   "yr.title":"👑 Young Royals",
@@ -1581,6 +1583,7 @@ fr:{
   "contDetected":(c)=>`Continent détecté : <b>${c}</b> 🌍`,"contOther":"Nous ajouterons ton pays à la carte ✦",
 },
 es:{
+  "med.needFileOrLink":"Añade una foto (archivo) o un enlace de vídeo",
   "med.typeYR":"Lugar de Young Royals",
   "gal.fYR":"👑 Young Royals",
   "yr.title":"👑 Young Royals",
@@ -1803,6 +1806,7 @@ es:{
   "contDetected":(c)=>`Continente detectado: <b>${c}</b> 🌍`,"contOther":"Añadiremos tu país al mapa ✦",
 },
 sv:{
+  "med.needFileOrLink":"Lägg till ett foto (fil) eller en videolänk",
   "med.typeYR":"Young Royals-plats",
   "gal.fYR":"👑 Young Royals",
   "yr.title":"👑 Young Royals",
@@ -2025,6 +2029,7 @@ sv:{
   "contDetected":(c)=>`Kontinent: <b>${c}</b> 🌍`,"contOther":"Vi lägger till ditt land på kartan ✦",
 },
 de:{
+  "med.needFileOrLink":"Füge ein Foto (Datei) oder einen Videolink hinzu",
   "med.typeYR":"Young-Royals-Drehort",
   "gal.fYR":"👑 Young Royals",
   "yr.title":"👑 Young Royals",
@@ -2247,6 +2252,7 @@ de:{
   "contDetected":(c)=>`Erkannter Kontinent: <b>${c}</b> 🌍`,"contOther":"Wir fügen dein Land der Karte hinzu ✦",
 },
 pt:{
+  "med.needFileOrLink":"Adiciona uma foto (ficheiro) ou um link de vídeo",
   "med.typeYR":"Local de Young Royals",
   "gal.fYR":"👑 Young Royals",
   "yr.title":"👑 Young Royals",
@@ -3804,7 +3810,8 @@ document.querySelectorAll("#filtresAnnee .puce").forEach(p=>{
 function tuileGalerie(m){
   var an=(m.cree_le?String(m.cree_le).slice(0,4):"");
   var ig=(typeof instaDuMedia==="function")?instaDuMedia(m):null;
-  var media = m.type==="video"
+  var estLien = (m.type==="video") || (m.lien && !m.contenu);   /* vidéo classique OU lien (ex : vidéo YR par Instagram) */
+  var media = estLien
     ? '<a href="'+escapeHtmlM(m.lien||"#")+'" target="_blank" rel="noopener" class="tuile-video"><span class="picto">🎬</span><span class="type">▶</span></a>'
     : '<div class="tuile-img" style="background-image:url('+(m.contenu||"")+')"></div>';
   var tagInner=iconeType(m.type)+(m.legende?' '+escapeHtmlM(m.legende):'');
@@ -7186,7 +7193,7 @@ const ADMIN_EMAIL="elisabeth.sikora@orange.fr";
 function estAdmin(){ return !!(window.MON_USER && String(window.MON_USER.email||"").toLowerCase()===ADMIN_EMAIL); }
 window.MEDIAS_VALIDES=[]; window.MES_MEDIAS=[]; window.MEDIAS_MODERER=[];
 function escapeHtmlM(x){ return String(x==null?"":x).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c];}); }
-function iconeType(ty){ return ty==="dessin"?"🎨":ty==="selfie"?"🤳":ty==="video"?"🎬":"📸"; }
+function iconeType(ty){ return ty==="dessin"?"🎨":ty==="selfie"?"🤳":ty==="yr"?"👑":ty==="video"?"🎬":"📸"; }
 /* Liste déroulante des concerts (passés) pour rattacher un visuel à un concert précis */
 function optionsConcertsMedia(sel){
   sel=sel||"";
@@ -7405,6 +7412,12 @@ async function envoyerMedia(){
     var lien=(document.getElementById("med-lien").value||"").trim();
     if(!lien){ toast(t("med.needLink")); return; }
     champs.lien=lien;
+  } else if(type==="yr"){
+    var lienY=(document.getElementById("med-lien").value||"").trim();
+    var fY=document.getElementById("med-fichier").files[0];
+    if(lienY){ champs.lien=lienY; }                 /* vidéo Instagram du lieu */
+    else if(fY){ champs.contenu=await lireImage(fY,1100,.82); }  /* photo du lieu */
+    else { toast(t("med.needFileOrLink")); return; }
   } else {
     var f=document.getElementById("med-fichier").files[0];
     if(!f){ toast(t("med.needFile")); return; }
@@ -7431,10 +7444,11 @@ async function rejeterMedia(id){
 }
 function majFormMedia(){
   var ty=document.getElementById("med-type"); if(!ty)return;
-  var estVideo=ty.value==="video";
+  var v=ty.value, estVideo=(v==="video"), estYR=(v==="yr");
   var zf=document.getElementById("med-zone-fichier"), zl=document.getElementById("med-zone-lien");
+  /* fichier : caché pour vidéo (photo/dessin/selfie/YR l'affichent). Lien : affiché pour vidéo ET Young Royals (vidéo Instagram). */
   if(zf) zf.style.display=estVideo?"none":"";
-  if(zl) zl.style.display=estVideo?"":"none";
+  if(zl) zl.style.display=(estVideo||estYR)?"":"none";
 }
 async function retirerMedia(id){
   var r=await window._sb.from("medias").update({valide:false,rejete:true}).eq("id",id);
@@ -7499,7 +7513,7 @@ function majAccesAdmin(){
 window.majAccesAdmin=majAccesAdmin;
 function miniMedia(m, showStatus){
   var inner;
-  if(m.type==="video"){ inner='<a href="'+escapeHtmlM(m.lien||"#")+'" target="_blank" rel="noopener" class="mm-video">🎬</a>'; }
+  if(m.type==="video" || (m.lien && !m.contenu)){ inner='<a href="'+escapeHtmlM(m.lien||"#")+'" target="_blank" rel="noopener" class="mm-video">🎬</a>'; }
   else { inner='<div class="mm-img" style="background-image:url('+(m.contenu||"")+')"></div>'; }
   var statut = showStatus ? '<span class="mm-statut '+(m.valide?"ok":"att")+'">'+(m.valide?t("med.validated"):t("med.pending"))+'</span>' : '';
   /* bouton retirer : sur ses propres envois, ou pour l'admin sur n'importe quel visuel */
