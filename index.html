@@ -541,7 +541,7 @@ footer .marque{font-family:'Bebas Neue';font-size:1.1rem;letter-spacing:.15em;co
         <p style="margin:4px 0"><span data-i18n="acc.connected">Connected:</span> <b id="auth-qui"></b></p>
         <button type="button" class="btn fantome" onclick="seDeconnecter()" data-i18n="acc.logout">Log out</button>
       </div>
-      <div style="font-size:.66rem;opacity:.5;margin-top:8px">version : COMPTES-67</div>
+      <div style="font-size:.66rem;opacity:.5;margin-top:8px">version : COMPTES-68</div>
     </div>
     <div class="verre" id="dejaFiche" style="display:none;margin-bottom:16px">
       <h3 class="accent" data-i18n="acc.haveCard">Your card is created ✓</h3>
@@ -717,6 +717,14 @@ footer .marque{font-family:'Bebas Neue';font-size:1.1rem;letter-spacing:.15em;co
   <section>
     <p class="eyebrow" data-i18n="po.eyebrow">The wall of hearts</p>
     <h2 data-i18n="po.title">Why do you love Omar?</h2>
+    <div class="polaroids" aria-hidden="true">
+      <div class="polaroid"><img src="photos/PQ_POLA1.webp" alt="" loading="lazy"></div>
+      <div class="polaroid"><img src="photos/PQ_POLA2.webp" alt="" loading="lazy"></div>
+      <div class="polaroid"><img src="photos/PQ_POLA3.webp" alt="" loading="lazy"></div>
+      <div class="polaroid"><img src="photos/PQ_POLA4.webp" alt="" loading="lazy"></div>
+      <div class="polaroid"><img src="photos/PQ_POLA5.webp" alt="" loading="lazy"></div>
+      <div class="polaroid"><img src="photos/PQ_POLA6.webp" alt="" loading="lazy"></div>
+    </div>
     <p class="citation" style="margin:12px 0 16px" data-i18n="po.intro">In just one sentence, say why Omar matters to you.</p>
     <div id="pourquoiForm"></div>
     <div id="murPourquoi" style="margin-top:16px"></div>
@@ -1015,9 +1023,17 @@ const OMAR_POLA4="photos/OMAR_POLA4.webp"
 const OMAR_POLA5="photos/OMAR_POLA5.webp"
 const OMAR_POLA6="photos/OMAR_POLA6.webp"
 const POLAROIDS_OMAR=[OMAR_POLA1,OMAR_POLA2,OMAR_POLA3,OMAR_POLA4,OMAR_POLA5,OMAR_POLA6]
+/* ---- Polaroids de la page « Pourquoi j'aime Omar » · Rix Festival Stockholm 12.08.2026 ---- */
+const PQ_POLA1="photos/PQ_POLA1.webp";
+const PQ_POLA2="photos/PQ_POLA2.webp";
+const PQ_POLA3="photos/PQ_POLA3.webp";
+const PQ_POLA4="photos/PQ_POLA4.webp";
+const PQ_POLA5="photos/PQ_POLA5.webp";
+const PQ_POLA6="photos/PQ_POLA6.webp";
+const POLAROIDS_POURQUOI=[PQ_POLA1,PQ_POLA2,PQ_POLA3,PQ_POLA4,PQ_POLA5,PQ_POLA6];
 /* Archive des photos d'Omar POUR LE PASSEPORT : les nouvelles s'AJOUTENT (les anciennes restent).
    Sur le site (onglet Omar) seules les 6 dernières (POLAROIDS_OMAR) s'affichent. */
-const OMAR_PASSEPORT_PHOTOS=[OMAR_POLA1,OMAR_POLA2,OMAR_POLA3,OMAR_POLA4,OMAR_POLA5,OMAR_POLA6];
+const OMAR_PASSEPORT_PHOTOS=[OMAR_POLA1,OMAR_POLA2,OMAR_POLA3,OMAR_POLA4,OMAR_POLA5,OMAR_POLA6,PQ_POLA1,PQ_POLA2,PQ_POLA3,PQ_POLA4,PQ_POLA5,PQ_POLA6];
 
 /* ---- Vignettes photos des chansons · fournies par la modératrice ----
    1 photo par chanson (série complète intégrée le 20.07) · ajouter ici les prochaines :
