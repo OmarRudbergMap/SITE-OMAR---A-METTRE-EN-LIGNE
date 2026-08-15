@@ -540,7 +540,7 @@ footer .marque{font-family:'Bebas Neue';font-size:1.1rem;letter-spacing:.15em;co
         <p style="margin:4px 0"><span data-i18n="acc.connected">Connected:</span> <b id="auth-qui"></b></p>
         <button type="button" class="btn fantome" onclick="seDeconnecter()" data-i18n="acc.logout">Log out</button>
       </div>
-      <div style="font-size:.66rem;opacity:.5;margin-top:8px">version : COMPTES-62</div>
+      <div style="font-size:.66rem;opacity:.5;margin-top:8px">version : COMPTES-63</div>
     </div>
     <div class="verre" id="dejaFiche" style="display:none;margin-bottom:16px">
       <h3 class="accent" data-i18n="acc.haveCard">Your card is created ✓</h3>
@@ -688,7 +688,7 @@ footer .marque{font-family:'Bebas Neue';font-size:1.1rem;letter-spacing:.15em;co
     <p id="galerieVide" style="display:none;font-size:.85rem;color:var(--beige);text-align:center;margin:16px 0" data-i18n="gal.empty">Les photos et vidéos des fans apparaîtront ici après validation ✦</p>
     <p style="font-size:.72rem;color:var(--beige);margin-top:14px;text-align:center" data-i18n="gal.note">✦ These are the real photos and videos shared by fans, once validated. Send yours with the button below (no AI-generated images).</p>
     <p style="font-size:.78rem;color:var(--bordeaux);background:#fdeef3;border-radius:12px;padding:10px 14px;margin-top:10px;text-align:center" data-i18n="gal.videolink">🎬 For videos: don't upload a file from your phone (too heavy). Just paste the link to your video from Instagram, TikTok or YouTube, it will appear here. Photos, on the other hand, can be sent directly as image files.</p>
-    <button class="btn fantome btn-large" style="margin-top:10px" onclick="allerA('inscription')" data-i18n="gal.send">Send my photos & videos</button>
+    <button class="btn fantome btn-large" style="margin-top:10px" onclick="allerEnvoiMedia()" data-i18n="gal.send">Send my photos & videos</button>
   </section>
 </div>
 
@@ -2552,6 +2552,19 @@ function allerA(p,sansScroll){
   try{ if(location.hash !== "#"+p) history.replaceState(null,"","#"+p); }catch(e){} /* interdit dans certains aperçus sandbox */
   if(p==="inscription"){ requestAnimationFrame(dessinerCartePlate); requestAnimationFrame(function(){ if(window.majPickerReg) majPickerReg(false); }); }
 }
+/* Va directement au formulaire d'envoi de photos/vidéos (Espace Fan), sans repasser tout en haut.
+   Si le fan n'a pas encore de profil, le bloc n'existe pas → on l'amène en haut de l'Espace Fan pour se connecter/créer sa fiche. */
+function allerEnvoiMedia(){
+  allerA('inscription', true);
+  var essais=0;
+  (function viser(){
+    var el=document.getElementById('bloc-envoi-media');
+    if(el){ el.scrollIntoView({behavior:'smooth', block:'start'}); return; }
+    if(++essais<12){ setTimeout(viser,80); return; }
+    window.scrollTo({top:0, behavior:'smooth'});
+  })();
+}
+window.allerEnvoiMedia=allerEnvoiMedia;
 function majPickerReg(reinit){
   if(reinit) window.POS_INSCRIPTION=null;
   if(!document.getElementById("reg-picker")) return;
@@ -7819,7 +7832,7 @@ function rendreProfil(){
       +'<span>'+t("form.yr")+'</span></label>'
       +'</div>' : '';
   /* --- Médias (photos/vidéos) : modération (admin), envoi, galerie --- */
-  var htmlMesMedias = window.MON_PROFIL_ID ? `<div class="verre" style="margin-top:14px">
+  var htmlMesMedias = window.MON_PROFIL_ID ? `<div class="verre" id="bloc-envoi-media" style="margin-top:14px;scroll-margin-top:70px">
       <h3 style="color:var(--rose)">📸 ${t("med.title")}</h3>
       <p style="font-size:.78rem;color:var(--beige)">${t("med.intro")}</p>
       <select id="med-type" onchange="majFormMedia()" style="width:100%;margin-top:10px">
