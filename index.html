@@ -541,7 +541,7 @@ footer .marque{font-family:'Bebas Neue';font-size:1.1rem;letter-spacing:.15em;co
         <p style="margin:4px 0"><span data-i18n="acc.connected">Connected:</span> <b id="auth-qui"></b></p>
         <button type="button" class="btn fantome" onclick="seDeconnecter()" data-i18n="acc.logout">Log out</button>
       </div>
-      <div style="font-size:.66rem;opacity:.5;margin-top:8px">version : COMPTES-77</div>
+      <div style="font-size:.66rem;opacity:.5;margin-top:8px">version : COMPTES-78</div>
     </div>
     <div class="verre" id="dejaFiche" style="display:none;margin-bottom:16px">
       <h3 class="accent" data-i18n="acc.haveCard">Your card is created ✓</h3>
@@ -4324,10 +4324,10 @@ window.traduirePhrase=traduirePhrase;
 (function(){ try{ var s=document.createElement("style");
   s.textContent=`.nav-neuf{background:var(--bordeaux);color:#fff;font-size:.5rem;padding:1px 6px;border-radius:8px;letter-spacing:.06em;text-transform:uppercase;margin-left:6px;vertical-align:middle}
 .mur-pourquoi{display:grid;grid-template-columns:repeat(auto-fill,minmax(238px,1fr));gap:14px;margin-top:8px}
-.carte-pourquoi{margin:0;position:relative;background:linear-gradient(155deg,rgba(239,143,176,.15),rgba(179,53,51,.07));border:1px solid var(--verre-bord);border-radius:16px;padding:24px 18px 12px;overflow:hidden}
+.carte-pourquoi{margin:0;position:relative;display:flex;flex-direction:column;min-height:150px;background:linear-gradient(155deg,rgba(239,143,176,.15),rgba(179,53,51,.07));border:1px solid var(--verre-bord);border-radius:16px;padding:24px 18px 12px;overflow:hidden}
 .carte-pourquoi::before{content:"“";position:absolute;top:2px;left:12px;font-family:Georgia,serif;font-size:46px;line-height:1;color:var(--rose);opacity:.5}
 .carte-pourquoi blockquote{margin:0;font-size:.98rem;line-height:1.55;color:var(--blanc);font-style:italic}
-.cp-actions{display:flex;justify-content:flex-end;align-items:center;gap:8px;margin-top:12px}
+.cp-actions{display:flex;justify-content:flex-end;align-items:center;gap:8px;margin-top:auto;padding-top:12px}
 .cp-trad{background:none;border:none;color:var(--rose);font-size:.7rem;cursor:pointer;padding:0}
 .cp-suppr{background:none;border:none;color:var(--beige);font-size:.82rem;cursor:pointer;padding:0}`;
   document.head.appendChild(s); }catch(e){} })();
