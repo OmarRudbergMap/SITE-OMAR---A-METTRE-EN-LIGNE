@@ -448,11 +448,12 @@ footer .marque{font-family:'Bebas Neue';font-size:1.1rem;letter-spacing:.15em;co
   <a href="#inscription" data-page="inscription"><span class="num">03</span> <span data-i18n="nav.join">Fan Space</span></a>
   <a href="#histoires" data-page="histoires"><span class="num">04</span> <span data-i18n="nav.stories">Fan stories</span></a>
   <a href="#pourquoi" data-page="pourquoi"><span class="num">05</span> <span data-i18n="nav.pourquoi">Why I love Omar</span><span class="nav-neuf" id="badgePourquoiNav" data-i18n="q.new" style="display:none">Nouveau</span></a>
-  <a href="#concerts" data-page="concerts"><span class="num">06</span> <span data-i18n="nav.concerts">Concerts & Festivals</span></a>
-  <a href="#galerie" data-page="galerie"><span class="num">07</span> <span data-i18n="nav.gallery">Photos & Videos</span></a>
-  <a href="#projets" data-page="projets"><span class="num">08</span> <span data-i18n="nav.projects">Fan Projects</span></a>
-  <a href="#awards" data-page="awards"><span class="num">09</span> <span data-i18n="nav.awards">Awards</span></a>
-  <a href="#guide" data-page="guide"><span class="num">10</span> <span data-i18n="nav.guide">Guide des fans</span></a>
+  <a href="#blindtest" data-page="blindtest"><span class="num">06</span> <span data-i18n="nav.blindtest">Blind Test</span><span class="nav-neuf" id="badgeBlindtestNav" data-i18n="q.new" style="display:none">Nouveau</span></a>
+  <a href="#concerts" data-page="concerts"><span class="num">07</span> <span data-i18n="nav.concerts">Concerts & Festivals</span></a>
+  <a href="#galerie" data-page="galerie"><span class="num">08</span> <span data-i18n="nav.gallery">Photos & Videos</span></a>
+  <a href="#projets" data-page="projets"><span class="num">09</span> <span data-i18n="nav.projects">Fan Projects</span></a>
+  <a href="#awards" data-page="awards"><span class="num">10</span> <span data-i18n="nav.awards">Awards</span></a>
+  <a href="#guide" data-page="guide"><span class="num">11</span> <span data-i18n="nav.guide">Guide des fans</span></a>
   <a href="#moderation" data-page="moderation" id="lienModeration" style="display:none;color:var(--rose)">🛡️ <span data-i18n="nav.moderation">Moderation</span> <span id="badgeModeration" class="badge-modo" style="display:none">0</span></a>
   <a href="https://www.orworldassociation.com/adh%C3%A9sions-dons-contact" target="_blank" rel="noopener" style="border-bottom:none;font-size:1rem;color:var(--rose)">🤝 <span data-i18n="foot.partner">Partner of the O.R. WORLD ASSOCIATION</span> ↗</a>
 </nav>
@@ -541,7 +542,7 @@ footer .marque{font-family:'Bebas Neue';font-size:1.1rem;letter-spacing:.15em;co
         <p style="margin:4px 0"><span data-i18n="acc.connected">Connected:</span> <b id="auth-qui"></b></p>
         <button type="button" class="btn fantome" onclick="seDeconnecter()" data-i18n="acc.logout">Log out</button>
       </div>
-      <div style="font-size:.66rem;opacity:.5;margin-top:8px">version : COMPTES-82</div>
+      <div style="font-size:.66rem;opacity:.5;margin-top:8px">version : COMPTES-83</div>
     </div>
     <div class="verre" id="dejaFiche" style="display:none;margin-bottom:16px">
       <h3 class="accent" data-i18n="acc.haveCard">Your card is created ✓</h3>
@@ -944,6 +945,208 @@ footer .marque{font-family:'Bebas Neue';font-size:1.1rem;letter-spacing:.15em;co
     </div>
   </section>
 </div>
+<style id="bt-style">
+#page-blindtest{--or:#e9c86a;--argent:#cdd2da;--bronze:#d09a63}
+#page-blindtest.actif{background:radial-gradient(circle at 50% 0%,#2a0c0b,#160a0a 55%,#000);margin:0 -16px;padding:10px 16px 44px;border-radius:0}
+.btw{max-width:760px;margin:0 auto}
+#page-blindtest header{text-align:center;padding:36px 8px 4px}
+#page-blindtest .bt-eyebrow{font-size:.7rem;letter-spacing:.32em;text-transform:uppercase;color:var(--rose)}
+#page-blindtest h1.bt-h1{font-family:'Bebas Neue',sans-serif;font-size:clamp(2.4rem,11.5vw,4rem);letter-spacing:.03em;line-height:.92;margin:6px 0 4px;
+  background:linear-gradient(180deg,#fff,#f7c1d5 55%,var(--bordeaux));-webkit-background-clip:text;background-clip:text;color:transparent;
+  text-shadow:0 0 34px rgba(207,102,98,.35)}
+#page-blindtest .bt-sub{color:var(--beige);font-size:.95rem;max-width:520px;margin:8px auto 0}
+.bt-chips{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:18px 0 4px}
+.bt-chip{background:rgba(255,255,255,.05);border:1px solid var(--verre-bord);border-radius:20px;padding:7px 15px;font-size:.8rem;color:var(--blanc)}
+.bt-chip b{color:var(--rose)}
+.bt-bloc{margin-top:26px}
+.bt-titre{display:flex;align-items:center;gap:10px;margin:0 0 12px}
+.bt-titre .bt-num{font-family:'Bebas Neue',sans-serif;font-size:1.05rem;color:#160a0a;background:var(--rose);width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex:0 0 auto}
+.bt-titre h3{font-family:'Bebas Neue',sans-serif;font-size:1.6rem;letter-spacing:.03em;color:#fff;margin:0;font-weight:400}
+#page-blindtest .bt-verre{background:var(--verre);border:1px solid var(--verre-bord);border-radius:20px;padding:20px}
+/* --- sablier --- */
+.bt-sab{text-align:center}
+.bt-sab-tag{font-size:.64rem;letter-spacing:.18em;text-transform:uppercase;color:var(--bordeaux);font-weight:600;margin:0}
+.bt-sab-title{font-family:'Bebas Neue',sans-serif;font-size:1.7rem;color:#fff;margin:2px 0}
+.bt-sab-sub{font-size:.76rem;color:var(--rose);margin:0 0 6px}
+.bt-sablier{width:118px;height:164px;display:block;margin:4px auto 8px;filter:drop-shadow(0 8px 18px rgba(179,53,51,.45))}
+.bt-verre-g{fill:rgba(243,235,233,.05);stroke:#e8524d;stroke-width:3}.bt-cadre{fill:#b33533}.bt-sable{fill:#e8524d}.bt-flux{stroke:#e8524d;stroke-width:3;stroke-linecap:round}
+.bt-cd{display:flex;justify-content:center;gap:8px;margin:6px 0}
+.bt-cd b{display:block;font-family:'Bebas Neue',sans-serif;font-size:1.5rem;color:#e8524d;line-height:1}
+.bt-cd-b{background:rgba(179,53,51,.26);border:1px solid var(--verre-bord);border-radius:12px;padding:8px 4px;min-width:56px}
+.bt-cd span{font-size:.54rem;letter-spacing:.1em;text-transform:uppercase;color:var(--rose)}
+.bt-sab-note{font-size:.72rem;color:var(--beige);margin:8px 0 0;line-height:1.5}
+.bt-cta{text-align:center;margin-top:14px}
+.bt-cta p{font-size:.9rem;color:var(--blanc);margin:0 0 12px}
+.bt-cta-txt{font-size:.9rem;color:var(--blanc);margin:0 0 12px}
+.bt-next-dates{font-family:'Bebas Neue',sans-serif;font-size:1.35rem;color:#e8524d;margin:4px 0 0;letter-spacing:.02em}
+.bt-sabw{text-align:center;margin-top:14px}
+.bt-sabw-lbl{font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--rose);font-weight:600;margin:0 0 2px}
+.bt-sabw .bt-sablier{width:86px;height:120px;margin:2px auto 4px}
+.bt-sabw .bt-cd b{font-size:1.3rem}.bt-sabw .bt-cd-b{min-width:50px;padding:6px 4px}
+.bt-apercu{align-items:center}
+.bt-apercu .bt-waves{justify-content:flex-start}
+@media(max-width:560px){.bt-apercu{grid-template-columns:1fr;text-align:center}.bt-apercu .bt-disc{justify-content:center}.bt-apercu .bt-waves{justify-content:center}}
+.bt-jouer{background:linear-gradient(135deg,var(--rouge-sombre),var(--bordeaux));border:none;color:#fff;border-radius:14px;padding:14px 22px;font-size:1.05rem;font-weight:700;font-family:inherit;cursor:pointer;box-shadow:0 8px 22px rgba(179,53,51,.4)}
+.bt-deja{color:var(--rose);font-weight:600;margin:0}
+.bt-monscore{font-family:'Bebas Neue',sans-serif;font-size:1.7rem;color:#e8524d;margin:2px 0 0}
+/* --- classement live (liste) --- */
+.bt-rank-row{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:12px;background:rgba(255,255,255,.04);border:1px solid var(--verre-bord);margin-bottom:6px}
+.bt-rank-row.moi{border-color:#e8524d;background:rgba(232,82,77,.14)}
+.bt-rank-row .bt-r{width:26px;font-family:'Bebas Neue',sans-serif;font-size:1.1rem;color:var(--rose);text-align:center}
+.bt-rank-row .bt-p{flex:1;font-size:.9rem;color:#fff}
+.bt-rank-row .bt-sc{font-weight:700;color:#e8524d}
+.bt-rank-row .bt-tm{font-size:.7rem;color:var(--beige);min-width:52px;text-align:right}
+.bt-rank-empty{text-align:center;color:var(--beige);font-size:.88rem;margin:6px 0}
+/* --- podium --- */
+.bt-podium{display:grid;grid-template-columns:1fr 1.15fr 1fr;gap:10px;align-items:end}
+.bt-marche{background:rgba(255,255,255,.05);border:1px solid var(--verre-bord);border-radius:16px 16px 0 0;padding:14px 8px 12px;text-align:center}
+.bt-marche.p1{background:linear-gradient(180deg,rgba(233,200,106,.22),rgba(255,255,255,.04));border-color:rgba(233,200,106,.5);padding-top:22px}
+.bt-marche.p2{background:linear-gradient(180deg,rgba(205,210,218,.18),rgba(255,255,255,.04));border-color:rgba(205,210,218,.5)}
+.bt-marche.p3{background:linear-gradient(180deg,rgba(208,154,99,.18),rgba(255,255,255,.04));border-color:rgba(208,154,99,.5)}
+.bt-marche img{width:52px;height:52px;object-fit:contain}
+.bt-marche .nom{font-weight:600;margin-top:2px;color:#fff;font-size:.88rem}
+.bt-marche .pts{font-family:'Bebas Neue',sans-serif;font-size:1.5rem;color:#fff}
+.bt-marche .detail{font-size:.64rem;color:var(--beige)}
+.bt-marche .bonus{display:inline-block;margin-top:5px;font-size:.62rem;font-weight:600;padding:3px 9px;border-radius:12px;background:rgba(232,82,77,.16);color:#e8a}
+.bt-pod-ed{text-align:center;font-size:.78rem;color:var(--rose);margin:0 0 8px}
+/* --- calendrier --- */
+.bt-cal{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:12px}
+.bt-mois{background:rgba(255,255,255,.04);border:1px solid var(--verre-bord);border-radius:16px;padding:14px 12px 12px;text-align:center}
+.bt-mois.actif{border-color:var(--rose);box-shadow:0 0 22px rgba(207,102,98,.25)}
+.bt-mois.fini{opacity:.55}
+.bt-mois .m{font-family:'Bebas Neue',sans-serif;font-size:1.35rem;color:#fff;letter-spacing:.03em}
+.bt-mois .fen{display:inline-block;margin-top:6px;background:linear-gradient(135deg,var(--bordeaux),var(--orange));color:#fff;font-size:.76rem;font-weight:600;padding:5px 11px;border-radius:18px}
+.bt-mois .etat{display:block;margin-top:8px;font-size:.58rem;letter-spacing:.12em;text-transform:uppercase;color:var(--beige)}
+.bt-mois.actif .etat{color:#e8524d;font-weight:600}
+/* --- mini calendrier des jours --- */
+.bt-mc{margin-top:8px}
+.bt-mc-h{display:grid;grid-template-columns:repeat(7,1fr);gap:2px;margin-bottom:3px}
+.bt-mc-h span{font-size:.54rem;color:var(--beige);text-align:center;font-weight:600}
+.bt-mc-g{display:grid;grid-template-columns:repeat(7,1fr);gap:2px}
+.bt-mc-g span{font-size:.62rem;color:var(--blanc);text-align:center;padding:3px 0;border-radius:6px}
+.bt-mc-x{visibility:hidden}
+.bt-mc-d.on{background:linear-gradient(135deg,#e8524d,#b33533);color:#fff;font-weight:700;box-shadow:0 2px 8px rgba(232,82,77,.5)}
+/* --- badges --- */
+.bt-badges{display:flex;gap:16px;justify-content:center;flex-wrap:wrap}
+.bt-bdg{text-align:center;width:120px}
+.bt-bdg img{width:92px;height:92px;object-fit:contain;filter:drop-shadow(0 6px 14px rgba(0,0,0,.5))}
+.bt-bdg .lib{margin-top:6px;font-size:.78rem;color:#fff;font-weight:600}
+.bt-bdg .an{font-size:.6rem;color:var(--beige);letter-spacing:.08em;text-transform:uppercase}
+.bt-bdg-pts{font-family:'Bebas Neue',sans-serif;font-size:1.15rem;color:#e8524d;margin-top:3px}
+.bt-medal{width:92px;height:92px;margin:0 auto;border-radius:50%;position:relative;display:flex;align-items:center;justify-content:center;box-shadow:0 8px 22px rgba(0,0,0,.45),inset 0 0 0 4px rgba(255,255,255,.25),inset 0 0 22px rgba(0,0,0,.25)}
+.bt-medal .bt-ico{font-size:2rem;filter:drop-shadow(0 2px 3px rgba(0,0,0,.3))}
+.bt-medal .bt-rk{position:absolute;bottom:-6px;right:-2px;width:30px;height:30px;border-radius:50%;background:#160a0a;border:2px solid rgba(255,255,255,.5);display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:1rem;color:#fff}
+.m-or{background:radial-gradient(circle at 35% 30%,#fff3c4,#e9c86a 45%,#b8862e)}
+.m-arg{background:radial-gradient(circle at 35% 30%,#fff,#cdd2da 45%,#8b929c)}
+.m-bro{background:radial-gradient(circle at 35% 30%,#f6d3a8,#d09a63 45%,#8a5a2b)}
+.m-part{background:radial-gradient(circle at 35% 30%,#f7c1d5,#cf9592 45%,#8a3a4a)}
+.bt-ruban{width:18px;height:24px;margin:-2px auto 0;background:linear-gradient(var(--bordeaux),var(--rouge-sombre));clip-path:polygon(0 0,100% 0,100% 100%,50% 78%,0 100%)}
+.bt-pele .tuile-img{background-size:cover;background-position:center}
+.bt-hint{font-size:.74rem;color:var(--beige);text-align:center;margin:12px 0 0}
+/* --- pêle-mêle décoratif --- */
+.bt-pele{position:relative;height:150px;border-radius:16px;overflow:hidden;border:1px solid var(--verre-bord);background:rgba(0,0,0,.25);margin-top:14px}
+.bt-pele .tuile{position:absolute;width:64px;height:64px;border-radius:8px;box-shadow:0 6px 16px rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center;font-size:1.3rem;border:2px solid rgba(255,255,255,.12)}
+.bt-pele-lg{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;text-align:center;background:radial-gradient(circle,rgba(11,7,10,.55),rgba(11,7,10,.85))}
+.bt-pele-lg span{font-family:'Bebas Neue',sans-serif;font-size:1.4rem;color:#fff;letter-spacing:.06em}
+.bt-pele-lg small{display:block;font-size:.66rem;color:var(--rose);letter-spacing:.1em;text-transform:uppercase;margin-top:2px}
+
+/* ==================== OVERLAY DU JEU ==================== */
+#bt-jeu{display:none;position:fixed;inset:0;z-index:9999;background:radial-gradient(circle at 50% 0%,#2a0c0b,#160a0a 55%,#000);align-items:center;justify-content:center;padding:20px;overflow:auto}
+.bt-jeu-box{width:100%;max-width:520px}
+.bt-quit{position:fixed;top:14px;right:16px;background:none;border:none;color:var(--rose);font-size:1.6rem;cursor:pointer;z-index:2}
+.bt-jeu-card{background:var(--verre);border:1px solid var(--verre-bord);border-radius:20px;padding:22px;display:grid;grid-template-columns:130px 1fr;gap:18px;align-items:center}
+.bt-chrono{position:relative;width:130px;height:130px;margin:0 auto}
+.bt-chrono svg{transform:rotate(-90deg)}
+.bt-chrono .bt-n{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.bt-chrono .bt-n b{font-family:'Bebas Neue',sans-serif;font-size:2.6rem;color:#fff;line-height:1}
+.bt-chrono .bt-n span{font-size:.58rem;letter-spacing:.16em;text-transform:uppercase;color:var(--beige)}
+.bt-mystere .bt-disc{display:flex;align-items:center;gap:12px;margin-bottom:10px}
+.bt-vinyle{width:52px;height:52px;border-radius:50%;flex:0 0 auto;background:repeating-radial-gradient(circle at 50% 50%,#1a1016 0 2px,#2a1a20 2px 4px);box-shadow:0 0 0 4px #14090d,0 0 22px var(--lueur);position:relative;animation:btspin 3.2s linear infinite}
+.bt-vinyle::after{content:"";position:absolute;inset:21px;border-radius:50%;background:var(--bordeaux)}
+@keyframes btspin{to{transform:rotate(360deg)}}
+.bt-q{font-family:'Bebas Neue',sans-serif;font-size:1.4rem;color:#fff;line-height:1.05}
+.bt-q small{display:block;font-family:inherit;font-size:.64rem;letter-spacing:.14em;text-transform:uppercase;color:var(--rose)}
+.bt-waves{display:flex;align-items:flex-end;gap:3px;height:26px;margin:2px 0 12px}
+.bt-waves i{width:4px;background:linear-gradient(var(--rose),var(--bordeaux));border-radius:2px;animation:btw 1s ease-in-out infinite}
+.bt-waves i:nth-child(2n){animation-duration:.7s}.bt-waves i:nth-child(3n){animation-duration:1.3s}
+.bt-waves.pause i{animation-play-state:paused}
+@keyframes btw{0%,100%{height:20%}50%{height:100%}}
+.bt-rep{display:flex;gap:8px}
+#bt-input{flex:1;padding:12px 14px;border-radius:12px;border:1px solid var(--verre-bord);background:rgba(255,255,255,.06);color:#fff;font-family:inherit;font-size:1rem;outline:none}
+#bt-input:focus{border-color:#e8524d}
+.bt-rep button{border:none;border-radius:12px;padding:0 20px;font-weight:600;color:#fff;background:linear-gradient(135deg,var(--rouge-sombre),var(--bordeaux));cursor:pointer;font-family:inherit}
+.bt-feedback{min-height:22px;font-size:.9rem;margin:10px 0 0;font-weight:600}
+.bt-feedback.ok{color:#7ee08a}.bt-feedback.presque{color:#ffcf5a}.bt-feedback.retry{color:var(--rose)}
+.bt-scorerow{display:flex;justify-content:space-between;margin-top:12px;border-top:1px solid var(--verre-bord);padding-top:10px;font-size:.82rem;color:var(--beige)}
+.bt-scorerow b{color:var(--rose);font-size:1.05rem;font-family:'Bebas Neue',sans-serif}
+#bt-fini{display:none;text-align:center}
+.bt-fini-t{font-family:'Bebas Neue',sans-serif;font-size:1.8rem;color:#fff;margin:0}
+.bt-fini-score{font-family:'Bebas Neue',sans-serif;font-size:4rem;color:#e8524d;line-height:1;margin:6px 0}
+.bt-fini-score span{font-size:1.5rem;color:var(--rose)}
+.bt-fini-tm{color:var(--beige);margin:0 0 6px}
+.bt-fini-rang{font-size:1rem;color:#fff}.bt-fini-rang b{color:#e8524d;font-size:1.3rem}
+.bt-fini-warn{font-size:.76rem;color:var(--rose)}
+@media(max-width:560px){.bt-jeu-card{grid-template-columns:1fr;text-align:center}.bt-mystere{text-align:center}.bt-disc{justify-content:center}.bt-waves{justify-content:center}}
+</style>
+
+<div class="page" id="page-blindtest">
+ <div class="btw">
+  <header>
+    <p class="bt-eyebrow" data-i18n="bt.eyebrow2">The community game</p>
+    <h1 class="bt-h1">BLIND TEST</h1>
+    <p class="bt-sub" data-i18n="bt.intro">Recognise Omar's songs by ear, as fast as you can. Every month a new edition — and a podium to win!</p>
+    <div class="bt-chips">
+      <span class="bt-chip">🎵 <b>20</b>&nbsp;<span data-i18n="bt.chSongs">songs</span></span>
+      <span class="bt-chip">⏱️ <b>30 s</b>&nbsp;<span data-i18n="bt.chPer">per song</span></span>
+      <span class="bt-chip">🔒 <b>1</b>&nbsp;<span data-i18n="bt.chOne">try</span></span>
+      <span class="bt-chip">📅 <b>3</b>&nbsp;<span data-i18n="bt.chDays">days / month</span></span>
+      <span class="bt-chip">🏆 <b>+100 / +50 / +25</b>&nbsp;<span data-i18n="bt.chBonus">for the top 3</span></span>
+    </div>
+  </header>
+  <div id="bt-contenu"></div>
+ </div>
+</div>
+
+<div id="bt-jeu">
+  <button class="bt-quit" onclick="btQuitter()" aria-label="Fermer">✕</button>
+  <div class="bt-jeu-box">
+    <audio id="bt-audio" preload="auto"></audio>
+    <div id="bt-play">
+      <div class="bt-jeu-card">
+        <div class="bt-chrono">
+          <svg width="130" height="130" viewBox="0 0 130 130">
+            <circle cx="65" cy="65" r="56" fill="none" stroke="rgba(255,255,255,.08)" stroke-width="10"/>
+            <circle id="bt-ring-fg" cx="65" cy="65" r="56" fill="none" stroke="url(#btg)" stroke-width="10" stroke-linecap="round" stroke-dasharray="351.9" stroke-dashoffset="0"/>
+            <defs><linearGradient id="btg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f7c1d5"/><stop offset="1" stop-color="#b33533"/></linearGradient></defs>
+          </svg>
+          <div class="bt-n"><b id="bt-ring-num">30</b><span data-i18n="bt.seconds">seconds</span></div>
+        </div>
+        <div class="bt-mystere">
+          <div class="bt-disc">
+            <div class="bt-vinyle"></div>
+            <div class="bt-q"><span data-i18n="bt.mystery">Mystery song</span><small>N° <span id="bt-progress">1 / 20</span></small></div>
+          </div>
+          <div class="bt-waves" id="bt-waves">
+            <i style="height:40%"></i><i style="height:80%"></i><i style="height:55%"></i><i style="height:100%"></i><i style="height:35%"></i><i style="height:70%"></i><i style="height:90%"></i><i style="height:45%"></i><i style="height:65%"></i><i style="height:85%"></i><i style="height:30%"></i><i style="height:75%"></i><i style="height:50%"></i><i style="height:95%"></i><i style="height:40%"></i>
+          </div>
+          <div class="bt-rep">
+            <input id="bt-input" type="text" autocomplete="off" autocorrect="off" spellcheck="false" data-i18n-ph="bt.inputPh" placeholder="Song title…"
+              onkeydown="if(event.key==='Enter'){event.preventDefault();btRepondre();}">
+            <button onclick="btRepondre()" data-i18n="bt.validate">Validate</button>
+          </div>
+          <div class="bt-feedback" id="bt-feedback"></div>
+          <div class="bt-scorerow">
+            <span><span data-i18n="bt.found">Found</span>: <b id="bt-found">0</b> / 20</span>
+            <span><span data-i18n="bt.yourTime">Your time</span>: <b id="bt-time">0:00</b></span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="bt-fini"></div>
+  </div>
+</div>
+
+
 <div class="page" id="page-moderation"><section id="secModeration"></section></div>
 </main>
 
@@ -1188,6 +1391,79 @@ const FLAGS={en:"🇬🇧",fr:"🇫🇷",es:"🇪🇸",sv:"🇸🇪",de:"🇩�
 let LANG = "en";
 const I18N = {
 en:{
+  "nav.blindtest":"Blind Test",
+  "bt.moodTitle":"Vibe · all his songs",
+  "bt.moodSub":"all of Omar's songs",
+  "bt.moodNote":"The covers of Omar's songs, as a decorative background.",
+  "bdg.btPlay":"Blind Test player",
+  "bt.participant":"Player",
+  "bt.participantSub":"Just for playing",
+  "bt.chBonus":"for the top 3",
+  "bt.timeLeftPlay":"Time left before the winner",
+  "bt.nextGameIn":"Next game in",
+  "bt.songsMystery":"20 mystery songs",
+  "bt.eyebrow2":"The community game",
+  "bt.chSongs":"songs",
+  "bt.chPer":"per song",
+  "bt.chOne":"try",
+  "bt.chDays":"days / month",
+  "bt.blocLive":"Edition live now",
+  "bt.blocNext":"Next edition",
+  "bt.nextNote":"Come back on these days to play and climb the ranking!",
+  "bt.daysCal":"Calendar of days",
+  "bt.badgesTitle":"Badges to win",
+  "bt.earGold":"Golden Ear",
+  "bt.earSilver":"Silver Ear",
+  "bt.earBronze":"Bronze Ear",
+  "bt.champ":"Champion of the month",
+  "bt.vice":"Runner-up",
+  "bt.third":"3rd place",
+  "bt.badgesNote":"The badge goes on the fan's passport and earns bonus points: +100 for 1st place, +50 for 2nd, +25 for 3rd.",
+  "bt.seconds":"seconds",
+  "bt.mystery":"Mystery song",
+  "bt.found":"Found",
+  "bt.yourTime":"Your time",
+  "bt.eyebrow":"The game",
+  "bt.title":"🎧 Blind Test — Guess the song",
+  "bt.intro":"Listen to a short extract and type the song title as fast as you can. 20 songs per edition, three days to shine!",
+  "bt.needLogin":"Log in (in the Fan Space) to take part 💛",
+  "bt.readyTxt":"Ready to play? 20 extracts are waiting. One try per edition!",
+  "bt.play":"Play the 20 songs",
+  "bt.already":"You have already played this edition",
+  "bt.live":"Edition live now",
+  "bt.winnerSoon":"The big winner is coming…",
+  "bt.winnerNote":"When the hourglass runs out: podium and bonus points (+100 / +50 / +25) with the gold, silver and bronze badges.",
+  "bt.days":"Days",
+  "bt.hrs":"Hours",
+  "bt.min":"Min",
+  "bt.sec":"Sec",
+  "bt.nextEd":"Next edition",
+  "bt.allDone":"This season's editions are over. Come back soon for more!",
+  "bt.liveRank":"Live ranking",
+  "bt.rankOf":"Ranking of",
+  "bt.rankEmpty":"Be the first to play this edition ✦",
+  "bt.calendar":"Edition calendar",
+  "bt.stDone":"Finished",
+  "bt.stLive":"Live",
+  "bt.stSoon":"Upcoming",
+  "bt.pastWinners":"Winners of past editions",
+  "bt.song":"Song",
+  "bt.typeNote":"Which song is it? Type your answer 👇",
+  "bt.inputPh":"Song title…",
+  "bt.validate":"Validate",
+  "bt.bravo":"Well done!",
+  "bt.presque":"Almost! Try again",
+  "bt.retry":"Try again",
+  "bt.timeUp":"Time's up",
+  "bt.done":"Finished!",
+  "bt.yourRank":"Your ranking:",
+  "bt.seeRank":"See the ranking",
+  "bt.saveWarn":"⚠️ Score not saved (login). Please try again later.",
+  "bt.quitConfirm":"Leave the game? Your round will not be saved.",
+  "pt.blindtest":"Blind Test bonus",
+  "bdg.blindtest1":"Blind Test — Gold",
+  "bdg.blindtest2":"Blind Test — Silver",
+  "bdg.blindtest3":"Blind Test — Bronze",
   "foot.instaContact":"To contact me on Instagram:",
   "foot.instaAsso":"The association's Instagram:",
   "po.needLogin":"Log in (in the Fan Space) to share your sentence 💛",
@@ -1400,6 +1676,79 @@ en:{
   "contDetected":(c)=>`Continent detected: <b>${c}</b> 🌍`,"contOther":"We will add your country to the map ✦",
 },
 fr:{
+  "nav.blindtest":"Blind Test",
+  "bt.moodTitle":"Ambiance · toutes ses chansons",
+  "bt.moodSub":"toutes les chansons d'Omar",
+  "bt.moodNote":"Les pochettes des chansons d'Omar, en fond décoratif de l'onglet.",
+  "bdg.btPlay":"Participant Blind Test",
+  "bt.participant":"Participant",
+  "bt.participantSub":"Rien que pour avoir joué",
+  "bt.chBonus":"pour le top 3",
+  "bt.timeLeftPlay":"Temps restant avant le gagnant",
+  "bt.nextGameIn":"Prochain jeu dans",
+  "bt.songsMystery":"20 chansons mystères",
+  "bt.eyebrow2":"Le jeu de la communauté",
+  "bt.chSongs":"chansons",
+  "bt.chPer":"par titre",
+  "bt.chOne":"participation",
+  "bt.chDays":"jours / mois",
+  "bt.blocLive":"Édition en cours",
+  "bt.blocNext":"Prochaine édition",
+  "bt.nextNote":"Reviens ces jours-là pour jouer et grimper au classement !",
+  "bt.daysCal":"Le calendrier des jours",
+  "bt.badgesTitle":"Les badges à gagner",
+  "bt.earGold":"Oreille d'Or",
+  "bt.earSilver":"Oreille d'Argent",
+  "bt.earBronze":"Oreille de Bronze",
+  "bt.champ":"Champion du mois",
+  "bt.vice":"Vice-champion",
+  "bt.third":"3ᵉ place",
+  "bt.badgesNote":"Le badge s'ajoute au passeport du fan et rapporte des points bonus : +100 pour la 1re place, +50 pour la 2e, +25 pour la 3e.",
+  "bt.seconds":"secondes",
+  "bt.mystery":"Chanson mystère",
+  "bt.found":"Trouvées",
+  "bt.yourTime":"Ton temps",
+  "bt.eyebrow":"Le jeu",
+  "bt.title":"🎧 Blind Test — Devine la chanson",
+  "bt.intro":"Écoute un court extrait et tape le titre de la chanson le plus vite possible. 20 chansons par édition, trois jours pour briller !",
+  "bt.needLogin":"Connecte-toi (dans l'Espace Fan) pour participer 💛",
+  "bt.readyTxt":"Prête à jouer ? 20 extraits t'attendent. Une seule participation par édition !",
+  "bt.play":"Jouer les 20 chansons",
+  "bt.already":"Tu as déjà joué à cette édition",
+  "bt.live":"Édition en cours",
+  "bt.winnerSoon":"Le grand gagnant approche…",
+  "bt.winnerNote":"À la fin du sablier : podium et points bonus (+100 / +50 / +25) avec les badges or, argent et bronze.",
+  "bt.days":"Jours",
+  "bt.hrs":"Heures",
+  "bt.min":"Min",
+  "bt.sec":"Sec",
+  "bt.nextEd":"Prochaine édition",
+  "bt.allDone":"Les éditions de cette saison sont terminées. Reviens bientôt pour la suite !",
+  "bt.liveRank":"Classement en direct",
+  "bt.rankOf":"Classement de",
+  "bt.rankEmpty":"Sois le premier à jouer cette édition ✦",
+  "bt.calendar":"Calendrier des éditions",
+  "bt.stDone":"Terminée",
+  "bt.stLive":"En cours",
+  "bt.stSoon":"À venir",
+  "bt.pastWinners":"Les gagnants des éditions passées",
+  "bt.song":"Chanson",
+  "bt.typeNote":"Quelle est cette chanson ? Écris ta réponse 👇",
+  "bt.inputPh":"Titre de la chanson…",
+  "bt.validate":"Valider",
+  "bt.bravo":"Bravo !",
+  "bt.presque":"Presque ! Réessaie",
+  "bt.retry":"Essaie encore",
+  "bt.timeUp":"Temps écoulé",
+  "bt.done":"Terminé !",
+  "bt.yourRank":"Ton classement :",
+  "bt.seeRank":"Voir le classement",
+  "bt.saveWarn":"⚠️ Score non enregistré (connexion). Réessaie plus tard.",
+  "bt.quitConfirm":"Quitter le jeu ? Ta partie ne sera pas enregistrée.",
+  "pt.blindtest":"Bonus Blind Test",
+  "bdg.blindtest1":"Blind Test — Or",
+  "bdg.blindtest2":"Blind Test — Argent",
+  "bdg.blindtest3":"Blind Test — Bronze",
   "foot.instaContact":"Pour me contacter sur Instagram :",
   "foot.instaAsso":"Instagram de l'association :",
   "po.needLogin":"Connecte-toi (dans l'Espace Fan) pour laisser ta phrase 💛",
@@ -1697,6 +2046,79 @@ fr:{
   "contDetected":(c)=>`Continent détecté : <b>${c}</b> 🌍`,"contOther":"Nous ajouterons ton pays à la carte ✦",
 },
 es:{
+  "nav.blindtest":"Blind Test",
+  "bt.moodTitle":"Ambiente · todas sus canciones",
+  "bt.moodSub":"todas las canciones de Omar",
+  "bt.moodNote":"Las portadas de las canciones de Omar, como fondo decorativo.",
+  "bdg.btPlay":"Participante Blind Test",
+  "bt.participant":"Participante",
+  "bt.participantSub":"Solo por jugar",
+  "bt.chBonus":"para el top 3",
+  "bt.timeLeftPlay":"Tiempo antes del ganador",
+  "bt.nextGameIn":"Próximo juego en",
+  "bt.songsMystery":"20 canciones misteriosas",
+  "bt.eyebrow2":"El juego de la comunidad",
+  "bt.chSongs":"canciones",
+  "bt.chPer":"por canción",
+  "bt.chOne":"intento",
+  "bt.chDays":"días / mes",
+  "bt.blocLive":"Edición en curso",
+  "bt.blocNext":"Próxima edición",
+  "bt.nextNote":"¡Vuelve esos días para jugar y subir en la clasificación!",
+  "bt.daysCal":"Calendario de días",
+  "bt.badgesTitle":"Insignias por ganar",
+  "bt.earGold":"Oído de Oro",
+  "bt.earSilver":"Oído de Plata",
+  "bt.earBronze":"Oído de Bronce",
+  "bt.champ":"Campeón del mes",
+  "bt.vice":"Subcampeón",
+  "bt.third":"3er puesto",
+  "bt.badgesNote":"La insignia se añade al pasaporte del fan y da puntos extra: +100 al 1º, +50 al 2º, +25 al 3º.",
+  "bt.seconds":"segundos",
+  "bt.mystery":"Canción misteriosa",
+  "bt.found":"Acertadas",
+  "bt.yourTime":"Tu tiempo",
+  "bt.eyebrow":"El juego",
+  "bt.title":"🎧 Blind Test — Adivina la canción",
+  "bt.intro":"Escucha un breve extracto y escribe el título de la canción lo más rápido posible. ¡20 canciones por edición, tres días para brillar!",
+  "bt.needLogin":"Inicia sesión (en el Espacio Fan) para participar 💛",
+  "bt.readyTxt":"¿Lista para jugar? Te esperan 20 extractos. ¡Un solo intento por edición!",
+  "bt.play":"Jugar las 20 canciones",
+  "bt.already":"Ya has jugado esta edición",
+  "bt.live":"Edición en curso",
+  "bt.winnerSoon":"El gran ganador se acerca…",
+  "bt.winnerNote":"Al terminar el reloj de arena: podio y puntos extra (+100 / +50 / +25) con las insignias de oro, plata y bronce.",
+  "bt.days":"Días",
+  "bt.hrs":"Horas",
+  "bt.min":"Min",
+  "bt.sec":"Seg",
+  "bt.nextEd":"Próxima edición",
+  "bt.allDone":"Las ediciones de esta temporada han terminado. ¡Vuelve pronto!",
+  "bt.liveRank":"Clasificación en directo",
+  "bt.rankOf":"Clasificación de",
+  "bt.rankEmpty":"Sé el primero en jugar esta edición ✦",
+  "bt.calendar":"Calendario de ediciones",
+  "bt.stDone":"Terminada",
+  "bt.stLive":"En curso",
+  "bt.stSoon":"Próxima",
+  "bt.pastWinners":"Ganadores de ediciones pasadas",
+  "bt.song":"Canción",
+  "bt.typeNote":"¿Qué canción es? Escribe tu respuesta 👇",
+  "bt.inputPh":"Título de la canción…",
+  "bt.validate":"Validar",
+  "bt.bravo":"¡Bravo!",
+  "bt.presque":"¡Casi! Inténtalo de nuevo",
+  "bt.retry":"Inténtalo otra vez",
+  "bt.timeUp":"Tiempo agotado",
+  "bt.done":"¡Terminado!",
+  "bt.yourRank":"Tu clasificación:",
+  "bt.seeRank":"Ver la clasificación",
+  "bt.saveWarn":"⚠️ Puntuación no guardada (sesión). Inténtalo más tarde.",
+  "bt.quitConfirm":"¿Salir del juego? Tu partida no se guardará.",
+  "pt.blindtest":"Bono Blind Test",
+  "bdg.blindtest1":"Blind Test — Oro",
+  "bdg.blindtest2":"Blind Test — Plata",
+  "bdg.blindtest3":"Blind Test — Bronce",
   "foot.instaContact":"Para contactarme en Instagram:",
   "foot.instaAsso":"Instagram de la asociación:",
   "po.needLogin":"Inicia sesión (en el Espacio Fan) para dejar tu frase 💛",
@@ -1962,6 +2384,79 @@ es:{
   "contDetected":(c)=>`Continente detectado: <b>${c}</b> 🌍`,"contOther":"Añadiremos tu país al mapa ✦",
 },
 sv:{
+  "nav.blindtest":"Blind Test",
+  "bt.moodTitle":"Stämning · alla hans låtar",
+  "bt.moodSub":"alla Omars låtar",
+  "bt.moodNote":"Omslagen till Omars låtar, som dekorativ bakgrund.",
+  "bdg.btPlay":"Blind Test-deltagare",
+  "bt.participant":"Deltagare",
+  "bt.participantSub":"Bara för att ha spelat",
+  "bt.chBonus":"för topp 3",
+  "bt.timeLeftPlay":"Tid kvar till vinnaren",
+  "bt.nextGameIn":"Nästa spel om",
+  "bt.songsMystery":"20 mysterielåtar",
+  "bt.eyebrow2":"Communityns spel",
+  "bt.chSongs":"låtar",
+  "bt.chPer":"per låt",
+  "bt.chOne":"försök",
+  "bt.chDays":"dagar / månad",
+  "bt.blocLive":"Omgång pågår",
+  "bt.blocNext":"Nästa omgång",
+  "bt.nextNote":"Kom tillbaka dessa dagar för att spela och klättra i rankingen!",
+  "bt.daysCal":"Dagkalender",
+  "bt.badgesTitle":"Märken att vinna",
+  "bt.earGold":"Guldöra",
+  "bt.earSilver":"Silveröra",
+  "bt.earBronze":"Bronsöra",
+  "bt.champ":"Månadens mästare",
+  "bt.vice":"Tvåa",
+  "bt.third":"3:e plats",
+  "bt.badgesNote":"Märket hamnar i fansets pass och ger bonuspoäng: +100 för 1:a, +50 för 2:a, +25 för 3:e.",
+  "bt.seconds":"sekunder",
+  "bt.mystery":"Mysterielåt",
+  "bt.found":"Rätt",
+  "bt.yourTime":"Din tid",
+  "bt.eyebrow":"Spelet",
+  "bt.title":"🎧 Blind Test — Gissa låten",
+  "bt.intro":"Lyssna på ett kort utdrag och skriv låttiteln så snabbt du kan. 20 låtar per omgång, tre dagar att glänsa!",
+  "bt.needLogin":"Logga in (i Fan-utrymmet) för att delta 💛",
+  "bt.readyTxt":"Redo att spela? 20 utdrag väntar. Ett försök per omgång!",
+  "bt.play":"Spela de 20 låtarna",
+  "bt.already":"Du har redan spelat den här omgången",
+  "bt.live":"Omgång pågår nu",
+  "bt.winnerSoon":"Den stora vinnaren närmar sig…",
+  "bt.winnerNote":"När timglaset runnit ut: pallplats och bonuspoäng (+100 / +50 / +25) med guld-, silver- och bronsmärken.",
+  "bt.days":"Dagar",
+  "bt.hrs":"Timmar",
+  "bt.min":"Min",
+  "bt.sec":"Sek",
+  "bt.nextEd":"Nästa omgång",
+  "bt.allDone":"Säsongens omgångar är slut. Kom snart tillbaka!",
+  "bt.liveRank":"Live-ranking",
+  "bt.rankOf":"Ranking för",
+  "bt.rankEmpty":"Var först att spela denna omgång ✦",
+  "bt.calendar":"Omgångskalender",
+  "bt.stDone":"Avslutad",
+  "bt.stLive":"Pågår",
+  "bt.stSoon":"Kommande",
+  "bt.pastWinners":"Vinnare från tidigare omgångar",
+  "bt.song":"Låt",
+  "bt.typeNote":"Vilken låt är det? Skriv ditt svar 👇",
+  "bt.inputPh":"Låttitel…",
+  "bt.validate":"Bekräfta",
+  "bt.bravo":"Bravo!",
+  "bt.presque":"Nästan! Försök igen",
+  "bt.retry":"Försök igen",
+  "bt.timeUp":"Tiden är ute",
+  "bt.done":"Klart!",
+  "bt.yourRank":"Din placering:",
+  "bt.seeRank":"Se rankingen",
+  "bt.saveWarn":"⚠️ Poäng ej sparad (inloggning). Försök igen senare.",
+  "bt.quitConfirm":"Lämna spelet? Din omgång sparas inte.",
+  "pt.blindtest":"Blind Test-bonus",
+  "bdg.blindtest1":"Blind Test — Guld",
+  "bdg.blindtest2":"Blind Test — Silver",
+  "bdg.blindtest3":"Blind Test — Brons",
   "foot.instaContact":"Kontakta mig på Instagram:",
   "foot.instaAsso":"Föreningens Instagram:",
   "po.needLogin":"Logga in (i Fan Space) för att dela din mening 💛",
@@ -2227,6 +2722,79 @@ sv:{
   "contDetected":(c)=>`Kontinent: <b>${c}</b> 🌍`,"contOther":"Vi lägger till ditt land på kartan ✦",
 },
 de:{
+  "nav.blindtest":"Blind Test",
+  "bt.moodTitle":"Stimmung · alle seine Songs",
+  "bt.moodSub":"alle Songs von Omar",
+  "bt.moodNote":"Die Cover von Omars Songs als dekorativer Hintergrund.",
+  "bdg.btPlay":"Blind-Test-Teilnehmer",
+  "bt.participant":"Teilnehmer",
+  "bt.participantSub":"Nur fürs Mitspielen",
+  "bt.chBonus":"für die Top 3",
+  "bt.timeLeftPlay":"Zeit bis zum Gewinner",
+  "bt.nextGameIn":"Nächstes Spiel in",
+  "bt.songsMystery":"20 Mystery-Songs",
+  "bt.eyebrow2":"Das Community-Spiel",
+  "bt.chSongs":"Songs",
+  "bt.chPer":"pro Song",
+  "bt.chOne":"Versuch",
+  "bt.chDays":"Tage / Monat",
+  "bt.blocLive":"Ausgabe läuft",
+  "bt.blocNext":"Nächste Ausgabe",
+  "bt.nextNote":"Komm an diesen Tagen wieder, um zu spielen und aufzusteigen!",
+  "bt.daysCal":"Tage-Kalender",
+  "bt.badgesTitle":"Zu gewinnende Abzeichen",
+  "bt.earGold":"Goldenes Ohr",
+  "bt.earSilver":"Silbernes Ohr",
+  "bt.earBronze":"Bronzenes Ohr",
+  "bt.champ":"Champion des Monats",
+  "bt.vice":"Vize-Champion",
+  "bt.third":"3. Platz",
+  "bt.badgesNote":"Das Abzeichen kommt in den Fan-Pass und bringt Bonuspunkte: +100 für Platz 1, +50 für Platz 2, +25 für Platz 3.",
+  "bt.seconds":"Sekunden",
+  "bt.mystery":"Mystery-Song",
+  "bt.found":"Gefunden",
+  "bt.yourTime":"Deine Zeit",
+  "bt.eyebrow":"Das Spiel",
+  "bt.title":"🎧 Blind Test — Errate den Song",
+  "bt.intro":"Höre einen kurzen Ausschnitt und tippe den Songtitel so schnell wie möglich. 20 Songs pro Ausgabe, drei Tage zum Glänzen!",
+  "bt.needLogin":"Melde dich an (im Fan-Bereich), um teilzunehmen 💛",
+  "bt.readyTxt":"Bereit zu spielen? 20 Ausschnitte warten. Ein Versuch pro Ausgabe!",
+  "bt.play":"Die 20 Songs spielen",
+  "bt.already":"Du hast diese Ausgabe bereits gespielt",
+  "bt.live":"Ausgabe läuft jetzt",
+  "bt.winnerSoon":"Der große Gewinner naht…",
+  "bt.winnerNote":"Wenn die Sanduhr abgelaufen ist: Podium und Bonuspunkte (+100 / +50 / +25) mit den Gold-, Silber- und Bronze-Abzeichen.",
+  "bt.days":"Tage",
+  "bt.hrs":"Stunden",
+  "bt.min":"Min",
+  "bt.sec":"Sek",
+  "bt.nextEd":"Nächste Ausgabe",
+  "bt.allDone":"Die Ausgaben dieser Saison sind vorbei. Komm bald wieder!",
+  "bt.liveRank":"Live-Rangliste",
+  "bt.rankOf":"Rangliste von",
+  "bt.rankEmpty":"Sei der Erste, der diese Ausgabe spielt ✦",
+  "bt.calendar":"Ausgaben-Kalender",
+  "bt.stDone":"Beendet",
+  "bt.stLive":"Läuft",
+  "bt.stSoon":"Bald",
+  "bt.pastWinners":"Gewinner vergangener Ausgaben",
+  "bt.song":"Song",
+  "bt.typeNote":"Welcher Song ist das? Tippe deine Antwort 👇",
+  "bt.inputPh":"Songtitel…",
+  "bt.validate":"Bestätigen",
+  "bt.bravo":"Bravo!",
+  "bt.presque":"Fast! Versuch es nochmal",
+  "bt.retry":"Versuch es nochmal",
+  "bt.timeUp":"Zeit abgelaufen",
+  "bt.done":"Fertig!",
+  "bt.yourRank":"Deine Platzierung:",
+  "bt.seeRank":"Rangliste ansehen",
+  "bt.saveWarn":"⚠️ Punktzahl nicht gespeichert (Anmeldung). Bitte später erneut versuchen.",
+  "bt.quitConfirm":"Spiel verlassen? Deine Runde wird nicht gespeichert.",
+  "pt.blindtest":"Blind-Test-Bonus",
+  "bdg.blindtest1":"Blind Test — Gold",
+  "bdg.blindtest2":"Blind Test — Silber",
+  "bdg.blindtest3":"Blind Test — Bronze",
   "foot.instaContact":"Um mich auf Instagram zu kontaktieren:",
   "foot.instaAsso":"Instagram des Vereins:",
   "po.needLogin":"Melde dich an (im Fan Space), um deinen Satz zu teilen 💛",
@@ -2492,6 +3060,79 @@ de:{
   "contDetected":(c)=>`Erkannter Kontinent: <b>${c}</b> 🌍`,"contOther":"Wir fügen dein Land der Karte hinzu ✦",
 },
 pt:{
+  "nav.blindtest":"Blind Test",
+  "bt.moodTitle":"Clima · todas as músicas",
+  "bt.moodSub":"todas as músicas do Omar",
+  "bt.moodNote":"As capas das músicas do Omar, como fundo decorativo.",
+  "bdg.btPlay":"Participante Blind Test",
+  "bt.participant":"Participante",
+  "bt.participantSub":"Só por ter jogado",
+  "bt.chBonus":"para o top 3",
+  "bt.timeLeftPlay":"Tempo até o vencedor",
+  "bt.nextGameIn":"Próximo jogo em",
+  "bt.songsMystery":"20 músicas misteriosas",
+  "bt.eyebrow2":"O jogo da comunidade",
+  "bt.chSongs":"músicas",
+  "bt.chPer":"por música",
+  "bt.chOne":"tentativa",
+  "bt.chDays":"dias / mês",
+  "bt.blocLive":"Edição em andamento",
+  "bt.blocNext":"Próxima edição",
+  "bt.nextNote":"Volte nesses dias para jogar e subir na classificação!",
+  "bt.daysCal":"Calendário dos dias",
+  "bt.badgesTitle":"Insígnias para ganhar",
+  "bt.earGold":"Ouvido de Ouro",
+  "bt.earSilver":"Ouvido de Prata",
+  "bt.earBronze":"Ouvido de Bronze",
+  "bt.champ":"Campeão do mês",
+  "bt.vice":"Vice-campeão",
+  "bt.third":"3º lugar",
+  "bt.badgesNote":"A insígnia vai para o passaporte do fã e dá pontos bônus: +100 para o 1º, +50 para o 2º, +25 para o 3º.",
+  "bt.seconds":"segundos",
+  "bt.mystery":"Música misteriosa",
+  "bt.found":"Acertos",
+  "bt.yourTime":"Teu tempo",
+  "bt.eyebrow":"O jogo",
+  "bt.title":"🎧 Blind Test — Adivinha a música",
+  "bt.intro":"Ouve um curto trecho e escreve o título da música o mais rápido possível. 20 músicas por edição, três dias para brilhar!",
+  "bt.needLogin":"Entra (no Espaço Fã) para participar 💛",
+  "bt.readyTxt":"Pronta para jogar? 20 trechos te esperam. Uma tentativa por edição!",
+  "bt.play":"Jogar as 20 músicas",
+  "bt.already":"Você já jogou esta edição",
+  "bt.live":"Edição em andamento",
+  "bt.winnerSoon":"O grande vencedor se aproxima…",
+  "bt.winnerNote":"Quando a ampulheta acabar: pódio e pontos bônus (+100 / +50 / +25) com as insígnias de ouro, prata e bronze.",
+  "bt.days":"Dias",
+  "bt.hrs":"Horas",
+  "bt.min":"Min",
+  "bt.sec":"Seg",
+  "bt.nextEd":"Próxima edição",
+  "bt.allDone":"As edições desta temporada terminaram. Volte em breve!",
+  "bt.liveRank":"Classificação ao vivo",
+  "bt.rankOf":"Classificação de",
+  "bt.rankEmpty":"Seja o primeiro a jogar esta edição ✦",
+  "bt.calendar":"Calendário das edições",
+  "bt.stDone":"Terminada",
+  "bt.stLive":"Ao vivo",
+  "bt.stSoon":"Em breve",
+  "bt.pastWinners":"Vencedores das edições passadas",
+  "bt.song":"Música",
+  "bt.typeNote":"Que música é? Escreve a tua resposta 👇",
+  "bt.inputPh":"Título da música…",
+  "bt.validate":"Validar",
+  "bt.bravo":"Bravo!",
+  "bt.presque":"Quase! Tenta de novo",
+  "bt.retry":"Tenta de novo",
+  "bt.timeUp":"Tempo esgotado",
+  "bt.done":"Terminado!",
+  "bt.yourRank":"A tua classificação:",
+  "bt.seeRank":"Ver a classificação",
+  "bt.saveWarn":"⚠️ Pontuação não guardada (sessão). Tenta mais tarde.",
+  "bt.quitConfirm":"Sair do jogo? A tua partida não será guardada.",
+  "pt.blindtest":"Bônus Blind Test",
+  "bdg.blindtest1":"Blind Test — Ouro",
+  "bdg.blindtest2":"Blind Test — Prata",
+  "bdg.blindtest3":"Blind Test — Bronze",
   "foot.instaContact":"Para me contactar no Instagram:",
   "foot.instaAsso":"Instagram da associação:",
   "po.needLogin":"Inicia sessão (no Espaço Fã) para deixar a tua frase 💛",
@@ -2817,10 +3458,11 @@ function changerLangue(l){
   if(window.rendreExtension) rendreExtension();
   if(window.majAwards) majAwards();
   if(window.majLecteur) majLecteur();
+  if(window.rendreBlindtest) rendreBlindtest();
 }
 
 /* ---------------- NAVIGATION ---------------- */
-const pages = ["accueil","timeline","inscription","histoires","pourquoi","concerts","galerie","projets","awards","guide","confidentialite","moderation"];
+const pages = ["accueil","timeline","inscription","histoires","pourquoi","blindtest","concerts","galerie","projets","awards","guide","confidentialite","moderation"];
 function allerA(p,sansScroll){
   if(!pages.includes(p)) p = "accueil";
   /* onglet Modération : réservé à l'admin (la modératrice), un fan ne peut pas y accéder */
@@ -2833,6 +3475,7 @@ function allerA(p,sansScroll){
   if(!sansScroll) window.scrollTo({top:0, behavior:"smooth"});
   try{ if(location.hash !== "#"+p) history.replaceState(null,"","#"+p); }catch(e){} /* interdit dans certains aperçus sandbox */
   if(p==="inscription"){ requestAnimationFrame(dessinerCartePlate); requestAnimationFrame(function(){ if(window.majPickerReg) majPickerReg(false); }); }
+  if(p==="blindtest" && window.rendreBlindtest) rendreBlindtest();
 }
 /* Va directement au formulaire d'envoi de photos/vidéos (Espace Fan), sans repasser tout en haut.
    Si le fan n'a pas encore de profil, le bloc n'existe pas → on l'amène en haut de l'Espace Fan pour se connecter/créer sa fiche. */
@@ -3853,6 +4496,8 @@ function badgesFan(fn){
   if((fn.assoConcours||0)>0) b.push(["🎯","bdg.concours",{logo:"photos/ASSO_CONCOURS.webp"}]);
   if(fn.assoRencontre) b.push(["🤝","bdg.rencontre",{logo:"photos/ASSO_RENCONTRE.webp"}]);
   if(fn.radioDay) b.push(["📻","bdg.radioDay",{photo:"photos/BADGE_RADIODAY.webp"}]);
+  if(window.BT_WINS && fn.user_id && window.BT_WINS[fn.user_id]){ window.BT_WINS[fn.user_id].forEach(function(w){ var im=w.rang===1?"badge_or.png":w.rang===2?"badge_argent.png":"badge_bronze.png"; b.push(["🎧","bdg.blindtest"+w.rang,{photo:"blindtest/"+im}]); }); }
+  if(window.BT_SCORES && fn.user_id && window.BT_SCORES.some(function(x){return x.user_id===fn.user_id;})){ b.push(["🎧","bdg.btPlay",{photo:"blindtest/badge_casque.png",noPoints:true}]); }
   return b;
 }
 window.badgesFan=badgesFan;
@@ -3886,7 +4531,8 @@ function detailPoints(fn){
   if(_eng>0) d.push(["💬","pt.engagement",_eng]);
   var _rep=["qChanson","qConcertVoyage","qProjet","yrPremiereFois","yrNbVu","yrRencontre","yrTatouage","yrScene"].filter(function(k){return fn[k]&&String(fn[k]).trim();}).length;
   if(_rep>0) d.push(["📝","pt.questions",_rep*5,_rep]);
-  var nb=badgesFan(fn).length;
+  var _bb=(window.BT_BONUS&&fn.user_id)?window.BT_BONUS[fn.user_id]:0; if(_bb) d.push(["🎧","pt.blindtest",_bb]);
+  var nb=badgesFan(fn).filter(function(_x){return !(_x[2]&&_x[2].noPoints);}).length;
   if(nb>0) d.push(["🏅","pt.badges",nb*10, nb]);                   /* +10 par badge gagné */
   return d;
 }
@@ -4330,6 +4976,447 @@ async function supprimerPourquoi(uid){
   toast(t("med.removed")); if(window.chargerPourquoiSupabase) chargerPourquoiSupabase();
 }
 window.supprimerPourquoi=supprimerPourquoi;
+
+/* ===== BLIND TEST ===== */
+window.BT_SONGS=[
+{n:"01",t:"Dale Bye",a:["dale bye"]},
+{n:"02",t:"I'm Not a Boy",a:["im not a boy", "i am not a boy", "not a boy"]},
+{n:"03",t:"Breathe",a:["breathe"]},
+{n:"04",t:"Pull Up",a:["pull up"]},
+{n:"05",t:"Sorry",a:["sorry"]},
+{n:"06",t:"Como Ayer",a:["como ayer"]},
+{n:"07",t:"Alla Ba OUFF",a:["alla ba ouff", "alla ba", "ouff"]},
+{n:"08",t:"Så Mycket Bättre",a:["sa mycket battre", "mycket battre", "so mycket battre"]},
+{n:"09",t:"Girlfriend",a:["girlfriend"]},
+{n:"10",t:"Dum",a:["dum"]},
+{n:"11",t:"Red Light",a:["red light"]},
+{n:"12",t:"A World Like This",a:["a world like this", "world like this"]},
+{n:"13",t:"Dying",a:["dying"]},
+{n:"14",t:"Gabriela",a:["gabriela"]},
+{n:"15",t:"Todo De Ti (All That She Wants)",a:["todo de ti", "all that she wants"]},
+{n:"16",t:"Moving Like That",a:["moving like that"]},
+{n:"17",t:"No Soy un Hombre",a:["no soy un hombre"]},
+{n:"18",t:"Happier",a:["happier"]},
+{n:"19",t:"In The Sunrise",a:["in the sunrise", "sunrise"]},
+{n:"20",t:"She Fell In Love In The Summer",a:["she fell in love in the summer", "she fell in love", "fell in love in the summer"]},
+{n:"21",t:"Off My Mind",a:["off my mind"]},
+{n:"22",t:"Sabotage",a:["sabotage"]},
+{n:"23",t:"Om du inte fanns",a:["om du inte fanns"]},
+{n:"24",t:"Simon's Song",a:["simons song", "simon s song"]},
+{n:"25",t:"Remember",a:["remember"]},
+{n:"26",t:"Yo Dije",a:["yo dije", "yo dije ouff", "ouff"]},
+{n:"27",t:"Bebezinho",a:["bebezinho"]},
+{n:"28",t:"Luz Roja",a:["luz roja"]},
+{n:"29",t:"Mi Casa Su Casa",a:["mi casa su casa"]},
+{n:"30",t:"Höj ett glas (Fanfar)",a:["hoj ett glas", "hoj ett glas fanfar", "fanfar", "hej ett glas"]},
+{n:"31",t:"Lose Me",a:["lose me"]},
+{n:"32",t:"Siren",a:["siren"]},
+{n:"33",t:"Nakna",a:["nakna"]},
+{n:"34",t:"Min första",a:["min forsta", "min firsta"]},
+{n:"35",t:"Careless",a:["careless"]},
+{n:"36",t:"Mama",a:["mama"]},
+{n:"37",t:"La Incondicional",a:["la incondicional", "incondicional"]},
+{n:"38",t:"Que Pasa",a:["que pasa"]},
+{n:"39",t:"All In My Head",a:["all in my head", "in my head"]},
+{n:"40",t:"Wrong",a:["wrong"]},
+{n:"41",t:"Malandro",a:["malandro"]},
+{n:"42",t:"På min telephone (Toda la noche)",a:["pa min telephone", "toda la noche", "telephone toda la noche", "pa min telefon"]},
+{n:"43",t:"Call Me By Your Name",a:["call me by your name"]},
+{n:"44",t:"It Takes a Fool to Remain Sane",a:["it takes a fool to remain sane", "it takes a fool", "fool to remain sane"]},
+{n:"45",t:"Läppar",a:["lappar", "leppar"]},
+{n:"46",t:"Talk",a:["talk"]},
+{n:"47",t:"Bye Bye",a:["bye bye"]},
+{n:"48",t:"La Mesa",a:["la mesa"]},
+{n:"49",t:"Que Puedo Hacer",a:["que puedo hacer"]},
+{n:"50",t:"Symphony",a:["symphony"]},
+{n:"51",t:"I'm So Excited",a:["im so excited", "so excited"]},
+{n:"52",t:"Jag e nån annan",a:["jag e nan annan", "jag ar nagon annan", "nan annan", "jag e non annan"]},
+{n:"53",t:"Coast Side",a:["coast side"]},
+{n:"54",t:"Om om och om igen",a:["om om och om igen"]}
+];/* ==================== BLIND TEST OMAR ==================== */
+window.BT_POCHETTES = window.BT_POCHETTES || ["PH_MALANDRO","PH_SIREN","PH_WORLD","PH_GABRIELA","PH_BEBEZINHO","PH_DYING","PH_NOTABOY","PH_GIRLFRIEND","PH_LOSEME","PH_WRONG","PH_SABOTAGE","PH_TALK","PH_BYEBYE","PH_REDLIGHT","PH_HAPPIER","PH_SHEFELL","PH_CMBYN","PH_SIMONSSONG","PH_TODODETI","PH_DUM","PH_ALLHEAD","PH_BREATHE","PH_DALEBYE","PH_EXCITED","PH_FOOL","PH_JAGE","PH_LAMESA","PH_LAPPAR","PH_LUZROJA","PH_MICASA","PH_MINFORSTA","PH_MOVING","PH_NAKNA","PH_OFFMYMIND","PH_OMOM","PH_OUFF","PH_PULLUP","PH_QUEPASA","PH_QUEPUEDO","PH_REMEMBER","PH_SORRY","PH_SUNRISE","PH_TELEPHONE"].map(function(n){return "photos/"+n+".webp";});
+window.BT_SCORES=[];
+window.BT_BONUS={};
+window.BT_WINS={};
+window.BT_EDITIONS=[
+  {id:"2026-08", y:2026, m:8,  d1:21, d2:23},
+  {id:"2026-09", y:2026, m:9,  d1:18, d2:20},
+  {id:"2026-10", y:2026, m:10, d1:16, d2:18},
+  {id:"2026-11", y:2026, m:11, d1:13, d2:15},
+  {id:"2026-12", y:2026, m:12, d1:18, d2:20}
+];
+var BT_MOIS={en:["January","February","March","April","May","June","July","August","September","October","November","December"],
+  fr:["janvier","février","mars","avril","mai","juin","juillet","août","septembre","octobre","novembre","décembre"],
+  es:["enero","febrero","marzo","abril","mayo","junio","julio","agosto","septiembre","octubre","noviembre","diciembre"],
+  sv:["januari","februari","mars","april","maj","juni","juli","augusti","september","oktober","november","december"],
+  de:["Januar","Februar","März","April","Mai","Juni","Juli","August","September","Oktober","November","Dezember"],
+  pt:["janeiro","fevereiro","março","abril","maio","junho","julho","agosto","setembro","outubro","novembro","dezembro"]};
+var BT_JOURS={en:["M","T","W","T","F","S","S"],fr:["L","M","M","J","V","S","D"],es:["L","M","X","J","V","S","D"],
+  sv:["M","T","O","T","F","L","S"],de:["M","D","M","D","F","S","S"],pt:["S","T","Q","Q","S","S","D"]};
+function btMois(m){ return (BT_MOIS[LANG]||BT_MOIS.en)[m-1]; }
+function btStart(ed){ return new Date(ed.y, ed.m-1, ed.d1, 0,0,0).getTime(); }
+function btEnd(ed){ return new Date(ed.y, ed.m-1, ed.d2, 23,59,59).getTime(); }
+function btEnCours(){ var n=Date.now(); return window.BT_EDITIONS.find(function(e){return n>=btStart(e)&&n<=btEnd(e);})||null; }
+function btProchaine(){ var n=Date.now(); return window.BT_EDITIONS.filter(function(e){return btStart(e)>n;}).sort(function(a,b){return btStart(a)-btStart(b);})[0]||null; }
+function btTerminees(){ var n=Date.now(); return window.BT_EDITIONS.filter(function(e){return btEnd(e)<n;}).sort(function(a,b){return btEnd(b)-btEnd(a);}); }
+function btLabelEd(ed){ var mo=btMois(ed.m); return mo.charAt(0).toUpperCase()+mo.slice(1); }
+function btDates(ed){ return ed.d1+" → "+ed.d2+" "+btMois(ed.m); }
+
+function btHash(s){ var h=2166136261; for(var i=0;i<s.length;i++){ h^=s.charCodeAt(i); h=Math.imul(h,16777619); } return h>>>0; }
+function btRng(seed){ return function(){ seed|=0; seed=seed+0x6D2B79F5|0; var t=Math.imul(seed^seed>>>15,1|seed); t=t+Math.imul(t^t>>>7,61|t)^t; return ((t^t>>>14)>>>0)/4294967296; }; }
+function btSongs(ed){
+  var arr=(window.BT_SONGS||[]).slice(), r=btRng(btHash(ed.id));
+  for(var i=arr.length-1;i>0;i--){ var j=Math.floor(r()*(i+1)); var tmp=arr[i]; arr[i]=arr[j]; arr[j]=tmp; }
+  return arr.slice(0,20);
+}
+function btNorm(s){ return String(s||"").toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g,"").replace(/[^a-z0-9]+/g," ").trim().replace(/\s+/g," "); }
+function btLev(a,b){ var m=a.length,n=b.length; if(!m)return n; if(!n)return m; var d=[],i,j; for(i=0;i<=m;i++)d[i]=[i]; for(j=0;j<=n;j++)d[0][j]=j;
+  for(i=1;i<=m;i++)for(j=1;j<=n;j++){ var c=a[i-1]===b[j-1]?0:1; d[i][j]=Math.min(d[i-1][j]+1,d[i][j-1]+1,d[i-1][j-1]+c); } return d[m][n]; }
+function btCmp(input, answers){
+  var q=btNorm(input); if(!q) return "non"; var best=99;
+  for(var i=0;i<answers.length;i++){
+    var a=btNorm(answers[i]); if(!a) continue;
+    if(q===a) return "ok";
+    var tol=Math.max(1, Math.floor(a.length*0.22)), l=btLev(q,a); if(l<best) best=l;
+    if(l<=tol) return "ok";
+    if(a.length>=5 && (q.indexOf(a)>=0 || a.indexOf(q)>=0) && q.length>=4) return "ok";
+  }
+  if(best<=Math.max(2, Math.floor(btNorm(answers[0]).length*0.4))) return "presque";
+  return "non";
+}
+async function chargerBlindtest(){
+  if(!window._sb){ if(window.rendreBlindtest) rendreBlindtest(); return; }
+  try{
+    var r=await window._sb.from("blindtest_scores").select("user_id,pseudo,edition,score,temps_ms,cree_le");
+    if(!r.error){ window.BT_SCORES=r.data||[]; btCalculBonus(); }
+  }catch(e){ console.warn("blindtest:",e); }
+  if(window.rendreBlindtest) rendreBlindtest();
+  if(window.toutMettreAJour) try{ toutMettreAJour(false); }catch(_e){}
+}
+window.chargerBlindtest=chargerBlindtest;
+function btClassement(edId){ return (window.BT_SCORES||[]).filter(function(x){return x.edition===edId;})
+  .sort(function(a,b){ return (b.score-a.score)||((a.temps_ms||0)-(b.temps_ms||0)); }); }
+function btCalculBonus(){
+  var B={},W={},bonus=[100,50,25];
+  btTerminees().forEach(function(ed){ btClassement(ed.id).slice(0,3).forEach(function(row,i){
+    if(!row.user_id) return; B[row.user_id]=(B[row.user_id]||0)+bonus[i];
+    (W[row.user_id]=W[row.user_id]||[]).push({edition:ed.id,rang:i+1}); }); });
+  window.BT_BONUS=B; window.BT_WINS=W;
+}
+function btMonScore(edId){ return window.MON_USER ? (window.BT_SCORES||[]).find(function(x){return x.edition===edId && x.user_id===window.MON_USER.id;}) : null; }
+function btFmtTemps(ms){ var s=Math.round((ms||0)/1000), m=Math.floor(s/60); s=s%60; return m+":"+(s<10?"0":"")+s; }
+function escapeHtmlBt(s){ return String(s||"").replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];}); }
+
+/* ==================== RENDU ==================== */
+function btBadgeNav(){ try{ var b=document.getElementById("badgeBlindtestNav"); if(b) b.style.display=btEnCours()?"":"none"; }catch(e){} }
+function btBloc(num,titre,inner){ return '<section class="bt-bloc"><div class="bt-titre"><span class="bt-num">'+num+'</span><h3>'+titre+'</h3></div>'+inner+'</section>'; }
+function rendreBlindtest(){
+  btBadgeNav();
+  var c=document.getElementById("bt-contenu"); if(!c) return;
+  var ed=btEnCours(), h="";
+  /* 1 · Le jeu (carte façon maquette) */
+  if(ed){
+    var mine=btMonScore(ed.id), cta;
+    if(!(window.MON_USER && window.MON_PROFIL_ID)){
+      cta='<p class="bt-cta-txt">'+t("bt.needLogin")+'</p><button class="bt-jouer" onclick="allerA(\'inscription\')">'+t("po.loginBtn")+'</button>';
+    } else if(mine){
+      cta='<p class="bt-deja">✓ '+t("bt.already")+'</p><p class="bt-monscore">'+mine.score+'/20 · ⏱ '+btFmtTemps(mine.temps_ms)+'</p>';
+    } else {
+      cta='<p class="bt-cta-txt">'+t("bt.readyTxt")+'</p><button class="bt-jouer" onclick="btDemarrer()">▶ '+t("bt.play")+'</button>';
+    }
+    h+=btBloc(1, t("bt.blocLive"), btJeuCard(ed, cta)+btSablierWidget());
+  } else {
+    var pr=btProchaine();
+    if(pr){
+      var ctaN='<p class="bt-cta-txt">'+t("bt.nextNote")+'</p><p class="bt-next-dates">📅 '+btDates(pr)+' '+pr.y+'</p>';
+      h+=btBloc(1, t("bt.blocNext"), btJeuCard(pr, ctaN)+btSablierWidget());
+    } else {
+      h+=btBloc(1, t("bt.blocNext"), '<div class="bt-verre" style="text-align:center"><p class="bt-sab-title">'+t("bt.allDone")+'</p></div>');
+    }
+  }
+  /* 2 · Classement */
+  if(ed){
+    h+=btBloc(2, t("bt.liveRank"), '<div class="bt-verre">'+btRankList(ed)+'</div>');
+  } else {
+    var der=btTerminees()[0];
+    if(der) h+=btBloc(2, t("bt.rankOf")+" "+btLabelEd(der), '<div class="bt-verre">'+btPodium(der)+'</div>');
+  }
+  /* 3 · Les éditions (mois) */
+  h+=btBloc(3, t("bt.calendar"), '<div class="bt-cal">'+btMoisCards()+'</div>');
+  /* 4 · Le calendrier des jours */
+  h+=btBloc(4, t("bt.daysCal"), '<div class="bt-cal">'+window.BT_EDITIONS.map(btMiniCal).join("")+'</div>');
+  /* 5 · Les badges */
+  h+=btBloc(5, t("bt.badgesTitle"), '<div class="bt-verre"><div class="bt-badges">'
+    +'<div class="bt-bdg"><img src="blindtest/badge_or.png" alt=""><div class="lib">'+t("bt.earGold")+'</div><div class="an">'+t("bt.champ")+'</div><div class="bt-bdg-pts">+100 pts</div></div>'
+    +'<div class="bt-bdg"><img src="blindtest/badge_argent.png" alt=""><div class="lib">'+t("bt.earSilver")+'</div><div class="an">'+t("bt.vice")+'</div><div class="bt-bdg-pts">+50 pts</div></div>'
+    +'<div class="bt-bdg"><img src="blindtest/badge_bronze.png" alt=""><div class="lib">'+t("bt.earBronze")+'</div><div class="an">'+t("bt.third")+'</div><div class="bt-bdg-pts">+25 pts</div></div>'
+    +'<div class="bt-bdg"><img src="blindtest/badge_casque.png" alt=""><div class="lib">'+t("bt.participant")+'</div><div class="an">'+t("bt.participantSub")+'</div><div class="bt-bdg-pts" style="color:var(--rose)">0 pt</div></div>'
+    +'</div><p class="bt-hint">'+t("bt.badgesNote")+'</p></div>');
+  /* 6 · Pêle-mêle des pochettes */
+  h+=btBloc(6, t("bt.moodTitle"), '<div class="bt-pele" id="bt-pele-box"></div><p class="bt-hint">'+t("bt.moodNote")+'</p>');
+  c.innerHTML=h;
+  btFillPele();
+  btTick();
+}
+window.rendreBlindtest=rendreBlindtest;
+
+function btMedaille(cls,rk,lib,an,pts,ptcol){
+  return '<div class="bt-bdg"><div class="bt-medal '+cls+'"><span class="bt-ico">🎧</span>'
+    +(rk?'<span class="bt-rk">'+rk+'</span>':'')+'</div><div class="bt-ruban"></div>'
+    +'<div class="lib">'+lib+'</div><div class="an">'+an+'</div>'
+    +'<div class="bt-bdg-pts"'+(ptcol?' style="color:'+ptcol+'"':'')+'>'+pts+'</div></div>';
+}
+function btFillPele(){
+  var box=document.getElementById("bt-pele-box"); if(!box) return;
+  if(window.BT_POCHETTES && window.BT_POCHETTES.length){
+    var h2="";
+    for(var i=0;i<16;i++){ var src=window.BT_POCHETTES[i%window.BT_POCHETTES.length];
+      var L=(i*53%80), Tp=(i*37%56), rot=((i*29)%40)-20;
+      h2+='<div class="tuile tuile-img" style="background-image:url('+src+');left:'+L+'%;top:'+Tp+'%;transform:rotate('+rot+'deg)"></div>';
+    }
+    h2+='<div class="bt-pele-lg"><span>🎧 BLIND TEST<small>'+t("bt.moodSub")+'</small></span></div>';
+    box.innerHTML=h2; return;
+  }
+  var em=['🎵','🎶','💿','🎧','⭐','🎤','🌙','🔥','💛','🎸','✨','🌴'];
+  var gr=[['#3a1030','#b33533'],['#7e1f1d','#cf6662'],['#2a1a20','#cf9592'],['#160a0a','#7e1f1d'],['#b33533','#3a1030'],['#cf6662','#2a1a20']];
+  var html="";
+  for(var i=0;i<16;i++){ var g=gr[i%gr.length]; var L=(i*53%80), Tp=(i*37%56), rot=((i*29)%40)-20;
+    html+='<div class="tuile" style="background:linear-gradient(135deg,'+g[0]+','+g[1]+');left:'+L+'%;top:'+Tp+'%;transform:rotate('+rot+'deg)">'+em[i%em.length]+'</div>';
+  }
+  html+='<div class="bt-pele-lg"><span>🎧 BLIND TEST<small>'+t("bt.moodSub")+'</small></span></div>';
+  box.innerHTML=html;
+}
+function btJeuCard(ed, ctaHtml){
+  var bars="";
+  var hs=[40,80,55,100,35,70,90,45,65,85,30,75,50,95,60];
+  for(var i=0;i<hs.length;i++) bars+='<i style="height:'+hs[i]+'%"></i>';
+  return '<div class="bt-verre"><div class="bt-jeu-card bt-apercu">'
+    +'<div class="bt-chrono"><svg width="130" height="130" viewBox="0 0 130 130">'
+    +'<circle cx="65" cy="65" r="56" fill="none" stroke="rgba(255,255,255,.08)" stroke-width="10"/>'
+    +'<circle cx="65" cy="65" r="56" fill="none" stroke="url(#btga)" stroke-width="10" stroke-linecap="round" stroke-dasharray="351.9" stroke-dashoffset="90"/>'
+    +'<defs><linearGradient id="btga" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f7c1d5"/><stop offset="1" stop-color="#b33533"/></linearGradient></defs></svg>'
+    +'<div class="bt-n"><b style="font-size:1.9rem">🎧</b><span>Blind Test</span></div></div>'
+    +'<div class="bt-mystere"><div class="bt-disc"><div class="bt-vinyle"></div>'
+    +'<div class="bt-q">'+btLabelEd(ed)+' '+ed.y+'<small>'+t("bt.songsMystery")+'</small></div></div>'
+    +'<div class="bt-waves">'+bars+'</div>'
+    +'<div class="bt-cta">'+ctaHtml+'</div></div></div></div>';
+}
+function btSablierWidget(){
+  var ed=btEnCours(), pr=btProchaine(), s1, s2, label;
+  if(ed){ s1=btStart(ed); s2=btEnd(ed); label=t("bt.timeLeftPlay"); }
+  else if(pr){ s2=btStart(pr); s1=s2-30*86400000; label=t("bt.nextGameIn"); }
+  else return "";
+  return '<div class="bt-verre bt-sabw"><p class="bt-sabw-lbl">⏳ '+label+'</p>'
+    +'<svg class="bt-sablier" viewBox="0 0 100 140" data-s1="'+s1+'" data-s2="'+s2+'">'
+    +'<rect class="bt-cadre" x="16" y="6" width="68" height="7" rx="3"/><rect class="bt-cadre" x="16" y="127" width="68" height="7" rx="3"/>'
+    +'<path class="bt-verre-g" d="M22 13 H78 L56 68 A6 6 0 0 0 56 72 L78 127 H22 L44 72 A6 6 0 0 0 44 68 Z"/>'
+    +'<clipPath id="bt-ch"><path d="M24 15 H76 L55 68 A6 6 0 0 0 55 71 H45 A6 6 0 0 0 45 68 Z"/></clipPath>'
+    +'<rect id="bt-sh" class="bt-sable" x="24" y="15" width="52" height="55" clip-path="url(#bt-ch)"/>'
+    +'<clipPath id="bt-cb"><path d="M45 72 A6 6 0 0 1 55 72 L76 125 H24 Z"/></clipPath>'
+    +'<rect id="bt-sb" class="bt-sable" x="24" y="125" width="52" height="0" clip-path="url(#bt-cb)"/>'
+    +'<line class="bt-flux" x1="50" y1="70" x2="50" y2="118"/></svg>'
+    +btCompteur()+'</div>';
+}
+function btSablierSVG(ed){
+  return '<p class="bt-sab-tag">✦ '+t("bt.live")+' ✦</p><p class="bt-sab-title">'+t("bt.winnerSoon")+'</p>'
+    +'<p class="bt-sab-sub">'+btLabelEd(ed)+' '+ed.y+' · '+btDates(ed)+'</p>'
+    +'<svg class="bt-sablier" viewBox="0 0 100 140" data-s1="'+btStart(ed)+'" data-s2="'+btEnd(ed)+'">'
+    +'<rect class="bt-cadre" x="16" y="6" width="68" height="7" rx="3"/><rect class="bt-cadre" x="16" y="127" width="68" height="7" rx="3"/>'
+    +'<path class="bt-verre-g" d="M22 13 H78 L56 68 A6 6 0 0 0 56 72 L78 127 H22 L44 72 A6 6 0 0 0 44 68 Z"/>'
+    +'<clipPath id="bt-ch"><path d="M24 15 H76 L55 68 A6 6 0 0 0 55 71 H45 A6 6 0 0 0 45 68 Z"/></clipPath>'
+    +'<rect id="bt-sh" class="bt-sable" x="24" y="15" width="52" height="55" clip-path="url(#bt-ch)"/>'
+    +'<clipPath id="bt-cb"><path d="M45 72 A6 6 0 0 1 55 72 L76 125 H24 Z"/></clipPath>'
+    +'<rect id="bt-sb" class="bt-sable" x="24" y="125" width="52" height="0" clip-path="url(#bt-cb)"/>'
+    +'<line class="bt-flux" x1="50" y1="70" x2="50" y2="118"/></svg>'+btCompteur()
+    +'<p class="bt-sab-note">'+t("bt.winnerNote")+'</p>';
+}
+function btCompteur(){
+  return '<div class="bt-cd"><div class="bt-cd-b"><b id="cd-j">00</b><span>'+t("bt.days")+'</span></div>'
+    +'<div class="bt-cd-b"><b id="cd-h">00</b><span>'+t("bt.hrs")+'</span></div>'
+    +'<div class="bt-cd-b"><b id="cd-m">00</b><span>'+t("bt.min")+'</span></div>'
+    +'<div class="bt-cd-b"><b id="cd-s">00</b><span>'+t("bt.sec")+'</span></div></div>';
+}
+function btTick(){
+  var now=Date.now(), svg=document.querySelector(".bt-sablier"), cible=null;
+  if(svg){
+    var s1=+svg.dataset.s1, s2=+svg.dataset.s2, e=Math.min(1,Math.max(0,(now-s1)/(s2-s1)));
+    var sh=document.getElementById("bt-sh"), sb=document.getElementById("bt-sb");
+    if(sh){ sh.setAttribute("height",(55*(1-e)).toFixed(1)); sh.setAttribute("y",(15+55*e).toFixed(1)); }
+    if(sb){ var bh=53*e; sb.setAttribute("height",bh.toFixed(1)); sb.setAttribute("y",(125-bh).toFixed(1)); }
+    cible=s2;
+  }
+  if(cible===null){ var pr=btProchaine(); if(pr) cible=btStart(pr); }
+  if(document.getElementById("cd-j") && cible!==null){
+    var r=Math.max(0,cible-now), sec=Math.floor(r/1000);
+    var j=Math.floor(sec/86400); sec-=j*86400; var hh=Math.floor(sec/3600); sec-=hh*3600; var mm=Math.floor(sec/60); sec-=mm*60;
+    var set=function(id,v){ var el=document.getElementById(id); if(el) el.textContent=(v<10?"0":"")+v; };
+    set("cd-j",j); set("cd-h",hh); set("cd-m",mm); set("cd-s",sec);
+  }
+}
+window.btTick=btTick;
+
+function btRankList(ed){
+  var cl=btClassement(ed.id);
+  if(!cl.length) return '<p class="bt-rank-empty">'+t("bt.rankEmpty")+'</p>';
+  return cl.slice(0,15).map(function(row,i){
+    var moi=window.MON_USER && row.user_id===window.MON_USER.id;
+    var medal=i===0?"🥇":i===1?"🥈":i===2?"🥉":(i+1)+".";
+    return '<div class="bt-rank-row'+(moi?" moi":"")+'"><span class="bt-r">'+medal+'</span>'
+      +'<span class="bt-p">'+escapeHtmlBt(row.pseudo||"✦")+'</span>'
+      +'<span class="bt-sc">'+row.score+'/20</span><span class="bt-tm">⏱ '+btFmtTemps(row.temps_ms)+'</span></div>';
+  }).join("");
+}
+function btPodium(ed){
+  var cl=btClassement(ed.id);
+  if(!cl.length) return '<p class="bt-rank-empty">'+t("bt.rankEmpty")+'</p>';
+  var badges=["badge_or.png","badge_argent.png","badge_bronze.png"], med=["🥇","🥈","🥉"], bonus=["+100","+50","+25"], cls=["p1","p2","p3"];
+  var ordre=[1,0,2]; /* 2e, 1er, 3e pour l'effet podium */
+  var cells=ordre.map(function(i){
+    var row=cl[i]; if(!row) return '<div class="bt-marche '+cls[i]+'"></div>';
+    return '<div class="bt-marche '+cls[i]+'"><img src="blindtest/'+badges[i]+'" alt="">'
+      +'<div class="nom">'+med[i]+' '+escapeHtmlBt(row.pseudo||"✦")+'</div>'
+      +'<div class="pts">'+row.score+'/20</div><div class="detail">⏱ '+btFmtTemps(row.temps_ms)+'</div>'
+      +'<span class="bonus">'+bonus[i]+' pts</span></div>';
+  }).join("");
+  var reste=cl.slice(3,10).map(function(row,k){
+    var moi=window.MON_USER && row.user_id===window.MON_USER.id;
+    return '<div class="bt-rank-row'+(moi?" moi":"")+'"><span class="bt-r">'+(k+4)+'.</span><span class="bt-p">'+escapeHtmlBt(row.pseudo||"✦")+'</span><span class="bt-sc">'+row.score+'/20</span><span class="bt-tm">⏱ '+btFmtTemps(row.temps_ms)+'</span></div>';
+  }).join("");
+  return '<div class="bt-podium">'+cells+'</div>'+(reste?'<div style="margin-top:12px">'+reste+'</div>':'');
+}
+function btMoisCards(){
+  var now=Date.now();
+  return window.BT_EDITIONS.map(function(ed){
+    var st= now>btEnd(ed)?"fini":(now>=btStart(ed)?"actif":"");
+    var etat= st==="fini"?t("bt.stDone"):st==="actif"?("● "+t("bt.stLive")):t("bt.stSoon");
+    return '<div class="bt-mois '+st+'"><div class="m">'+btLabelEd(ed)+'</div><span class="fen">'+ed.d1+" → "+ed.d2+" "+btMois(ed.m).slice(0,4)+'.</span><span class="etat">'+etat+'</span></div>';
+  }).join("");
+}
+/* mini calendrier du mois avec les 3 jours de l'édition surlignés */
+function btMiniCal(ed){
+  var now=Date.now(), st= now>btEnd(ed)?"fini":(now>=btStart(ed)?"actif":"");
+  var first=new Date(ed.y, ed.m-1, 1).getDay();          /* 0=dim */
+  var lundi=(first+6)%7;                                  /* colonne lundi-première */
+  var nb=new Date(ed.y, ed.m, 0).getDate();
+  var jours=(BT_JOURS[LANG]||BT_JOURS.en);
+  var head='<div class="bt-mc-h">'+jours.map(function(d){return '<span>'+d+'</span>';}).join("")+'</div>';
+  var cells="";
+  for(var k=0;k<lundi;k++) cells+='<span class="bt-mc-x"></span>';
+  for(var d=1;d<=nb;d++){
+    var on=(d>=ed.d1 && d<=ed.d2);
+    cells+='<span class="bt-mc-d'+(on?" on":"")+'">'+d+'</span>';
+  }
+  return '<div class="bt-mois '+st+'"><div class="m" style="font-size:1.15rem">'+btLabelEd(ed)+'</div>'
+    +'<div class="bt-mc">'+head+'<div class="bt-mc-g">'+cells+'</div></div></div>';
+}
+
+/* ==================== LE JEU ==================== */
+window.BT=null;
+function btDemarrer(){
+  var ed=btEnCours(); if(!ed) return;
+  if(!(window.MON_USER && window.MON_PROFIL_ID)){ allerA("inscription"); return; }
+  if(btMonScore(ed.id)){ toast(t("bt.already")); return; }
+  window.BT={ ed:ed, songs:btSongs(ed), idx:0, score:0, temps:0, songStart:0, timer:null, remaining:30, fini:false };
+  document.getElementById("bt-jeu").style.display="flex";
+  document.getElementById("bt-play").style.display="block";
+  document.getElementById("bt-fini").style.display="none";
+  document.body.style.overflow="hidden";
+  btPlaySong();
+}
+window.btDemarrer=btDemarrer;
+function btSet(id,v){ var el=document.getElementById(id); if(el) el.textContent=v; }
+function btPlaySong(){
+  var B=window.BT; if(!B) return;
+  if(B.idx>=B.songs.length){ btFinir(); return; }
+  var song=B.songs[B.idx];
+  btSet("bt-progress",(B.idx+1)+" / "+B.songs.length);
+  btSet("bt-found",B.score); btSet("bt-time",btFmtTemps(B.temps));
+  var fb=document.getElementById("bt-feedback"); fb.textContent=""; fb.className="bt-feedback";
+  var inp=document.getElementById("bt-input"); inp.value=""; inp.disabled=false; setTimeout(function(){inp.focus();},50);
+  var w=document.getElementById("bt-waves"); if(w) w.classList.remove("pause");
+  var au=document.getElementById("bt-audio"); au.src=(window.BT_AUDIO_MAP&&window.BT_AUDIO_MAP[song.n])?window.BT_AUDIO_MAP[song.n]:("blindtest/bt"+song.n+".mp3"); au.currentTime=0;
+  var pr=au.play(); if(pr&&pr.catch) pr.catch(function(){});
+  B.songStart=Date.now(); B.remaining=30; btMajRing(30);
+  clearInterval(B.timer);
+  B.timer=setInterval(function(){
+    B.remaining-=0.1;
+    btSet("bt-time",btFmtTemps(B.temps + (Date.now()-B.songStart)));
+    if(B.remaining<=0){ btMajRing(0); btTimeout(); } else btMajRing(B.remaining);
+  },100);
+}
+function btMajRing(sec){
+  var el=document.getElementById("bt-ring-fg"); if(!el) return;
+  var r=+el.getAttribute("r")||56, C=2*Math.PI*r, frac=Math.max(0,sec/30);
+  el.style.strokeDasharray=C.toFixed(1);
+  el.style.strokeDashoffset=(C*(1-frac)).toFixed(1);
+  btSet("bt-ring-num", Math.ceil(Math.max(0,sec)));
+}
+function btArret(){ var B=window.BT; if(B) clearInterval(B.timer); var au=document.getElementById("bt-audio"); if(au) au.pause(); var w=document.getElementById("bt-waves"); if(w) w.classList.add("pause"); }
+function btRepondre(){
+  var B=window.BT; if(!B||B.idx>=B.songs.length) return;
+  var inp=document.getElementById("bt-input"), v=inp.value; if(!btNorm(v)) return;
+  var song=B.songs[B.idx], res=btCmp(v, song.a), fb=document.getElementById("bt-feedback");
+  if(res==="ok"){
+    B.score++; B.temps += (Date.now()-B.songStart); clearInterval(B.timer); inp.disabled=true;
+    btSet("bt-found",B.score); btSet("bt-time",btFmtTemps(B.temps));
+    fb.textContent="✓ "+t("bt.bravo")+" — "+song.t; fb.className="bt-feedback ok";
+    var w=document.getElementById("bt-waves"); if(w) w.classList.add("pause");
+    document.getElementById("bt-audio").pause();
+    setTimeout(function(){ B.idx++; btPlaySong(); }, 1100);
+  } else if(res==="presque"){ fb.textContent="🤏 "+t("bt.presque"); fb.className="bt-feedback presque"; inp.select();
+  } else { fb.textContent="↺ "+t("bt.retry"); fb.className="bt-feedback retry"; inp.select(); }
+}
+window.btRepondre=btRepondre;
+function btTimeout(){
+  var B=window.BT; if(!B) return;
+  clearInterval(B.timer); B.temps += 30000;
+  var song=B.songs[B.idx], inp=document.getElementById("bt-input"); inp.disabled=true;
+  var fb=document.getElementById("bt-feedback"); fb.textContent="⏱ "+t("bt.timeUp")+" — "+song.t; fb.className="bt-feedback retry";
+  var w=document.getElementById("bt-waves"); if(w) w.classList.add("pause");
+  document.getElementById("bt-audio").pause();
+  setTimeout(function(){ B.idx++; btPlaySong(); }, 1400);
+}
+async function btFinir(){
+  var B=window.BT; if(!B||B.fini) return; B.fini=true; btArret();
+  var ok=false;
+  if(window._sb && window.MON_USER){
+    var pseudo=(typeof MOI!=="undefined"&&MOI&&MOI.prenom)?MOI.prenom:(window.MON_USER.email||"").split("@")[0];
+    try{ var r=await window._sb.from("blindtest_scores").insert({user_id:window.MON_USER.id, edition:B.ed.id, pseudo:pseudo, score:B.score, temps_ms:Math.round(B.temps)});
+      ok=!(r&&r.error); if(r&&r.error) console.warn("bt insert:",r.error);
+    }catch(e){ console.warn(e); }
+  }
+  if(window.chargerBlindtest) await chargerBlindtest();
+  var cl=btClassement(B.ed.id), rang=cl.findIndex(function(x){return window.MON_USER&&x.user_id===window.MON_USER.id;})+1;
+  document.getElementById("bt-play").style.display="none";
+  var fini=document.getElementById("bt-fini"); fini.style.display="block";
+  fini.innerHTML='<p class="bt-fini-t">🎉 '+t("bt.done")+'</p>'
+    +'<div class="bt-fini-score">'+B.score+'<span>/20</span></div>'
+    +'<p class="bt-fini-tm">⏱ '+btFmtTemps(B.temps)+'</p>'
+    +(rang>0?'<p class="bt-fini-rang">'+t("bt.yourRank")+' <b>'+rang+(rang===1?"ᵉʳ":"ᵉ")+'</b></p>':'')
+    +(ok?'':'<p class="bt-fini-warn">'+t("bt.saveWarn")+'</p>')
+    +'<button class="bt-jouer" style="margin-top:14px" onclick="btFermer()">'+t("bt.seeRank")+'</button>';
+}
+function btFermer(){
+  btArret(); window.BT=null;
+  document.getElementById("bt-jeu").style.display="none";
+  document.getElementById("bt-play").style.display="block";
+  document.getElementById("bt-fini").style.display="none";
+  document.body.style.overflow="";
+  if(window.rendreBlindtest) rendreBlindtest();
+  var el=document.querySelector(".bt-bloc"); if(el) el.scrollIntoView({behavior:"smooth",block:"start"});
+}
+window.btFermer=btFermer;
+function btQuitter(){
+  if(window.BT && !window.BT.fini){ if(!confirm(t("bt.quitConfirm"))) return; }
+  btArret(); window.BT=null;
+  document.getElementById("bt-jeu").style.display="none";
+  document.getElementById("bt-play").style.display="block";
+  document.getElementById("bt-fini").style.display="none";
+  document.body.style.overflow="";
+}
+window.btQuitter=btQuitter;
+setInterval(function(){ var p=document.getElementById("page-blindtest"); if(p && p.classList.contains("actif") && !window.BT) btTick(); }, 1000);
+
 async function traduirePhrase(i, btn){
   var p=document.getElementById("phrase-"+i); if(!p) return;
   if(p.dataset.orig===undefined) p.dataset.orig=p.textContent||"";
@@ -9382,6 +10469,7 @@ if(window.chargerGroupesSupabase) chargerGroupesSupabase();
 if(window.chargerProjetsSupabase) chargerProjetsSupabase();
 if(window.chargerAwardsSupabase) chargerAwardsSupabase();
 if(window.chargerPourquoiSupabase) chargerPourquoiSupabase();
+if(window.chargerBlindtest) chargerBlindtest();
 if(window.chargerInteractionsSupabase) chargerInteractionsSupabase();
 
     if(window.chargerParticipationsSupabase) chargerParticipationsSupabase();
