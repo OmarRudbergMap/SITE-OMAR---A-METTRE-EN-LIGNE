@@ -542,7 +542,7 @@ footer .marque{font-family:'Bebas Neue';font-size:1.1rem;letter-spacing:.15em;co
         <p style="margin:4px 0"><span data-i18n="acc.connected">Connected:</span> <b id="auth-qui"></b></p>
         <button type="button" class="btn fantome" onclick="seDeconnecter()" data-i18n="acc.logout">Log out</button>
       </div>
-      <div style="font-size:.66rem;opacity:.5;margin-top:8px">version : COMPTES-83</div>
+      <div style="font-size:.66rem;opacity:.5;margin-top:8px">version : COMPTES-84</div>
     </div>
     <div class="verre" id="dejaFiche" style="display:none;margin-bottom:16px">
       <h3 class="accent" data-i18n="acc.haveCard">Your card is created ✓</h3>
@@ -947,9 +947,9 @@ footer .marque{font-family:'Bebas Neue';font-size:1.1rem;letter-spacing:.15em;co
 </div>
 <style id="bt-style">
 #page-blindtest{--or:#e9c86a;--argent:#cdd2da;--bronze:#d09a63}
-#page-blindtest.actif{background:radial-gradient(circle at 50% 0%,#2a0c0b,#160a0a 55%,#000);margin:0 -16px;padding:10px 16px 44px;border-radius:0}
+#page-blindtest.actif{background:radial-gradient(circle at 50% 0%,#2a0c0b,#160a0a 55%,#000);padding-bottom:44px}
 .btw{max-width:760px;margin:0 auto}
-#page-blindtest header{text-align:center;padding:36px 8px 4px}
+#page-blindtest .bt-hero-head{text-align:center;padding:30px 8px 4px}
 #page-blindtest .bt-eyebrow{font-size:.7rem;letter-spacing:.32em;text-transform:uppercase;color:var(--rose)}
 #page-blindtest h1.bt-h1{font-family:'Bebas Neue',sans-serif;font-size:clamp(2.4rem,11.5vw,4rem);letter-spacing:.03em;line-height:.92;margin:6px 0 4px;
   background:linear-gradient(180deg,#fff,#f7c1d5 55%,var(--bordeaux));-webkit-background-clip:text;background-clip:text;color:transparent;
@@ -1039,7 +1039,7 @@ footer .marque{font-family:'Bebas Neue';font-size:1.1rem;letter-spacing:.15em;co
 .m-or{background:radial-gradient(circle at 35% 30%,#fff3c4,#e9c86a 45%,#b8862e)}
 .m-arg{background:radial-gradient(circle at 35% 30%,#fff,#cdd2da 45%,#8b929c)}
 .m-bro{background:radial-gradient(circle at 35% 30%,#f6d3a8,#d09a63 45%,#8a5a2b)}
-.m-part{background:radial-gradient(circle at 35% 30%,#f7c1d5,#cf9592 45%,#8a3a4a)}
+.m-part{background:radial-gradient(circle at 35% 30%,#fbe6da,#e6ad98 42%,#b76e79 100%)}
 .bt-ruban{width:18px;height:24px;margin:-2px auto 0;background:linear-gradient(var(--bordeaux),var(--rouge-sombre));clip-path:polygon(0 0,100% 0,100% 100%,50% 78%,0 100%)}
 .bt-pele .tuile-img{background-size:cover;background-position:center}
 .bt-hint{font-size:.74rem;color:var(--beige);text-align:center;margin:12px 0 0}
@@ -1091,7 +1091,7 @@ footer .marque{font-family:'Bebas Neue';font-size:1.1rem;letter-spacing:.15em;co
 
 <div class="page" id="page-blindtest">
  <div class="btw">
-  <header>
+  <div class="bt-hero-head">
     <p class="bt-eyebrow" data-i18n="bt.eyebrow2">The community game</p>
     <h1 class="bt-h1">BLIND TEST</h1>
     <p class="bt-sub" data-i18n="bt.intro">Recognise Omar's songs by ear, as fast as you can. Every month a new edition — and a podium to win!</p>
@@ -1102,7 +1102,7 @@ footer .marque{font-family:'Bebas Neue';font-size:1.1rem;letter-spacing:.15em;co
       <span class="bt-chip">📅 <b>3</b>&nbsp;<span data-i18n="bt.chDays">days / month</span></span>
       <span class="bt-chip">🏆 <b>+100 / +50 / +25</b>&nbsp;<span data-i18n="bt.chBonus">for the top 3</span></span>
     </div>
-  </header>
+  </div>
   <div id="bt-contenu"></div>
  </div>
 </div>
@@ -1392,6 +1392,8 @@ let LANG = "en";
 const I18N = {
 en:{
   "nav.blindtest":"Blind Test",
+  "bt.testAdmin":"Test the game (admin preview)",
+  "bt.testNote":"Test mode — this score is not saved.",
   "bt.moodTitle":"Vibe · all his songs",
   "bt.moodSub":"all of Omar's songs",
   "bt.moodNote":"The covers of Omar's songs, as a decorative background.",
@@ -1677,6 +1679,8 @@ en:{
 },
 fr:{
   "nav.blindtest":"Blind Test",
+  "bt.testAdmin":"Tester le jeu (aperçu admin)",
+  "bt.testNote":"Mode test — ce score n'est pas enregistré.",
   "bt.moodTitle":"Ambiance · toutes ses chansons",
   "bt.moodSub":"toutes les chansons d'Omar",
   "bt.moodNote":"Les pochettes des chansons d'Omar, en fond décoratif de l'onglet.",
@@ -2047,6 +2051,8 @@ fr:{
 },
 es:{
   "nav.blindtest":"Blind Test",
+  "bt.testAdmin":"Probar el juego (admin)",
+  "bt.testNote":"Modo prueba — esta puntuación no se guarda.",
   "bt.moodTitle":"Ambiente · todas sus canciones",
   "bt.moodSub":"todas las canciones de Omar",
   "bt.moodNote":"Las portadas de las canciones de Omar, como fondo decorativo.",
@@ -2385,6 +2391,8 @@ es:{
 },
 sv:{
   "nav.blindtest":"Blind Test",
+  "bt.testAdmin":"Testa spelet (admin)",
+  "bt.testNote":"Testläge — poängen sparas inte.",
   "bt.moodTitle":"Stämning · alla hans låtar",
   "bt.moodSub":"alla Omars låtar",
   "bt.moodNote":"Omslagen till Omars låtar, som dekorativ bakgrund.",
@@ -2723,6 +2731,8 @@ sv:{
 },
 de:{
   "nav.blindtest":"Blind Test",
+  "bt.testAdmin":"Spiel testen (Admin)",
+  "bt.testNote":"Testmodus — dieser Score wird nicht gespeichert.",
   "bt.moodTitle":"Stimmung · alle seine Songs",
   "bt.moodSub":"alle Songs von Omar",
   "bt.moodNote":"Die Cover von Omars Songs als dekorativer Hintergrund.",
@@ -3061,6 +3071,8 @@ de:{
 },
 pt:{
   "nav.blindtest":"Blind Test",
+  "bt.testAdmin":"Testar o jogo (admin)",
+  "bt.testNote":"Modo teste — esta pontuação não é salva.",
   "bt.moodTitle":"Clima · todas as músicas",
   "bt.moodSub":"todas as músicas do Omar",
   "bt.moodNote":"As capas das músicas do Omar, como fundo decorativo.",
@@ -5120,7 +5132,7 @@ function rendreBlindtest(){
     if(!(window.MON_USER && window.MON_PROFIL_ID)){
       cta='<p class="bt-cta-txt">'+t("bt.needLogin")+'</p><button class="bt-jouer" onclick="allerA(\'inscription\')">'+t("po.loginBtn")+'</button>';
     } else if(mine){
-      cta='<p class="bt-deja">✓ '+t("bt.already")+'</p><p class="bt-monscore">'+mine.score+'/20 · ⏱ '+btFmtTemps(mine.temps_ms)+'</p>';
+      cta='<p class="bt-deja">✓ '+t("bt.already")+'</p><p class="bt-monscore">'+mine.score+'/20 · ⏱ '+btFmtTemps(mine.temps_ms)+'</p>'+btAdminBtn();
     } else {
       cta='<p class="bt-cta-txt">'+t("bt.readyTxt")+'</p><button class="bt-jouer" onclick="btDemarrer()">▶ '+t("bt.play")+'</button>';
     }
@@ -5128,7 +5140,7 @@ function rendreBlindtest(){
   } else {
     var pr=btProchaine();
     if(pr){
-      var ctaN='<p class="bt-cta-txt">'+t("bt.nextNote")+'</p><p class="bt-next-dates">📅 '+btDates(pr)+' '+pr.y+'</p>';
+      var ctaN='<p class="bt-cta-txt">'+t("bt.nextNote")+'</p><p class="bt-next-dates">📅 '+btDates(pr)+' '+pr.y+'</p>'+btAdminBtn();
       h+=btBloc(1, t("bt.blocNext"), btJeuCard(pr, ctaN)+btSablierWidget());
     } else {
       h+=btBloc(1, t("bt.blocNext"), '<div class="bt-verre" style="text-align:center"><p class="bt-sab-title">'+t("bt.allDone")+'</p></div>');
@@ -5150,7 +5162,7 @@ function rendreBlindtest(){
     +'<div class="bt-bdg"><img src="blindtest/badge_or.png" alt=""><div class="lib">'+t("bt.earGold")+'</div><div class="an">'+t("bt.champ")+'</div><div class="bt-bdg-pts">+100 pts</div></div>'
     +'<div class="bt-bdg"><img src="blindtest/badge_argent.png" alt=""><div class="lib">'+t("bt.earSilver")+'</div><div class="an">'+t("bt.vice")+'</div><div class="bt-bdg-pts">+50 pts</div></div>'
     +'<div class="bt-bdg"><img src="blindtest/badge_bronze.png" alt=""><div class="lib">'+t("bt.earBronze")+'</div><div class="an">'+t("bt.third")+'</div><div class="bt-bdg-pts">+25 pts</div></div>'
-    +'<div class="bt-bdg"><img src="blindtest/badge_casque.png" alt=""><div class="lib">'+t("bt.participant")+'</div><div class="an">'+t("bt.participantSub")+'</div><div class="bt-bdg-pts" style="color:var(--rose)">0 pt</div></div>'
+    +btMedaille('m-part','',t("bt.participant"),t("bt.participantSub"),'0 pt','var(--rose)')
     +'</div><p class="bt-hint">'+t("bt.badgesNote")+'</p></div>');
   /* 6 · Pêle-mêle des pochettes */
   h+=btBloc(6, t("bt.moodTitle"), '<div class="bt-pele" id="bt-pele-box"></div><p class="bt-hint">'+t("bt.moodNote")+'</p>');
@@ -5160,6 +5172,20 @@ function rendreBlindtest(){
 }
 window.rendreBlindtest=rendreBlindtest;
 
+function btAdminBtn(){
+  if(!(typeof estAdmin==="function" && estAdmin())) return "";
+  return '<div style="margin-top:10px"><button class="bt-jouer" style="background:#7e1f1d;font-size:.86rem;padding:9px 15px" onclick="btDemarrerTest()">🔧 '+t("bt.testAdmin")+'</button></div>';
+}
+function btDemarrerTest(){
+  var ed=btEnCours()||btProchaine()||(window.BT_EDITIONS&&window.BT_EDITIONS[0]); if(!ed) return;
+  window.BT={ ed:ed, songs:btSongs(ed), idx:0, score:0, temps:0, songStart:0, timer:null, remaining:30, fini:false, test:true };
+  document.getElementById("bt-jeu").style.display="flex";
+  document.getElementById("bt-play").style.display="block";
+  document.getElementById("bt-fini").style.display="none";
+  document.body.style.overflow="hidden";
+  btPlaySong();
+}
+window.btDemarrerTest=btDemarrerTest;
 function btMedaille(cls,rk,lib,an,pts,ptcol){
   return '<div class="bt-bdg"><div class="bt-medal '+cls+'"><span class="bt-ico">🎧</span>'
     +(rk?'<span class="bt-rk">'+rk+'</span>':'')+'</div><div class="bt-ruban"></div>'
@@ -5379,7 +5405,7 @@ function btTimeout(){
 async function btFinir(){
   var B=window.BT; if(!B||B.fini) return; B.fini=true; btArret();
   var ok=false;
-  if(window._sb && window.MON_USER){
+  if(window._sb && window.MON_USER && !B.test){
     var pseudo=(typeof MOI!=="undefined"&&MOI&&MOI.prenom)?MOI.prenom:(window.MON_USER.email||"").split("@")[0];
     try{ var r=await window._sb.from("blindtest_scores").insert({user_id:window.MON_USER.id, edition:B.ed.id, pseudo:pseudo, score:B.score, temps_ms:Math.round(B.temps)});
       ok=!(r&&r.error); if(r&&r.error) console.warn("bt insert:",r.error);
@@ -5393,7 +5419,7 @@ async function btFinir(){
     +'<div class="bt-fini-score">'+B.score+'<span>/20</span></div>'
     +'<p class="bt-fini-tm">⏱ '+btFmtTemps(B.temps)+'</p>'
     +(rang>0?'<p class="bt-fini-rang">'+t("bt.yourRank")+' <b>'+rang+(rang===1?"ᵉʳ":"ᵉ")+'</b></p>':'')
-    +(ok?'':'<p class="bt-fini-warn">'+t("bt.saveWarn")+'</p>')
+    +(B.test?'<p class="bt-fini-warn">'+t("bt.testNote")+'</p>':(ok?'':'<p class="bt-fini-warn">'+t("bt.saveWarn")+'</p>'))
     +'<button class="bt-jouer" style="margin-top:14px" onclick="btFermer()">'+t("bt.seeRank")+'</button>';
 }
 function btFermer(){
