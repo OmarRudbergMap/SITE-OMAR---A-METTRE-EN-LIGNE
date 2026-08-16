@@ -542,7 +542,7 @@ footer .marque{font-family:'Bebas Neue';font-size:1.1rem;letter-spacing:.15em;co
         <p style="margin:4px 0"><span data-i18n="acc.connected">Connected:</span> <b id="auth-qui"></b></p>
         <button type="button" class="btn fantome" onclick="seDeconnecter()" data-i18n="acc.logout">Log out</button>
       </div>
-      <div style="font-size:.66rem;opacity:.5;margin-top:8px">version : COMPTES-84</div>
+      <div style="font-size:.66rem;opacity:.5;margin-top:8px">version : COMPTES-85</div>
     </div>
     <div class="verre" id="dejaFiche" style="display:none;margin-bottom:16px">
       <h3 class="accent" data-i18n="acc.haveCard">Your card is created ✓</h3>
@@ -997,6 +997,11 @@ footer .marque{font-family:'Bebas Neue';font-size:1.1rem;letter-spacing:.15em;co
 .bt-rank-row .bt-sc{font-weight:700;color:#e8524d}
 .bt-rank-row .bt-tm{font-size:.7rem;color:var(--beige);min-width:52px;text-align:right}
 .bt-rank-empty{text-align:center;color:var(--beige);font-size:.88rem;margin:6px 0}
+.bt-rank-head{display:flex;align-items:center;gap:10px;padding:2px 12px 6px;font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:var(--beige)}
+.bt-rank-head .bt-r{width:26px;text-align:center}
+.bt-rank-head .bt-p{flex:1}
+.bt-rank-head .bt-tm{min-width:52px;text-align:right}
+.bt-pele-grand{height:200px;margin-bottom:2px}
 /* --- podium --- */
 .bt-podium{display:grid;grid-template-columns:1fr 1.15fr 1fr;gap:10px;align-items:end}
 .bt-marche{background:rgba(255,255,255,.05);border:1px solid var(--verre-bord);border-radius:16px 16px 0 0;padding:14px 8px 12px;text-align:center}
@@ -1392,6 +1397,12 @@ let LANG = "en";
 const I18N = {
 en:{
   "nav.blindtest":"Blind Test",
+  "bt.podiumTitle":"The podium",
+  "bt.podiumLive":"The podium (live)",
+  "bt.rankFull":"Full ranking · top 50",
+  "bt.colName":"Fan",
+  "bt.colPts":"Score",
+  "bt.colTime":"Time",
   "bt.testAdmin":"Test the game (admin preview)",
   "bt.testNote":"Test mode — this score is not saved.",
   "bt.moodTitle":"Vibe · all his songs",
@@ -1679,6 +1690,12 @@ en:{
 },
 fr:{
   "nav.blindtest":"Blind Test",
+  "bt.podiumTitle":"Le podium",
+  "bt.podiumLive":"Le podium (en direct)",
+  "bt.rankFull":"Classement complet · les 50 premiers",
+  "bt.colName":"Fan",
+  "bt.colPts":"Score",
+  "bt.colTime":"Temps",
   "bt.testAdmin":"Tester le jeu (aperçu admin)",
   "bt.testNote":"Mode test — ce score n'est pas enregistré.",
   "bt.moodTitle":"Ambiance · toutes ses chansons",
@@ -2051,6 +2068,12 @@ fr:{
 },
 es:{
   "nav.blindtest":"Blind Test",
+  "bt.podiumTitle":"El podio",
+  "bt.podiumLive":"El podio (en directo)",
+  "bt.rankFull":"Clasificación completa · top 50",
+  "bt.colName":"Fan",
+  "bt.colPts":"Puntos",
+  "bt.colTime":"Tiempo",
   "bt.testAdmin":"Probar el juego (admin)",
   "bt.testNote":"Modo prueba — esta puntuación no se guarda.",
   "bt.moodTitle":"Ambiente · todas sus canciones",
@@ -2391,6 +2414,12 @@ es:{
 },
 sv:{
   "nav.blindtest":"Blind Test",
+  "bt.podiumTitle":"Prispallen",
+  "bt.podiumLive":"Prispallen (live)",
+  "bt.rankFull":"Fullständig ranking · topp 50",
+  "bt.colName":"Fan",
+  "bt.colPts":"Poäng",
+  "bt.colTime":"Tid",
   "bt.testAdmin":"Testa spelet (admin)",
   "bt.testNote":"Testläge — poängen sparas inte.",
   "bt.moodTitle":"Stämning · alla hans låtar",
@@ -2731,6 +2760,12 @@ sv:{
 },
 de:{
   "nav.blindtest":"Blind Test",
+  "bt.podiumTitle":"Das Podium",
+  "bt.podiumLive":"Das Podium (live)",
+  "bt.rankFull":"Komplette Rangliste · Top 50",
+  "bt.colName":"Fan",
+  "bt.colPts":"Punkte",
+  "bt.colTime":"Zeit",
   "bt.testAdmin":"Spiel testen (Admin)",
   "bt.testNote":"Testmodus — dieser Score wird nicht gespeichert.",
   "bt.moodTitle":"Stimmung · alle seine Songs",
@@ -3071,6 +3106,12 @@ de:{
 },
 pt:{
   "nav.blindtest":"Blind Test",
+  "bt.podiumTitle":"O pódio",
+  "bt.podiumLive":"O pódio (ao vivo)",
+  "bt.rankFull":"Classificação completa · top 50",
+  "bt.colName":"Fã",
+  "bt.colPts":"Pontos",
+  "bt.colTime":"Tempo",
   "bt.testAdmin":"Testar o jogo (admin)",
   "bt.testNote":"Modo teste — esta pontuação não é salva.",
   "bt.moodTitle":"Clima · todas as músicas",
@@ -5126,6 +5167,9 @@ function rendreBlindtest(){
   btBadgeNav();
   var c=document.getElementById("bt-contenu"); if(!c) return;
   var ed=btEnCours(), h="";
+  /* Mur d'ambiance (pochettes) — tout en haut, sans numéro */
+  h+='<div class="bt-pele bt-pele-grand" id="bt-pele-box"></div>';
+  var refEd = ed || btTerminees()[0] || btProchaine() || (window.BT_EDITIONS&&window.BT_EDITIONS[0]);
   /* 1 · Le jeu (carte façon maquette) */
   if(ed){
     var mine=btMonScore(ed.id), cta;
@@ -5146,13 +5190,8 @@ function rendreBlindtest(){
       h+=btBloc(1, t("bt.blocNext"), '<div class="bt-verre" style="text-align:center"><p class="bt-sab-title">'+t("bt.allDone")+'</p></div>');
     }
   }
-  /* 2 · Classement */
-  if(ed){
-    h+=btBloc(2, t("bt.liveRank"), '<div class="bt-verre">'+btRankList(ed)+'</div>');
-  } else {
-    var der=btTerminees()[0];
-    if(der) h+=btBloc(2, t("bt.rankOf")+" "+btLabelEd(der), '<div class="bt-verre">'+btPodium(der)+'</div>');
-  }
+  /* 2 · Le podium */
+  if(refEd) h+=btBloc(2, ed?t("bt.podiumLive"):t("bt.podiumTitle"), '<div class="bt-verre">'+btPodium(refEd)+'</div>');
   /* 3 · Les éditions (mois) */
   h+=btBloc(3, t("bt.calendar"), '<div class="bt-cal">'+btMoisCards()+'</div>');
   /* 4 · Le calendrier des jours */
@@ -5164,8 +5203,8 @@ function rendreBlindtest(){
     +'<div class="bt-bdg"><img src="blindtest/badge_bronze.png" alt=""><div class="lib">'+t("bt.earBronze")+'</div><div class="an">'+t("bt.third")+'</div><div class="bt-bdg-pts">+25 pts</div></div>'
     +btMedaille('m-part','',t("bt.participant"),t("bt.participantSub"),'0 pt','var(--rose)')
     +'</div><p class="bt-hint">'+t("bt.badgesNote")+'</p></div>');
-  /* 6 · Pêle-mêle des pochettes */
-  h+=btBloc(6, t("bt.moodTitle"), '<div class="bt-pele" id="bt-pele-box"></div><p class="bt-hint">'+t("bt.moodNote")+'</p>');
+  /* 6 · Classement complet — jusqu'au 50e (après les badges) */
+  if(refEd) h+=btBloc(6, t("bt.rankFull"), '<div class="bt-verre">'+btRankList(refEd, 50)+'</div>');
   c.innerHTML=h;
   btFillPele();
   btTick();
@@ -5196,8 +5235,8 @@ function btFillPele(){
   var box=document.getElementById("bt-pele-box"); if(!box) return;
   if(window.BT_POCHETTES && window.BT_POCHETTES.length){
     var h2="";
-    for(var i=0;i<16;i++){ var src=window.BT_POCHETTES[i%window.BT_POCHETTES.length];
-      var L=(i*53%80), Tp=(i*37%56), rot=((i*29)%40)-20;
+    for(var i=0;i<30;i++){ var src=window.BT_POCHETTES[i%window.BT_POCHETTES.length];
+      var L=(i*47%86), Tp=(i*61%70), rot=((i*29)%40)-20;
       h2+='<div class="tuile tuile-img" style="background-image:url('+src+');left:'+L+'%;top:'+Tp+'%;transform:rotate('+rot+'deg)"></div>';
     }
     h2+='<div class="bt-pele-lg"><span>🎧 BLIND TEST<small>'+t("bt.moodSub")+'</small></span></div>';
@@ -5206,7 +5245,7 @@ function btFillPele(){
   var em=['🎵','🎶','💿','🎧','⭐','🎤','🌙','🔥','💛','🎸','✨','🌴'];
   var gr=[['#3a1030','#b33533'],['#7e1f1d','#cf6662'],['#2a1a20','#cf9592'],['#160a0a','#7e1f1d'],['#b33533','#3a1030'],['#cf6662','#2a1a20']];
   var html="";
-  for(var i=0;i<16;i++){ var g=gr[i%gr.length]; var L=(i*53%80), Tp=(i*37%56), rot=((i*29)%40)-20;
+  for(var i=0;i<30;i++){ var g=gr[i%gr.length]; var L=(i*47%86), Tp=(i*61%70), rot=((i*29)%40)-20;
     html+='<div class="tuile" style="background:linear-gradient(135deg,'+g[0]+','+g[1]+');left:'+L+'%;top:'+Tp+'%;transform:rotate('+rot+'deg)">'+em[i%em.length]+'</div>';
   }
   html+='<div class="bt-pele-lg"><span>🎧 BLIND TEST<small>'+t("bt.moodSub")+'</small></span></div>';
@@ -5281,10 +5320,12 @@ function btTick(){
 }
 window.btTick=btTick;
 
-function btRankList(ed){
+function btRankList(ed, limit){
+  limit=limit||50;
   var cl=btClassement(ed.id);
   if(!cl.length) return '<p class="bt-rank-empty">'+t("bt.rankEmpty")+'</p>';
-  return cl.slice(0,15).map(function(row,i){
+  var head='<div class="bt-rank-head"><span class="bt-r">#</span><span class="bt-p">'+t("bt.colName")+'</span><span class="bt-sc">'+t("bt.colPts")+'</span><span class="bt-tm">'+t("bt.colTime")+'</span></div>';
+  return head+cl.slice(0,limit).map(function(row,i){
     var moi=window.MON_USER && row.user_id===window.MON_USER.id;
     var medal=i===0?"🥇":i===1?"🥈":i===2?"🥉":(i+1)+".";
     return '<div class="bt-rank-row'+(moi?" moi":"")+'"><span class="bt-r">'+medal+'</span>'
@@ -5304,11 +5345,7 @@ function btPodium(ed){
       +'<div class="pts">'+row.score+'/20</div><div class="detail">⏱ '+btFmtTemps(row.temps_ms)+'</div>'
       +'<span class="bonus">'+bonus[i]+' pts</span></div>';
   }).join("");
-  var reste=cl.slice(3,10).map(function(row,k){
-    var moi=window.MON_USER && row.user_id===window.MON_USER.id;
-    return '<div class="bt-rank-row'+(moi?" moi":"")+'"><span class="bt-r">'+(k+4)+'.</span><span class="bt-p">'+escapeHtmlBt(row.pseudo||"✦")+'</span><span class="bt-sc">'+row.score+'/20</span><span class="bt-tm">⏱ '+btFmtTemps(row.temps_ms)+'</span></div>';
-  }).join("");
-  return '<div class="bt-podium">'+cells+'</div>'+(reste?'<div style="margin-top:12px">'+reste+'</div>':'');
+  return '<div class="bt-podium">'+cells+'</div>';
 }
 function btMoisCards(){
   var now=Date.now();
