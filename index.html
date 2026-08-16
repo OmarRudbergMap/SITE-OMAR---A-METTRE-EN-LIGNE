@@ -541,7 +541,7 @@ footer .marque{font-family:'Bebas Neue';font-size:1.1rem;letter-spacing:.15em;co
         <p style="margin:4px 0"><span data-i18n="acc.connected">Connected:</span> <b id="auth-qui"></b></p>
         <button type="button" class="btn fantome" onclick="seDeconnecter()" data-i18n="acc.logout">Log out</button>
       </div>
-      <div style="font-size:.66rem;opacity:.5;margin-top:8px">version : COMPTES-81</div>
+      <div style="font-size:.66rem;opacity:.5;margin-top:8px">version : COMPTES-82</div>
     </div>
     <div class="verre" id="dejaFiche" style="display:none;margin-bottom:16px">
       <h3 class="accent" data-i18n="acc.haveCard">Your card is created ✓</h3>
@@ -4159,7 +4159,7 @@ document.getElementById("formulaireFan").addEventListener("submit",async e=>{
         concerts_vus: clesConcerts,
         rencontre: !!fn.rencontre,
         accord_parental: accordParental,
-        valide: false
+        valide: true
       }).then(function(r){
         if(r && r.error){ console.warn("Supabase (fans) :", r.error); alert("Erreur base Supabase :\n\n"+r.error.message+"\n\n(code : "+(r.error.code||"?")+")"); }
         else { console.log("Fan enregistré dans Supabase ✔"); toast("✔ Enregistré dans ta base Supabase !"); }
@@ -8111,13 +8111,7 @@ function rendreModeration(){
     ? '<div class="verre" style="margin-top:14px;border-color:var(--bordeaux)"><h3 style="color:var(--rose)">🏆 '+t("aw.modTitle")+' ('+awAtt.length+')</h3>'
       +'<p style="font-size:.78rem;color:var(--beige)">'+t("aw.modIntro")+'</p>'+awAtt.map(unItemAwardModo).join("")+'</div>'
     : '';
-  var fansAtt=window.FANS_MODERER||[];
-  var htmlFans = fansAtt.length
-    ? '<div class="verre" style="margin-top:12px;border-color:var(--bordeaux)"><h3 style="color:var(--rose)">🧍 '+t("fmod.title")+' ('+fansAtt.length+')</h3>'
-      +'<p style="font-size:.78rem;color:var(--beige)">'+t("fmod.intro")+'</p>'+fansAtt.map(unItemFanModo).join("")+'</div>'
-    : '';
   s.innerHTML='<p class="eyebrow">🛡️ '+t("med.nav")+'</p><h2>'+t("med.modTitle")+'</h2>'
-    +htmlFans
     +'<div class="verre" style="margin-top:12px;border-color:var(--bordeaux)">'
     +'<h3 style="color:var(--rose)">⏳ '+t("med.modSection")+' ('+enAttente.length+')</h3>'
     +'<p style="font-size:.78rem;color:var(--beige)">'+t("med.modIntro")+'</p>'
@@ -8174,7 +8168,7 @@ function majAccesAdmin(){
   var admin=(typeof estAdmin==="function" && estAdmin());
   lien.style.display=admin?"":"none";
   var badge=document.getElementById("badgeModeration");
-  var n=(window.MEDIAS_MODERER||[]).length+(window.PROJETS_MODERER||[]).length+(window.AWARDS_MODERER||[]).length+(window.FANS_MODERER||[]).length;
+  var n=(window.MEDIAS_MODERER||[]).length+(window.PROJETS_MODERER||[]).length+(window.AWARDS_MODERER||[]).length;
   if(badge){ if(admin && n>0){ badge.style.display=""; badge.textContent=n; } else { badge.style.display="none"; } }
   if(admin) rendreModeration();
 }
@@ -9501,7 +9495,6 @@ function majPanneauCompte(session){
     if(window.chargerProjetsSupabase) chargerProjetsSupabase();
     if(window.chargerAwardsSupabase) chargerAwardsSupabase();
     if(window.chargerPourquoiSupabase) chargerPourquoiSupabase();
-    if(window.chargerFansModeration) chargerFansModeration();
     if(window.chargerInteractionsSupabase) chargerInteractionsSupabase();
     
     if(window.chargerParticipationsSupabase) chargerParticipationsSupabase();
