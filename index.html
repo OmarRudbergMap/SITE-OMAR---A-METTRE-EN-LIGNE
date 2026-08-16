@@ -1002,6 +1002,8 @@ footer .marque{font-family:'Bebas Neue';font-size:1.1rem;letter-spacing:.15em;co
 .bt-rank-head .bt-p{flex:1}
 .bt-rank-head .bt-tm{min-width:52px;text-align:right}
 .bt-pele-grand{height:200px;margin-bottom:2px}
+.bt-pele-grid{position:absolute;inset:-8px;display:grid;grid-auto-rows:1fr;gap:0}
+.bt-pele-grid .pmt{background-size:cover;background-position:center;box-shadow:0 0 10px rgba(0,0,0,.35)}
 /* --- podium --- */
 .bt-podium{display:grid;grid-template-columns:1fr 1.15fr 1fr;gap:10px;align-items:end}
 .bt-marche{background:rgba(255,255,255,.05);border:1px solid var(--verre-bord);border-radius:16px 16px 0 0;padding:14px 8px 12px;text-align:center}
@@ -5233,23 +5235,22 @@ function btMedaille(cls,rk,lib,an,pts,ptcol){
 }
 function btFillPele(){
   var box=document.getElementById("bt-pele-box"); if(!box) return;
-  if(window.BT_POCHETTES && window.BT_POCHETTES.length){
-    var h2="";
-    for(var i=0;i<30;i++){ var src=window.BT_POCHETTES[i%window.BT_POCHETTES.length];
-      var L=(i*47%86), Tp=(i*61%70), rot=((i*29)%40)-20;
-      h2+='<div class="tuile tuile-img" style="background-image:url('+src+');left:'+L+'%;top:'+Tp+'%;transform:rotate('+rot+'deg)"></div>';
-    }
-    h2+='<div class="bt-pele-lg"><span>🎧 BLIND TEST<small>'+t("bt.moodSub")+'</small></span></div>';
-    box.innerHTML=h2; return;
-  }
+  var cols=7, rows=3, n=cols*rows;
+  var srcs=(window.BT_POCHETTES&&window.BT_POCHETTES.length)?window.BT_POCHETTES:null;
   var em=['🎵','🎶','💿','🎧','⭐','🎤','🌙','🔥','💛','🎸','✨','🌴'];
   var gr=[['#3a1030','#b33533'],['#7e1f1d','#cf6662'],['#2a1a20','#cf9592'],['#160a0a','#7e1f1d'],['#b33533','#3a1030'],['#cf6662','#2a1a20']];
-  var html="";
-  for(var i=0;i<30;i++){ var g=gr[i%gr.length]; var L=(i*47%86), Tp=(i*61%70), rot=((i*29)%40)-20;
-    html+='<div class="tuile" style="background:linear-gradient(135deg,'+g[0]+','+g[1]+');left:'+L+'%;top:'+Tp+'%;transform:rotate('+rot+'deg)">'+em[i%em.length]+'</div>';
+  var inner='<div class="bt-pele-grid" style="grid-template-columns:repeat('+cols+',1fr)">';
+  for(var i=0;i<n;i++){
+    var rot=((i*37)%9)-4;
+    if(srcs){
+      inner+='<div class="pmt" style="background-image:url('+srcs[i%srcs.length]+');transform:rotate('+rot+'deg) scale(1.14)"></div>';
+    } else {
+      var g=gr[i%gr.length];
+      inner+='<div class="pmt" style="background:linear-gradient(135deg,'+g[0]+','+g[1]+');transform:rotate('+rot+'deg) scale(1.14);display:flex;align-items:center;justify-content:center;font-size:1.2rem">'+em[i%em.length]+'</div>';
+    }
   }
-  html+='<div class="bt-pele-lg"><span>🎧 BLIND TEST<small>'+t("bt.moodSub")+'</small></span></div>';
-  box.innerHTML=html;
+  inner+='</div><div class="bt-pele-lg"><span>🎧 BLIND TEST<small>'+t("bt.moodSub")+'</small></span></div>';
+  box.innerHTML=inner;
 }
 function btJeuCard(ed, ctaHtml){
   var bars="";
