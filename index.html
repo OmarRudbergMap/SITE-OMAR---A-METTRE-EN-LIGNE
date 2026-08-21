@@ -542,7 +542,7 @@ footer .marque{font-family:'Bebas Neue';font-size:1.1rem;letter-spacing:.15em;co
         <p style="margin:4px 0"><span data-i18n="acc.connected">Connected:</span> <b id="auth-qui"></b></p>
         <button type="button" class="btn fantome" onclick="seDeconnecter()" data-i18n="acc.logout">Log out</button>
       </div>
-      <div style="font-size:.66rem;opacity:.5;margin-top:8px">version : COMPTES-87</div>
+      <div style="font-size:.66rem;opacity:.5;margin-top:8px">version : COMPTES-89</div>
     </div>
     <div class="verre" id="dejaFiche" style="display:none;margin-bottom:16px">
       <h3 class="accent" data-i18n="acc.haveCard">Your card is created ✓</h3>
@@ -855,93 +855,108 @@ footer .marque{font-family:'Bebas Neue';font-size:1.1rem;letter-spacing:.15em;co
 <div class="page" id="page-concerts"><section id="secConcerts"></section></div>
 <div class="page" id="page-guide">
   <section>
-    <p class="eyebrow">Guide des fans</p>
-    <h2>Mode d'emploi du site</h2>
-    <p style="color:var(--beige);margin:8px 0 4px">Tout ce que tu peux faire sur le site, onglet par onglet. Prends ta place sur la carte et fais vivre la communauté ✦</p>
+    <p class="eyebrow" data-i18n="gd.eyebrow">Guide des fans</p>
+    <h2 data-i18n="gd.title">Mode d'emploi du site</h2>
+    <p style="color:var(--beige);margin:8px 0 4px" data-i18n="gd.intro">Tout ce que tu peux faire sur le site, onglet par onglet. Prends ta place sur la carte et fais vivre la communauté ✦</p>
 
     <div class="verre" style="margin-top:14px">
-      <div class="guide-h" style="border-top:none;padding-top:0"><span class="gn">0</span><span class="gi">🔑</span><h3>Créer mon compte</h3></div>
+      <div class="guide-h" style="border-top:none;padding-top:0"><span class="gn">0</span><span class="gi">🔑</span><h3 data-i18n="gd.s0h">Créer mon compte</h3></div>
       <ol class="guide-etapes">
-        <li>Va dans l'onglet <b>Espace Fan</b>, entre ton <b>email</b> et un <b>mot de passe</b> (6 caractères min.).</li>
-        <li>Remplis ton <b>profil</b> : prénom, pays, ville, âge, chanson préférée, <b>Instagram</b> et une photo.</li>
-        <li>Une fois <b>validé</b> par la modératrice, tu apparais sur la carte 🌍</li>
+        <li data-i18n-html="gd.s0a">Va dans l'onglet <b>Espace Fan</b>, entre ton <b>email</b> et un <b>mot de passe</b> (6 caractères min.).</li>
+        <li data-i18n-html="gd.s0b">Remplis ton <b>profil</b> : prénom, pays, ville, âge, chanson préférée, <b>Instagram</b> et une photo.</li>
+        <li data-i18n-html="gd.s0c">Tu apparais <b>directement</b> sur la carte 🌍</li>
       </ol>
-      <div class="guide-astuce">💡 Renseigne bien ton <b>Instagram</b> : il s'affiche sur tes photos et à côté de tes contributions.</div>
+      <div class="guide-astuce" data-i18n-html="gd.s0tip">💡 Renseigne bien ton <b>Instagram</b> : il s'affiche sur tes photos et à côté de tes contributions.</div>
     </div>
 
     <div class="verre">
-      <div class="guide-h"><span class="gn">1</span><span class="gi">🏠</span><h3>Accueil · la mappemonde</h3></div>
+      <div class="guide-h"><span class="gn">1</span><span class="gi">🏠</span><h3 data-i18n="gd.s1h">Accueil · la mappemonde</h3></div>
       <ol class="guide-etapes">
-        <li>Fais tourner le <b>globe</b> et zoome pour explorer les fans du monde entier.</li>
-        <li>Clique sur <b>« ✦ Ajouter mon point »</b> pour rejoindre la communauté.</li>
-        <li>Les jours d'anniversaire, une <b>bannière rose</b> apparaît : laisse un petit message 🎂</li>
-      </ol>
-    </div>
-
-    <div class="verre">
-      <div class="guide-h"><span class="gn">2</span><span class="gi">⭐</span><h3>Omar</h3></div>
-      <ol class="guide-etapes">
-        <li>Son <b>histoire</b>, sa <b>discographie complète</b> (pochettes + streams) et une sélection de <b>photos</b>.</li>
+        <li data-i18n-html="gd.s1a">Fais tourner le <b>globe</b> et zoome pour explorer les fans du monde entier.</li>
+        <li data-i18n-html="gd.s1b">Clique sur <b>« ✦ Ajouter mon point »</b> pour rejoindre la communauté.</li>
+        <li data-i18n-html="gd.s1c">Les jours d'anniversaire, une <b>bannière rose</b> apparaît : laisse un petit message 🎂</li>
       </ol>
     </div>
 
     <div class="verre">
-      <div class="guide-h"><span class="gn">3</span><span class="gi">👤</span><h3>Espace Fan · ton espace</h3></div>
+      <div class="guide-h"><span class="gn">2</span><span class="gi">⭐</span><h3 data-i18n="gd.s2h">Omar</h3></div>
       <ol class="guide-etapes">
-        <li><b>Ton profil</b> et ta fiche (jours de fan, compteurs).</li>
-        <li><b>Ton histoire</b> : raconte comment tu es devenu fan.</li>
-        <li><b>Mes photos &amp; vidéos</b> : envoie photos, dessins, selfies, vidéos → validation → points. Choisis le concert concerné pour une photo de concert.</li>
-        <li><b>Classement des chansons</b> : range toutes les chansons avec des numéros (1, 2, 3…). Ça alimente un classement communautaire.</li>
-        <li><b>Mon engagement</b> : série Young Royals, projets, produits OMR Beauty, DIY, merch → badges &amp; points.</li>
-        <li><b>Badges &amp; points</b>, et ton <b>passeport</b> à imprimer.</li>
+        <li data-i18n-html="gd.s2a">Son <b>histoire</b>, sa <b>discographie complète</b> (pochettes + streams) et une sélection de <b>photos</b>.</li>
       </ol>
     </div>
 
     <div class="verre">
-      <div class="guide-h"><span class="gn">4</span><span class="gi">📖</span><h3>Fan Stories</h3></div>
+      <div class="guide-h"><span class="gn">3</span><span class="gi">👤</span><h3 data-i18n="gd.s3h">Espace Fan · ton espace</h3></div>
       <ol class="guide-etapes">
-        <li>Lis les histoires des autres fans, et écris la tienne depuis ton Espace Fan.</li>
+        <li data-i18n-html="gd.s3a"><b>Ton profil</b> et ta fiche (jours de fan, compteurs).</li>
+        <li data-i18n-html="gd.s3b"><b>Ton histoire</b> : raconte comment tu es devenu fan.</li>
+        <li data-i18n-html="gd.s3c"><b>Mes photos & vidéos</b> : envoie photos, dessins, selfies, vidéos, Young Royals → validation → points. Chaque envoi va dans sa catégorie.</li>
+        <li data-i18n-html="gd.s3d"><b>Classement des chansons</b> : range toutes les chansons avec des numéros (1, 2, 3…). Ça alimente un classement communautaire.</li>
+        <li data-i18n-html="gd.s3e"><b>Mon engagement</b> : série Young Royals, projets, produits OMR Beauty, DIY, merch → badges & points.</li>
+        <li data-i18n-html="gd.s3f"><b>Badges & points</b>, et ton <b>passeport</b> à imprimer.</li>
       </ol>
     </div>
 
     <div class="verre">
-      <div class="guide-h"><span class="gn">5</span><span class="gi">🎤</span><h3>Concerts &amp; Tour</h3></div>
+      <div class="guide-h"><span class="gn">4</span><span class="gi">📖</span><h3 data-i18n="gd.s4h">Fan Stories</h3></div>
       <ol class="guide-etapes">
-        <li>Toutes les dates sur une <b>carte</b> et en <b>liste</b> (passés + à venir).</li>
-        <li>Concerts passés : la <b>galerie des fans</b> avec tes photos validées (et ton pseudo Instagram).</li>
-        <li>Concerts à venir : <b>« 🤝 Rejoindre le groupe Instagram »</b> pour s'organiser (hôtels, voyage…). À ouvrir depuis l'appli Instagram sur téléphone.</li>
+        <li data-i18n-html="gd.s4a">Lis les histoires des autres fans, et écris la tienne depuis ton Espace Fan.</li>
       </ol>
     </div>
 
     <div class="verre">
-      <div class="guide-h"><span class="gn">6</span><span class="gi">📸</span><h3>Photos &amp; Vidéos</h3></div>
+      <div class="guide-h"><span class="gn">5</span><span class="gi">💛</span><h3 data-i18n="gd.spqh">Pourquoi aimes-tu Omar ?</h3></div>
       <ol class="guide-etapes">
-        <li>La galerie de la communauté (photos, selfies, fan arts, vidéos validés).</li>
-        <li><b>Filtre</b> par type et par année. Le <b>pseudo Instagram</b> est affiché sur chaque visuel.</li>
+        <li data-i18n-html="gd.spqa">En une phrase, dis pourquoi Omar compte pour toi. Ta phrase s'affiche sur le mur (de façon anonyme) et sur ton passeport.</li>
       </ol>
     </div>
 
     <div class="verre">
-      <div class="guide-h"><span class="gn">7</span><span class="gi">✨</span><h3>Fan Projects</h3></div>
+      <div class="guide-h"><span class="gn">6</span><span class="gi">🎧</span><h3 data-i18n="gd.sbth">Blind Test</h3></div>
       <ol class="guide-etapes">
-        <li><b>Propose un projet</b> : titre, description, catégorie (🎤 Projet concert, 🤝 Rencontre, 🎨 Artistique, 💿 Album, 🌍 Autre).</li>
-        <li>Après <b>validation</b>, tout le monde peut <b>voter</b> (1 vote par projet).</li>
+        <li data-i18n-html="gd.sbta">Chaque mois, 3 jours de jeu : écoute un extrait et devine la chanson le plus vite possible. 20 chansons, +1 point par bonne réponse.</li>
+        <li data-i18n-html="gd.sbtb">Le top 3 gagne des points bonus (+100 / +50 / +25) et une médaille (Or, Argent, Bronze).</li>
       </ol>
-      <div class="guide-astuce">💛 Si ton projet n'apparaît pas ensuite, c'est qu'il n'a pas pu être retenu, on ne peut pas tout accepter.</div>
     </div>
 
     <div class="verre">
-      <div class="guide-h"><span class="gn">8</span><span class="gi">🏆</span><h3>Awards</h3></div>
+      <div class="guide-h"><span class="gn">7</span><span class="gi">🎤</span><h3 data-i18n="gd.s5h">Concerts & Tour</h3></div>
       <ol class="guide-etapes">
-        <li>Une fois par an, la communauté élit ses coups de cœur (5 catégories).</li>
-        <li><b>Propose une candidature</b> ; pour « Meilleure photo », joins la <b>photo</b>, pour « Meilleure vidéo », le <b>lien</b>.</li>
-        <li>Quand le vote est ouvert, tu as <b>un vote par catégorie et par jour</b> (un compte à rebours l'indique).</li>
+        <li data-i18n-html="gd.s5a">Toutes les dates sur une <b>carte</b> et en <b>liste</b> (passés + à venir).</li>
+        <li data-i18n-html="gd.s5b">Concerts passés : la <b>galerie des fans</b> avec tes photos validées (et ton pseudo Instagram).</li>
+        <li data-i18n-html="gd.s5c">Concerts à venir : <b>« 🤝 Rejoindre le groupe Instagram »</b> pour s'organiser (hôtels, voyage…). À ouvrir depuis l'appli Instagram sur téléphone.</li>
+      </ol>
+    </div>
+
+    <div class="verre">
+      <div class="guide-h"><span class="gn">8</span><span class="gi">📸</span><h3 data-i18n="gd.s6h">Photos & Vidéos</h3></div>
+      <ol class="guide-etapes">
+        <li data-i18n-html="gd.s6a">La galerie de la communauté, <b>rangée par catégorie</b> : photos de concert, selfies, dessins, Young Royals, vidéos.</li>
+        <li data-i18n-html="gd.s6b">Pour envoyer, va dans l'onglet <b>Espace Fan</b> → « Mes photos & vidéos ». Le <b>pseudo Instagram</b> s'affiche sur chaque visuel.</li>
+      </ol>
+    </div>
+
+    <div class="verre">
+      <div class="guide-h"><span class="gn">9</span><span class="gi">✨</span><h3 data-i18n="gd.s7h">Fan Projects</h3></div>
+      <ol class="guide-etapes">
+        <li data-i18n-html="gd.s7a"><b>Propose un projet</b> : titre, description, catégorie (🎤 Projet concert, 🤝 Rencontre, 🎨 Artistique, 💿 Album, 🌍 Autre).</li>
+        <li data-i18n-html="gd.s7b">Après <b>validation</b>, tout le monde peut <b>voter</b> (1 vote par projet).</li>
+      </ol>
+      <div class="guide-astuce" data-i18n-html="gd.s7tip">💛 Si ton projet n'apparaît pas ensuite, c'est qu'il n'a pas pu être retenu, on ne peut pas tout accepter.</div>
+    </div>
+
+    <div class="verre">
+      <div class="guide-h"><span class="gn">10</span><span class="gi">🏆</span><h3 data-i18n="gd.s8h">Awards</h3></div>
+      <ol class="guide-etapes">
+        <li data-i18n-html="gd.s8a">Une fois par an, la communauté élit ses coups de cœur (5 catégories).</li>
+        <li data-i18n-html="gd.s8b"><b>Propose une candidature</b> ; pour « Meilleure photo », joins la <b>photo</b>, pour « Meilleure vidéo », le <b>lien</b>.</li>
+        <li data-i18n-html="gd.s8c">Quand le vote est ouvert, tu as <b>un vote par catégorie et par jour</b> (un compte à rebours l'indique).</li>
       </ol>
     </div>
 
     <div class="verre" style="border-color:rgba(224,162,79,.4);background:rgba(224,162,79,.1)">
-      <h3 style="color:#ffcf8f">À propos des photos &amp; vidéos ✦</h3>
-      <p style="font-size:.86rem;color:#f4dcc0;margin:0">Toutes les photos et vidéos présentes sur ce site ne m'appartiennent pas : elles sont partagées par les fans. Si tu es l'auteur d'un contenu et souhaites que <b>ton nom soit ajouté</b>, ou qu'il soit <b>retiré</b>, contacte-moi à <a href='mailto:omarrudbergmap@gmail.com' style='color:#ffcf8f;text-decoration:underline'>omarrudbergmap@gmail.com</a> et je m'en occupe tout de suite. 💛</p>
+      <h3 style="color:#ffcf8f" data-i18n="gd.aboutH">À propos des photos & vidéos ✦</h3>
+      <p style="font-size:.86rem;color:#f4dcc0;margin:0" data-i18n-html="gd.aboutP">Toutes les photos et vidéos présentes sur ce site ne m'appartiennent pas : elles sont partagées par les fans. Si tu es l'auteur d'un contenu et souhaites que <b>ton nom soit ajouté</b>, ou qu'il soit <b>retiré</b>, contacte-moi à <a href='mailto:omarrudbergmap@gmail.com' style='color:#ffcf8f;text-decoration:underline'>omarrudbergmap@gmail.com</a> et je m'en occupe tout de suite. 💛</p>
     </div>
   </section>
 </div>
@@ -1398,6 +1413,51 @@ const FLAGS={en:"🇬🇧",fr:"🇫🇷",es:"🇪🇸",sv:"🇸🇪",de:"🇩�
 let LANG = "en";
 const I18N = {
 en:{
+"gd.eyebrow":"Fan guide",
+"gd.title":"How the site works",
+"gd.intro":"Everything you can do on the site, tab by tab. Take your spot on the map and bring the community to life ✦",
+"gd.s0h":"Create my account",
+"gd.s0a":"Go to the <b>Fan Space</b> tab, enter your <b>email</b> and a <b>password</b> (6 characters min.).",
+"gd.s0b":"Fill in your <b>profile</b>: first name, country, city, age, favourite song, <b>Instagram</b> and a photo.",
+"gd.s0c":"You appear <b>right away</b> on the map 🌍",
+"gd.s0tip":"💡 Add your <b>Instagram</b>: it shows on your photos and next to your contributions.",
+"gd.s1h":"Home · the world map",
+"gd.s1a":"Spin the <b>globe</b> and zoom in to explore fans from all over the world.",
+"gd.s1b":"Click <b>“✦ Add my dot”</b> to join the community.",
+"gd.s1c":"On birthdays, a <b>pink banner</b> appears: leave a little message 🎂",
+"gd.s2h":"Omar",
+"gd.s2a":"His <b>story</b>, his <b>full discography</b> (covers + streams) and a selection of <b>photos</b>.",
+"gd.s3h":"Fan Space · your space",
+"gd.s3a":"<b>Your profile</b> and card (fan days, counters).",
+"gd.s3b":"<b>Your story</b>: tell how you became a fan.",
+"gd.s3c":"<b>My photos & videos</b>: send photos, drawings, selfies, videos, Young Royals → review → points. Each upload goes to its category.",
+"gd.s3d":"<b>Song ranking</b>: order all the songs with numbers (1, 2, 3…). It feeds a community ranking.",
+"gd.s3e":"<b>My involvement</b>: Young Royals series, projects, OMR Beauty products, DIY, merch → badges & points.",
+"gd.s3f":"<b>Badges & points</b>, and your <b>passport</b> to print.",
+"gd.s4h":"Fan Stories",
+"gd.s4a":"Read other fans' stories, and write yours from your Fan Space.",
+"gd.spqh":"Why do you love Omar?",
+"gd.spqa":"In one sentence, say why Omar matters to you. Your sentence shows on the wall (anonymously) and on your passport.",
+"gd.sbth":"Blind Test",
+"gd.sbta":"Every month, 3 days of play: listen to an extract and guess the song as fast as you can. 20 songs, +1 point per correct answer.",
+"gd.sbtb":"The top 3 win bonus points (+100 / +50 / +25) and a medal (Gold, Silver, Bronze).",
+"gd.s5h":"Concerts & Tour",
+"gd.s5a":"All the dates on a <b>map</b> and in a <b>list</b> (past + upcoming).",
+"gd.s5b":"Past concerts: the <b>fan gallery</b> with your approved photos (and your Instagram handle).",
+"gd.s5c":"Upcoming concerts: <b>“🤝 Join the Instagram group”</b> to get organised (hotels, travel…). Open it from the Instagram app on your phone.",
+"gd.s6h":"Photos & Videos",
+"gd.s6a":"The community gallery, <b>sorted by category</b>: concert photos, selfies, drawings, Young Royals, videos.",
+"gd.s6b":"To upload, go to the <b>Fan Space</b> tab → “My photos & videos”. The <b>Instagram handle</b> shows on each item.",
+"gd.s7h":"Fan Projects",
+"gd.s7a":"<b>Suggest a project</b>: title, description, category (🎤 Concert project, 🤝 Meet-up, 🎨 Artistic, 💿 Album, 🌍 Other).",
+"gd.s7b":"After <b>approval</b>, everyone can <b>vote</b> (1 vote per project).",
+"gd.s7tip":"💛 If your project doesn't appear afterwards, it couldn't be kept — we can't accept everything.",
+"gd.s8h":"Awards",
+"gd.s8a":"Once a year, the community votes for its favourites (5 categories).",
+"gd.s8b":"<b>Suggest a nomination</b>; for “Best photo”, attach the <b>photo</b>, for “Best video”, the <b>link</b>.",
+"gd.s8c":"When voting is open, you get <b>one vote per category per day</b> (a countdown shows it).",
+"gd.aboutH":"About the photos & videos ✦",
+"gd.aboutP":"All the photos and videos on this site do not belong to me: they are shared by the fans. If you are the author of a piece of content and would like <b>your name added</b>, or it <b>removed</b>, contact me at <a href='mailto:omarrudbergmap@gmail.com' style='color:#ffcf8f;text-decoration:underline'>omarrudbergmap@gmail.com</a> and I'll take care of it right away. 💛",
   "nav.blindtest":"Blind Test",
   "bt.podiumTitle":"The podium",
   "bt.podiumLive":"The podium (live)",
@@ -1691,6 +1751,51 @@ en:{
   "contDetected":(c)=>`Continent detected: <b>${c}</b> 🌍`,"contOther":"We will add your country to the map ✦",
 },
 fr:{
+"gd.eyebrow":"Guide des fans",
+"gd.title":"Mode d'emploi du site",
+"gd.intro":"Tout ce que tu peux faire sur le site, onglet par onglet. Prends ta place sur la carte et fais vivre la communauté ✦",
+"gd.s0h":"Créer mon compte",
+"gd.s0a":"Va dans l'onglet <b>Espace Fan</b>, entre ton <b>email</b> et un <b>mot de passe</b> (6 caractères min.).",
+"gd.s0b":"Remplis ton <b>profil</b> : prénom, pays, ville, âge, chanson préférée, <b>Instagram</b> et une photo.",
+"gd.s0c":"Tu apparais <b>directement</b> sur la carte 🌍",
+"gd.s0tip":"💡 Renseigne bien ton <b>Instagram</b> : il s'affiche sur tes photos et à côté de tes contributions.",
+"gd.s1h":"Accueil · la mappemonde",
+"gd.s1a":"Fais tourner le <b>globe</b> et zoome pour explorer les fans du monde entier.",
+"gd.s1b":"Clique sur <b>« ✦ Ajouter mon point »</b> pour rejoindre la communauté.",
+"gd.s1c":"Les jours d'anniversaire, une <b>bannière rose</b> apparaît : laisse un petit message 🎂",
+"gd.s2h":"Omar",
+"gd.s2a":"Son <b>histoire</b>, sa <b>discographie complète</b> (pochettes + streams) et une sélection de <b>photos</b>.",
+"gd.s3h":"Espace Fan · ton espace",
+"gd.s3a":"<b>Ton profil</b> et ta fiche (jours de fan, compteurs).",
+"gd.s3b":"<b>Ton histoire</b> : raconte comment tu es devenu fan.",
+"gd.s3c":"<b>Mes photos & vidéos</b> : envoie photos, dessins, selfies, vidéos, Young Royals → validation → points. Chaque envoi va dans sa catégorie.",
+"gd.s3d":"<b>Classement des chansons</b> : range toutes les chansons avec des numéros (1, 2, 3…). Ça alimente un classement communautaire.",
+"gd.s3e":"<b>Mon engagement</b> : série Young Royals, projets, produits OMR Beauty, DIY, merch → badges & points.",
+"gd.s3f":"<b>Badges & points</b>, et ton <b>passeport</b> à imprimer.",
+"gd.s4h":"Fan Stories",
+"gd.s4a":"Lis les histoires des autres fans, et écris la tienne depuis ton Espace Fan.",
+"gd.spqh":"Pourquoi aimes-tu Omar ?",
+"gd.spqa":"En une phrase, dis pourquoi Omar compte pour toi. Ta phrase s'affiche sur le mur (de façon anonyme) et sur ton passeport.",
+"gd.sbth":"Blind Test",
+"gd.sbta":"Chaque mois, 3 jours de jeu : écoute un extrait et devine la chanson le plus vite possible. 20 chansons, +1 point par bonne réponse.",
+"gd.sbtb":"Le top 3 gagne des points bonus (+100 / +50 / +25) et une médaille (Or, Argent, Bronze).",
+"gd.s5h":"Concerts & Tour",
+"gd.s5a":"Toutes les dates sur une <b>carte</b> et en <b>liste</b> (passés + à venir).",
+"gd.s5b":"Concerts passés : la <b>galerie des fans</b> avec tes photos validées (et ton pseudo Instagram).",
+"gd.s5c":"Concerts à venir : <b>« 🤝 Rejoindre le groupe Instagram »</b> pour s'organiser (hôtels, voyage…). À ouvrir depuis l'appli Instagram sur téléphone.",
+"gd.s6h":"Photos & Vidéos",
+"gd.s6a":"La galerie de la communauté, <b>rangée par catégorie</b> : photos de concert, selfies, dessins, Young Royals, vidéos.",
+"gd.s6b":"Pour envoyer, va dans l'onglet <b>Espace Fan</b> → « Mes photos & vidéos ». Le <b>pseudo Instagram</b> s'affiche sur chaque visuel.",
+"gd.s7h":"Fan Projects",
+"gd.s7a":"<b>Propose un projet</b> : titre, description, catégorie (🎤 Projet concert, 🤝 Rencontre, 🎨 Artistique, 💿 Album, 🌍 Autre).",
+"gd.s7b":"Après <b>validation</b>, tout le monde peut <b>voter</b> (1 vote par projet).",
+"gd.s7tip":"💛 Si ton projet n'apparaît pas ensuite, c'est qu'il n'a pas pu être retenu, on ne peut pas tout accepter.",
+"gd.s8h":"Awards",
+"gd.s8a":"Une fois par an, la communauté élit ses coups de cœur (5 catégories).",
+"gd.s8b":"<b>Propose une candidature</b> ; pour « Meilleure photo », joins la <b>photo</b>, pour « Meilleure vidéo », le <b>lien</b>.",
+"gd.s8c":"Quand le vote est ouvert, tu as <b>un vote par catégorie et par jour</b> (un compte à rebours l'indique).",
+"gd.aboutH":"À propos des photos & vidéos ✦",
+"gd.aboutP":"Toutes les photos et vidéos présentes sur ce site ne m'appartiennent pas : elles sont partagées par les fans. Si tu es l'auteur d'un contenu et souhaites que <b>ton nom soit ajouté</b>, ou qu'il soit <b>retiré</b>, contacte-moi à <a href='mailto:omarrudbergmap@gmail.com' style='color:#ffcf8f;text-decoration:underline'>omarrudbergmap@gmail.com</a> et je m'en occupe tout de suite. 💛",
   "nav.blindtest":"Blind Test",
   "bt.podiumTitle":"Le podium",
   "bt.podiumLive":"Le podium (en direct)",
@@ -2069,6 +2174,51 @@ fr:{
   "contDetected":(c)=>`Continent détecté : <b>${c}</b> 🌍`,"contOther":"Nous ajouterons ton pays à la carte ✦",
 },
 es:{
+"gd.eyebrow":"Guía de fans",
+"gd.title":"Cómo funciona el sitio",
+"gd.intro":"Todo lo que puedes hacer en el sitio, pestaña por pestaña. Ocupa tu lugar en el mapa y da vida a la comunidad ✦",
+"gd.s0h":"Crear mi cuenta",
+"gd.s0a":"Ve a la pestaña <b>Espacio Fan</b>, introduce tu <b>correo</b> y una <b>contraseña</b> (mín. 6 caracteres).",
+"gd.s0b":"Completa tu <b>perfil</b>: nombre, país, ciudad, edad, canción favorita, <b>Instagram</b> y una foto.",
+"gd.s0c":"Apareces <b>directamente</b> en el mapa 🌍",
+"gd.s0tip":"💡 Pon tu <b>Instagram</b>: aparece en tus fotos y junto a tus aportaciones.",
+"gd.s1h":"Inicio · el mapamundi",
+"gd.s1a":"Gira el <b>globo</b> y haz zoom para explorar a los fans de todo el mundo.",
+"gd.s1b":"Haz clic en <b>«✦ Añadir mi punto»</b> para unirte a la comunidad.",
+"gd.s1c":"En los cumpleaños aparece una <b>pancarta rosa</b>: deja un mensajito 🎂",
+"gd.s2h":"Omar",
+"gd.s2a":"Su <b>historia</b>, su <b>discografía completa</b> (portadas + streams) y una selección de <b>fotos</b>.",
+"gd.s3h":"Espacio Fan · tu espacio",
+"gd.s3a":"<b>Tu perfil</b> y tu ficha (días de fan, contadores).",
+"gd.s3b":"<b>Tu historia</b>: cuenta cómo te hiciste fan.",
+"gd.s3c":"<b>Mis fotos y vídeos</b>: envía fotos, dibujos, selfies, vídeos, Young Royals → validación → puntos. Cada envío va a su categoría.",
+"gd.s3d":"<b>Ranking de canciones</b>: ordena todas las canciones con números (1, 2, 3…). Alimenta un ranking comunitario.",
+"gd.s3e":"<b>Mi implicación</b>: serie Young Royals, proyectos, productos OMR Beauty, DIY, merch → insignias y puntos.",
+"gd.s3f":"<b>Insignias y puntos</b>, y tu <b>pasaporte</b> para imprimir.",
+"gd.s4h":"Fan Stories",
+"gd.s4a":"Lee las historias de otros fans y escribe la tuya desde tu Espacio Fan.",
+"gd.spqh":"¿Por qué quieres a Omar?",
+"gd.spqa":"En una frase, di por qué Omar es importante para ti. Tu frase se muestra en el muro (de forma anónima) y en tu pasaporte.",
+"gd.sbth":"Blind Test",
+"gd.sbta":"Cada mes, 3 días de juego: escucha un fragmento y adivina la canción lo más rápido posible. 20 canciones, +1 punto por acierto.",
+"gd.sbtb":"El top 3 gana puntos extra (+100 / +50 / +25) y una medalla (Oro, Plata, Bronce).",
+"gd.s5h":"Conciertos y gira",
+"gd.s5a":"Todas las fechas en un <b>mapa</b> y en una <b>lista</b> (pasadas + próximas).",
+"gd.s5b":"Conciertos pasados: la <b>galería de fans</b> con tus fotos aprobadas (y tu usuario de Instagram).",
+"gd.s5c":"Conciertos próximos: <b>«🤝 Unirse al grupo de Instagram»</b> para organizarse (hoteles, viaje…). Ábrelo desde la app de Instagram en el móvil.",
+"gd.s6h":"Fotos y vídeos",
+"gd.s6a":"La galería de la comunidad, <b>ordenada por categoría</b>: fotos de concierto, selfies, dibujos, Young Royals, vídeos.",
+"gd.s6b":"Para enviar, ve a la pestaña <b>Espacio Fan</b> → «Mis fotos y vídeos». El <b>usuario de Instagram</b> aparece en cada elemento.",
+"gd.s7h":"Fan Projects",
+"gd.s7a":"<b>Propón un proyecto</b>: título, descripción, categoría (🎤 Proyecto concierto, 🤝 Encuentro, 🎨 Artístico, 💿 Álbum, 🌍 Otro).",
+"gd.s7b":"Tras la <b>validación</b>, todos pueden <b>votar</b> (1 voto por proyecto).",
+"gd.s7tip":"💛 Si tu proyecto no aparece después, es que no se pudo aceptar; no podemos aceptar todo.",
+"gd.s8h":"Awards",
+"gd.s8a":"Una vez al año, la comunidad elige sus favoritos (5 categorías).",
+"gd.s8b":"<b>Propón una candidatura</b>; para «Mejor foto», adjunta la <b>foto</b>, para «Mejor vídeo», el <b>enlace</b>.",
+"gd.s8c":"Cuando la votación está abierta, tienes <b>un voto por categoría y por día</b> (un contador lo indica).",
+"gd.aboutH":"Sobre las fotos y vídeos ✦",
+"gd.aboutP":"Todas las fotos y vídeos de este sitio no me pertenecen: los comparten los fans. Si eres el autor de un contenido y quieres que <b>se añada tu nombre</b> o que se <b>retire</b>, escríbeme a <a href='mailto:omarrudbergmap@gmail.com' style='color:#ffcf8f;text-decoration:underline'>omarrudbergmap@gmail.com</a> y me ocupo enseguida. 💛",
   "nav.blindtest":"Blind Test",
   "bt.podiumTitle":"El podio",
   "bt.podiumLive":"El podio (en directo)",
@@ -2415,6 +2565,51 @@ es:{
   "contDetected":(c)=>`Continente detectado: <b>${c}</b> 🌍`,"contOther":"Añadiremos tu país al mapa ✦",
 },
 sv:{
+"gd.eyebrow":"Fanguide",
+"gd.title":"Så funkar sajten",
+"gd.intro":"Allt du kan göra på sajten, flik för flik. Ta din plats på kartan och håll gemenskapen levande ✦",
+"gd.s0h":"Skapa mitt konto",
+"gd.s0a":"Gå till fliken <b>Fan-utrymme</b>, ange din <b>e-post</b> och ett <b>lösenord</b> (minst 6 tecken).",
+"gd.s0b":"Fyll i din <b>profil</b>: förnamn, land, stad, ålder, favoritlåt, <b>Instagram</b> och ett foto.",
+"gd.s0c":"Du dyker upp <b>direkt</b> på kartan 🌍",
+"gd.s0tip":"💡 Fyll i ditt <b>Instagram</b>: det visas på dina foton och bredvid dina bidrag.",
+"gd.s1h":"Start · världskartan",
+"gd.s1a":"Snurra <b>jordgloben</b> och zooma för att utforska fans från hela världen.",
+"gd.s1b":"Klicka på <b>”✦ Lägg till min prick”</b> för att gå med i gemenskapen.",
+"gd.s1c":"På födelsedagar dyker en <b>rosa banner</b> upp: lämna en liten hälsning 🎂",
+"gd.s2h":"Omar",
+"gd.s2a":"Hans <b>historia</b>, hela <b>diskografin</b> (omslag + streams) och ett urval <b>foton</b>.",
+"gd.s3h":"Fan-utrymme · ditt utrymme",
+"gd.s3a":"<b>Din profil</b> och ditt kort (fandagar, räknare).",
+"gd.s3b":"<b>Din historia</b>: berätta hur du blev fan.",
+"gd.s3c":"<b>Mina foton & videor</b>: skicka foton, teckningar, selfies, videor, Young Royals → granskning → poäng. Varje bidrag hamnar i sin kategori.",
+"gd.s3d":"<b>Låtranking</b>: ordna alla låtar med siffror (1, 2, 3…). Det bygger en gemensam topplista.",
+"gd.s3e":"<b>Mitt engagemang</b>: serien Young Royals, projekt, OMR Beauty-produkter, DIY, merch → märken & poäng.",
+"gd.s3f":"<b>Märken & poäng</b>, och ditt <b>pass</b> att skriva ut.",
+"gd.s4h":"Fan Stories",
+"gd.s4a":"Läs andra fans historier och skriv din egen från ditt Fan-utrymme.",
+"gd.spqh":"Varför älskar du Omar?",
+"gd.spqa":"Säg i en mening varför Omar betyder något för dig. Din mening visas på väggen (anonymt) och på ditt pass.",
+"gd.sbth":"Blind Test",
+"gd.sbta":"Varje månad, 3 speldagar: lyssna på ett utdrag och gissa låten så snabbt du kan. 20 låtar, +1 poäng per rätt svar.",
+"gd.sbtb":"Topp 3 vinner bonuspoäng (+100 / +50 / +25) och en medalj (Guld, Silver, Brons).",
+"gd.s5h":"Konserter & turné",
+"gd.s5a":"Alla datum på en <b>karta</b> och i en <b>lista</b> (tidigare + kommande).",
+"gd.s5b":"Tidigare konserter: <b>fangalleriet</b> med dina godkända foton (och ditt Instagram-namn).",
+"gd.s5c":"Kommande konserter: <b>”🤝 Gå med i Instagram-gruppen”</b> för att organisera (hotell, resa…). Öppna via Instagram-appen i telefonen.",
+"gd.s6h":"Foton & videor",
+"gd.s6a":"Gemenskapens galleri, <b>sorterat per kategori</b>: konsertfoton, selfies, teckningar, Young Royals, videor.",
+"gd.s6b":"För att skicka, gå till fliken <b>Fan-utrymme</b> → ”Mina foton & videor”. <b>Instagram-namnet</b> visas på varje bidrag.",
+"gd.s7h":"Fan Projects",
+"gd.s7a":"<b>Föreslå ett projekt</b>: titel, beskrivning, kategori (🎤 Konsertprojekt, 🤝 Träff, 🎨 Konstnärligt, 💿 Album, 🌍 Annat).",
+"gd.s7b":"Efter <b>godkännande</b> kan alla <b>rösta</b> (1 röst per projekt).",
+"gd.s7tip":"💛 Om ditt projekt inte dyker upp sedan kunde det inte tas med – vi kan inte godkänna allt.",
+"gd.s8h":"Awards",
+"gd.s8a":"En gång om året röstar gemenskapen fram sina favoriter (5 kategorier).",
+"gd.s8b":"<b>Föreslå en nominering</b>; för ”Bästa foto”, bifoga <b>fotot</b>, för ”Bästa video”, <b>länken</b>.",
+"gd.s8c":"När röstningen är öppen har du <b>en röst per kategori och dag</b> (en nedräkning visar det).",
+"gd.aboutH":"Om foton & videor ✦",
+"gd.aboutP":"Alla foton och videor på den här sajten tillhör inte mig: de delas av fansen. Om du är upphovsperson och vill att <b>ditt namn läggs till</b> eller att innehållet <b>tas bort</b>, kontakta mig på <a href='mailto:omarrudbergmap@gmail.com' style='color:#ffcf8f;text-decoration:underline'>omarrudbergmap@gmail.com</a> så fixar jag det direkt. 💛",
   "nav.blindtest":"Blind Test",
   "bt.podiumTitle":"Prispallen",
   "bt.podiumLive":"Prispallen (live)",
@@ -2761,6 +2956,51 @@ sv:{
   "contDetected":(c)=>`Kontinent: <b>${c}</b> 🌍`,"contOther":"Vi lägger till ditt land på kartan ✦",
 },
 de:{
+"gd.eyebrow":"Fan-Guide",
+"gd.title":"So funktioniert die Seite",
+"gd.intro":"Alles, was du auf der Seite tun kannst, Tab für Tab. Sichere dir deinen Platz auf der Karte und belebe die Community ✦",
+"gd.s0h":"Mein Konto erstellen",
+"gd.s0a":"Geh zum Tab <b>Fan-Bereich</b>, gib deine <b>E-Mail</b> und ein <b>Passwort</b> ein (mind. 6 Zeichen).",
+"gd.s0b":"Fülle dein <b>Profil</b> aus: Vorname, Land, Stadt, Alter, Lieblingssong, <b>Instagram</b> und ein Foto.",
+"gd.s0c":"Du erscheinst <b>sofort</b> auf der Karte 🌍",
+"gd.s0tip":"💡 Trag dein <b>Instagram</b> ein: Es erscheint auf deinen Fotos und neben deinen Beiträgen.",
+"gd.s1h":"Start · die Weltkarte",
+"gd.s1a":"Dreh den <b>Globus</b> und zoome, um Fans aus aller Welt zu entdecken.",
+"gd.s1b":"Klicke auf <b>„✦ Meinen Punkt hinzufügen“</b>, um der Community beizutreten.",
+"gd.s1c":"An Geburtstagen erscheint ein <b>rosa Banner</b>: hinterlasse eine kleine Nachricht 🎂",
+"gd.s2h":"Omar",
+"gd.s2a":"Seine <b>Geschichte</b>, seine <b>komplette Diskografie</b> (Cover + Streams) und eine Auswahl an <b>Fotos</b>.",
+"gd.s3h":"Fan-Bereich · dein Bereich",
+"gd.s3a":"<b>Dein Profil</b> und deine Karte (Fan-Tage, Zähler).",
+"gd.s3b":"<b>Deine Geschichte</b>: erzähl, wie du Fan wurdest.",
+"gd.s3c":"<b>Meine Fotos & Videos</b>: sende Fotos, Zeichnungen, Selfies, Videos, Young Royals → Prüfung → Punkte. Jeder Upload kommt in seine Kategorie.",
+"gd.s3d":"<b>Song-Ranking</b>: ordne alle Songs mit Zahlen (1, 2, 3…). Das speist ein Community-Ranking.",
+"gd.s3e":"<b>Mein Engagement</b>: Serie Young Royals, Projekte, OMR-Beauty-Produkte, DIY, Merch → Abzeichen & Punkte.",
+"gd.s3f":"<b>Abzeichen & Punkte</b> und dein <b>Pass</b> zum Ausdrucken.",
+"gd.s4h":"Fan Stories",
+"gd.s4a":"Lies die Geschichten anderer Fans und schreib deine im Fan-Bereich.",
+"gd.spqh":"Warum liebst du Omar?",
+"gd.spqa":"Sag in einem Satz, warum Omar dir wichtig ist. Dein Satz erscheint an der Wand (anonym) und auf deinem Pass.",
+"gd.sbth":"Blind Test",
+"gd.sbta":"Jeden Monat, 3 Spieltage: Höre einen Ausschnitt und errate den Song so schnell wie möglich. 20 Songs, +1 Punkt pro richtiger Antwort.",
+"gd.sbtb":"Die Top 3 gewinnen Bonuspunkte (+100 / +50 / +25) und eine Medaille (Gold, Silber, Bronze).",
+"gd.s5h":"Konzerte & Tour",
+"gd.s5a":"Alle Termine auf einer <b>Karte</b> und in einer <b>Liste</b> (vergangene + kommende).",
+"gd.s5b":"Vergangene Konzerte: die <b>Fan-Galerie</b> mit deinen freigegebenen Fotos (und deinem Instagram-Namen).",
+"gd.s5c":"Kommende Konzerte: <b>„🤝 Der Instagram-Gruppe beitreten“</b> zum Organisieren (Hotels, Anreise…). Über die Instagram-App am Handy öffnen.",
+"gd.s6h":"Fotos & Videos",
+"gd.s6a":"Die Community-Galerie, <b>nach Kategorie sortiert</b>: Konzertfotos, Selfies, Zeichnungen, Young Royals, Videos.",
+"gd.s6b":"Zum Hochladen geh zum Tab <b>Fan-Bereich</b> → „Meine Fotos & Videos“. Der <b>Instagram-Name</b> erscheint bei jedem Beitrag.",
+"gd.s7h":"Fan Projects",
+"gd.s7a":"<b>Schlage ein Projekt vor</b>: Titel, Beschreibung, Kategorie (🎤 Konzertprojekt, 🤝 Treffen, 🎨 Künstlerisch, 💿 Album, 🌍 Sonstiges).",
+"gd.s7b":"Nach der <b>Freigabe</b> kann jeder <b>abstimmen</b> (1 Stimme pro Projekt).",
+"gd.s7tip":"💛 Wenn dein Projekt danach nicht erscheint, konnte es nicht angenommen werden – wir können nicht alles akzeptieren.",
+"gd.s8h":"Awards",
+"gd.s8a":"Einmal im Jahr wählt die Community ihre Favoriten (5 Kategorien).",
+"gd.s8b":"<b>Schlage eine Nominierung vor</b>; für „Bestes Foto“ füge das <b>Foto</b> bei, für „Bestes Video“ den <b>Link</b>.",
+"gd.s8c":"Wenn die Abstimmung offen ist, hast du <b>eine Stimme pro Kategorie und Tag</b> (ein Countdown zeigt es an).",
+"gd.aboutH":"Über die Fotos & Videos ✦",
+"gd.aboutP":"Alle Fotos und Videos auf dieser Seite gehören nicht mir: Sie werden von den Fans geteilt. Wenn du Urheber eines Inhalts bist und möchtest, dass <b>dein Name ergänzt</b> oder er <b>entfernt</b> wird, schreib mir an <a href='mailto:omarrudbergmap@gmail.com' style='color:#ffcf8f;text-decoration:underline'>omarrudbergmap@gmail.com</a>, ich kümmere mich sofort darum. 💛",
   "nav.blindtest":"Blind Test",
   "bt.podiumTitle":"Das Podium",
   "bt.podiumLive":"Das Podium (live)",
@@ -3107,6 +3347,51 @@ de:{
   "contDetected":(c)=>`Erkannter Kontinent: <b>${c}</b> 🌍`,"contOther":"Wir fügen dein Land der Karte hinzu ✦",
 },
 pt:{
+"gd.eyebrow":"Guia dos fãs",
+"gd.title":"Como o site funciona",
+"gd.intro":"Tudo o que você pode fazer no site, aba por aba. Marque seu lugar no mapa e dê vida à comunidade ✦",
+"gd.s0h":"Criar minha conta",
+"gd.s0a":"Vá para a aba <b>Espaço Fã</b>, digite seu <b>e-mail</b> e uma <b>senha</b> (mín. 6 caracteres).",
+"gd.s0b":"Preencha seu <b>perfil</b>: nome, país, cidade, idade, música favorita, <b>Instagram</b> e uma foto.",
+"gd.s0c":"Você aparece <b>na hora</b> no mapa 🌍",
+"gd.s0tip":"💡 Preencha seu <b>Instagram</b>: aparece nas suas fotos e ao lado das suas contribuições.",
+"gd.s1h":"Início · o mapa-múndi",
+"gd.s1a":"Gire o <b>globo</b> e dê zoom para explorar fãs do mundo todo.",
+"gd.s1b":"Clique em <b>“✦ Adicionar meu ponto”</b> para entrar na comunidade.",
+"gd.s1c":"Nos aniversários aparece um <b>banner rosa</b>: deixe uma mensagem 🎂",
+"gd.s2h":"Omar",
+"gd.s2a":"A <b>história</b> dele, a <b>discografia completa</b> (capas + streams) e uma seleção de <b>fotos</b>.",
+"gd.s3h":"Espaço Fã · o teu espaço",
+"gd.s3a":"<b>O teu perfil</b> e a ficha (dias de fã, contadores).",
+"gd.s3b":"<b>A tua história</b>: conta como você virou fã.",
+"gd.s3c":"<b>Minhas fotos e vídeos</b>: envie fotos, desenhos, selfies, vídeos, Young Royals → validação → pontos. Cada envio vai para sua categoria.",
+"gd.s3d":"<b>Ranking de músicas</b>: ordene todas as músicas com números (1, 2, 3…). Isso alimenta um ranking da comunidade.",
+"gd.s3e":"<b>Meu engajamento</b>: série Young Royals, projetos, produtos OMR Beauty, DIY, merch → insígnias e pontos.",
+"gd.s3f":"<b>Insígnias e pontos</b>, e o teu <b>passaporte</b> para imprimir.",
+"gd.s4h":"Fan Stories",
+"gd.s4a":"Leia as histórias de outros fãs e escreva a sua no Espaço Fã.",
+"gd.spqh":"Por que você ama o Omar?",
+"gd.spqa":"Em uma frase, diga por que o Omar é importante para você. Sua frase aparece no mural (anonimamente) e no seu passaporte.",
+"gd.sbth":"Blind Test",
+"gd.sbta":"Todo mês, 3 dias de jogo: ouça um trecho e adivinhe a música o mais rápido possível. 20 músicas, +1 ponto por acerto.",
+"gd.sbtb":"O top 3 ganha pontos bônus (+100 / +50 / +25) e uma medalha (Ouro, Prata, Bronze).",
+"gd.s5h":"Shows & turnê",
+"gd.s5a":"Todas as datas em um <b>mapa</b> e em uma <b>lista</b> (passadas + futuras).",
+"gd.s5b":"Shows passados: a <b>galeria dos fãs</b> com suas fotos aprovadas (e seu @ do Instagram).",
+"gd.s5c":"Shows futuros: <b>“🤝 Entrar no grupo do Instagram”</b> para se organizar (hotéis, viagem…). Abra pelo app do Instagram no celular.",
+"gd.s6h":"Fotos e vídeos",
+"gd.s6a":"A galeria da comunidade, <b>organizada por categoria</b>: fotos de show, selfies, desenhos, Young Royals, vídeos.",
+"gd.s6b":"Para enviar, vá à aba <b>Espaço Fã</b> → “Minhas fotos e vídeos”. O <b>@ do Instagram</b> aparece em cada item.",
+"gd.s7h":"Fan Projects",
+"gd.s7a":"<b>Proponha um projeto</b>: título, descrição, categoria (🎤 Projeto de show, 🤝 Encontro, 🎨 Artístico, 💿 Álbum, 🌍 Outro).",
+"gd.s7b":"Após a <b>validação</b>, todos podem <b>votar</b> (1 voto por projeto).",
+"gd.s7tip":"💛 Se o seu projeto não aparecer depois, é porque não pôde ser aceito; não dá para aceitar tudo.",
+"gd.s8h":"Awards",
+"gd.s8a":"Uma vez por ano, a comunidade elege seus favoritos (5 categorias).",
+"gd.s8b":"<b>Proponha uma indicação</b>; para “Melhor foto”, anexe a <b>foto</b>, para “Melhor vídeo”, o <b>link</b>.",
+"gd.s8c":"Quando a votação está aberta, você tem <b>um voto por categoria por dia</b> (uma contagem regressiva mostra).",
+"gd.aboutH":"Sobre as fotos e vídeos ✦",
+"gd.aboutP":"Todas as fotos e vídeos deste site não me pertencem: são compartilhados pelos fãs. Se você é autor de um conteúdo e quer que <b>seu nome seja adicionado</b> ou que ele seja <b>removido</b>, escreva para <a href='mailto:omarrudbergmap@gmail.com' style='color:#ffcf8f;text-decoration:underline'>omarrudbergmap@gmail.com</a> e cuido disso na hora. 💛",
   "nav.blindtest":"Blind Test",
   "bt.podiumTitle":"O pódio",
   "bt.podiumLive":"O pódio (ao vivo)",
@@ -8341,7 +8626,7 @@ const VILLES_MONDE=[
  /* Lituanie */ ["vilnius",54.69,25.28,"LT"],["kaunas",54.90,23.90,"LT"],["klaipeda",55.71,21.14,"LT"],["siauliai",55.93,23.32,"LT"],["panevezys",55.73,24.36,"LT"],
  /* Villes ajoutées (fans) */ ["dziekanowice",52.53,17.38,"PL"],["uppsala",59.86,17.64,"SE"],["essex",51.74,0.47,"GB"],["chelmsford",51.74,0.47,"GB"],["heinavesi",62.43,28.63,"FI"],["guipavas",48.43,-4.40,"FR"],["hoeilaart",50.77,4.47,"BE"],["copenhague",55.68,12.57,"DK"],["kobenhavn",55.68,12.57,"DK"],
  /* Biélorussie */ ["minsk",53.90,27.56,"BY"],["gomel",52.43,30.98,"BY"],["homyel",52.43,30.98,"BY"],["mogilev",53.90,30.33,"BY"],["mahilyow",53.90,30.33,"BY"],["vitebsk",55.19,30.20,"BY"],["hrodna",53.68,23.83,"BY"],["grodno",53.68,23.83,"BY"],["brest",52.10,23.70,"BY"],["barysaw",54.22,28.51,"BY"],["borisov",54.22,28.51,"BY"],["barisov",54.22,28.51,"BY"],["babruysk",53.14,29.22,"BY"],["bobruisk",53.14,29.22,"BY"],["baranovichi",53.13,26.01,"BY"],
- /* Russie */ ["moscow",55.76,37.62,"RU"],["moscou",55.76,37.62,"RU"],["saint petersburg",59.94,30.31,"RU"],["saint-petersbourg",59.94,30.31,"RU"],["st petersburg",59.94,30.31,"RU"],["sankt peterburg",59.94,30.31,"RU"],["novosibirsk",55.01,82.93,"RU"],["yekaterinburg",56.84,60.61,"RU"],["ekaterinburg",56.84,60.61,"RU"],["kazan",55.79,49.12,"RU"],["nizhny novgorod",56.30,44.00,"RU"],["sochi",43.60,39.73,"RU"],["vladivostok",43.12,131.89,"RU"],["samara",53.20,50.15,"RU"],["rostov",47.24,39.71,"RU"],["krasnodar",45.04,38.98,"RU"],["ufa",54.74,55.97,"RU"],["perm",58.01,56.25,"RU"],["volgograd",48.72,44.50,"RU"],["kaliningrad",54.71,20.51,"RU"],
+ /* Russie */ ["moscow",55.76,37.62,"RU"],["moscou",55.76,37.62,"RU"],["moskva",55.76,37.62,"RU"],["moskau",55.76,37.62,"RU"],["moscu",55.76,37.62,"RU"],["mosca",55.76,37.62,"RU"],["москва",55.76,37.62,"RU"],["saint petersburg",59.94,30.31,"RU"],["saint-petersbourg",59.94,30.31,"RU"],["st petersburg",59.94,30.31,"RU"],["sankt peterburg",59.94,30.31,"RU"],["novosibirsk",55.01,82.93,"RU"],["yekaterinburg",56.84,60.61,"RU"],["ekaterinburg",56.84,60.61,"RU"],["kazan",55.79,49.12,"RU"],["nizhny novgorod",56.30,44.00,"RU"],["sochi",43.60,39.73,"RU"],["vladivostok",43.12,131.89,"RU"],["samara",53.20,50.15,"RU"],["rostov",47.24,39.71,"RU"],["krasnodar",45.04,38.98,"RU"],["ufa",54.74,55.97,"RU"],["perm",58.01,56.25,"RU"],["volgograd",48.72,44.50,"RU"],["kaliningrad",54.71,20.51,"RU"],
 ];
 function coordsVille(ville, code){
   var v=_normVille(ville); if(!v) return null;
