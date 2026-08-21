@@ -542,7 +542,7 @@ footer .marque{font-family:'Bebas Neue';font-size:1.1rem;letter-spacing:.15em;co
         <p style="margin:4px 0"><span data-i18n="acc.connected">Connected:</span> <b id="auth-qui"></b></p>
         <button type="button" class="btn fantome" onclick="seDeconnecter()" data-i18n="acc.logout">Log out</button>
       </div>
-      <div style="font-size:.66rem;opacity:.5;margin-top:8px">version : COMPTES-85</div>
+      <div style="font-size:.66rem;opacity:.5;margin-top:8px">version : COMPTES-86</div>
     </div>
     <div class="verre" id="dejaFiche" style="display:none;margin-bottom:16px">
       <h3 class="accent" data-i18n="acc.haveCard">Your card is created ✓</h3>
@@ -9621,10 +9621,16 @@ function rendreProfil(){
       <button class="btn btn-large" style="margin-top:10px" onclick="envoyerMedia()">📤 ${t("med.send")}</button>
       ${(window.MES_MEDIAS||[]).length?`<p style="font-size:.66rem;letter-spacing:.14em;text-transform:uppercase;color:var(--beige);margin:14px 0 6px">${t("med.mine")}</p><div class="mes-envois">${window.MES_MEDIAS.map(function(m){return carteMonEnvoi(m);}).join("")}</div>`:``}
     </div>` : ``;
-  var htmlGalerie = (window.MEDIAS_VALIDES||[]).length ? `<div class="verre" style="margin-top:14px">
+  var _catsGal=[["photo","📸","med.typePhoto"],["selfie","🤳","med.typeSelfie"],["dessin","🎨","med.typeDessin"],["yr","👑","med.typeYR"],["video","🎬","med.typeVideo"]];
+  var _secsGal=_catsGal.map(function(c){
+    var items=(window.MEDIAS_VALIDES||[]).filter(function(m){return (m.type||"photo")===c[0];});
+    if(!items.length) return "";
+    return '<p style="font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--rose);margin:16px 0 7px">'+c[1]+' '+t(c[2])+' <span style="color:var(--beige)">· '+items.length+'</span></p>'
+      +'<div class="galerie-medias">'+items.slice(0,60).map(function(m){return miniMedia(m,false);}).join("")+'</div>';
+  }).join("");
+  var htmlGalerie = _secsGal ? `<div class="verre" style="margin-top:14px">
       <h3 style="color:var(--rose)">🖼️ ${t("med.galTitle")}</h3>
-      <p style="font-size:.78rem;color:var(--beige)">${t("med.galIntro")}</p>
-      <div class="galerie-medias">${window.MEDIAS_VALIDES.slice(0,30).map(function(m){return miniMedia(m,false);}).join("")}</div>
+      <p style="font-size:.78rem;color:var(--beige)">${t("med.galIntro")}</p>${_secsGal}
     </div>` : ``;
   var carterPoints = monFan ? `<div class="verre" style="margin-top:14px">
       <h3 style="color:var(--rose)">⭐ ${t("pt.title")}</h3>
