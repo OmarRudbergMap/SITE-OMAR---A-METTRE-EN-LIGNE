@@ -542,7 +542,7 @@ footer .marque{font-family:'Bebas Neue';font-size:1.1rem;letter-spacing:.15em;co
         <p style="margin:4px 0"><span data-i18n="acc.connected">Connected:</span> <b id="auth-qui"></b></p>
         <button type="button" class="btn fantome" onclick="seDeconnecter()" data-i18n="acc.logout">Log out</button>
       </div>
-      <div style="font-size:.66rem;opacity:.5;margin-top:8px">version : COMPTES-89</div>
+      <div style="font-size:.66rem;opacity:.5;margin-top:8px">version : COMPTES-90</div>
     </div>
     <div class="verre" id="dejaFiche" style="display:none;margin-bottom:16px">
       <h3 class="accent" data-i18n="acc.haveCard">Your card is created ✓</h3>
@@ -5272,7 +5272,7 @@ function rendrePourquoi(){
   try{ var bn=document.getElementById("badgePourquoiNav"); if(bn) bn.style.display=(typeof qEstNouveau==="function"&&qEstNouveau())?"":"none"; }catch(e){}
   var f=document.getElementById("pourquoiForm");
   if(f){
-    if(window.MON_USER && window.MON_PROFIL_ID){
+    if(window.MON_USER){
       f.innerHTML='<div class="verre" style="border:1px solid var(--rose)">'
         +'<p style="font-size:.82rem;color:var(--rose);font-weight:600;margin-bottom:6px">✍️ '+t("po.myPhrase")+'</p>'
         +'<textarea id="po-input" maxlength="240" class="q-ta" style="min-height:70px" placeholder="'+t("po.ph")+'">'+_escPo(window.MA_PHRASE||"")+'</textarea>'
@@ -5299,10 +5299,16 @@ function rendrePourquoi(){
 }
 window.rendrePourquoi=rendrePourquoi;
 async function envoyerPourquoi(){
-  if(!window.MON_USER || !window.MON_PROFIL_ID){ toast(t("med.needProfile")); return; }
+  if(!window.MON_USER){ toast(t("po.needLogin")); return; }
   var el=document.getElementById("po-input"); var txt=(el?el.value:"").trim();
   if(!txt){ toast(t("po.needText")); return; }
-  var r=await window._sb.from("pourquoi_omar").upsert({user_id:window.MON_USER.id, texte:txt},{onConflict:"user_id"});
+  var uid=window.MON_USER.id;
+  var r=await window._sb.from("pourquoi_omar").upsert({user_id:uid, texte:txt},{onConflict:"user_id"});
+  if(r&&r.error){
+    /* secours : si la mise à jour échoue (ligne existante), on efface et on réinsère */
+    try{ await window._sb.from("pourquoi_omar").delete().eq("user_id",uid); }catch(e){}
+    r=await window._sb.from("pourquoi_omar").insert({user_id:uid, texte:txt});
+  }
   if(r&&r.error){ diag("L'envoi n'a pas fonctionné, réessaie dans un instant ✦",false); console.warn("pourquoi insert:",r.error); return; }
   window.MA_PHRASE=txt; toast(t("po.saved"));
   if(window.chargerPourquoiSupabase) chargerPourquoiSupabase();
