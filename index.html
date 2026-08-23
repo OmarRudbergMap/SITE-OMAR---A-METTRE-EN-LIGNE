@@ -542,7 +542,7 @@ footer .marque{font-family:'Bebas Neue';font-size:1.1rem;letter-spacing:.15em;co
         <p style="margin:4px 0"><span data-i18n="acc.connected">Connected:</span> <b id="auth-qui"></b></p>
         <button type="button" class="btn fantome" onclick="seDeconnecter()" data-i18n="acc.logout">Log out</button>
       </div>
-      <div style="font-size:.66rem;opacity:.5;margin-top:8px">version : COMPTES-91</div>
+      <div style="font-size:.66rem;opacity:.5;margin-top:8px">version : COMPTES-92</div>
     </div>
     <div class="verre" id="dejaFiche" style="display:none;margin-bottom:16px">
       <h3 class="accent" data-i18n="acc.haveCard">Your card is created ✓</h3>
@@ -10824,7 +10824,7 @@ async function chargerFansSupabase(){
       let age=0;
       if(row.date_naissance){ const dn=new Date(row.date_naissance);
         if(!isNaN(dn.getTime())) age=Math.max(0,Math.floor((Date.now()-dn.getTime())/(365.25*864e5))); }
-      integrerFan({ prenom:row.pseudo||"Fan", code:code, ville:row.ville||"", fanId:row.id,
+      integrerFan({ prenom:row.pseudo||"Fan", code:code, ville:row.ville||"", fanId:row.id, user_id:row.user_id||null,
         drapeau:drapeauISO(code), age:age, depuis:(row.annee?String(row.annee):""),
         annee:row.annee||(new Date()).getFullYear(),
         chanson:row.chanson||"", insta:row.insta||"", concert:row.concert||"",
@@ -10930,7 +10930,7 @@ async function chargerMonProfil(){
     } else {
       var code=String(row.pays||"XX").toUpperCase(); var age=0;
       if(row.date_naissance){ var dn=new Date(row.date_naissance); if(!isNaN(dn.getTime())) age=Math.max(0,Math.floor((Date.now()-dn.getTime())/(365.25*864e5))); }
-      integrerFan({ prenom:row.pseudo||"Fan", code:code, ville:row.ville||"", fanId:row.id,
+      integrerFan({ prenom:row.pseudo||"Fan", code:code, ville:row.ville||"", fanId:row.id, user_id:row.user_id||null,
         drapeau:drapeauISO(code), age:age, depuis:(row.annee?String(row.annee):""), annee:row.annee||(new Date()).getFullYear(),
         chanson:row.chanson||"", insta:row.insta||"", concert:row.concert||"", rencontre:!!row.rencontre,
         histoire:row.histoire||"", photo:row.photo||null, photoHistoire:row.photo_histoire||null, tampons:nbConcerts(row.concerts_vus), lieuYR:aLieuYR(row.concerts_vus), concertsVus:row.concerts_vus||[], classementChansons:row.classement_chansons||[],
