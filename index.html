@@ -542,7 +542,7 @@ footer .marque{font-family:'Bebas Neue';font-size:1.1rem;letter-spacing:.15em;co
         <p style="margin:4px 0"><span data-i18n="acc.connected">Connected:</span> <b id="auth-qui"></b></p>
         <button type="button" class="btn fantome" onclick="seDeconnecter()" data-i18n="acc.logout">Log out</button>
       </div>
-      <div style="font-size:.66rem;opacity:.5;margin-top:8px">version : COMPTES-94</div>
+      <div style="font-size:.66rem;opacity:.5;margin-top:8px">version : COMPTES-96</div>
     </div>
     <div class="verre" id="dejaFiche" style="display:none;margin-bottom:16px">
       <h3 class="accent" data-i18n="acc.haveCard">Your card is created ✓</h3>
@@ -5124,8 +5124,8 @@ document.getElementById("formulaireFan").addEventListener("submit",async e=>{
   if(!window._sb){
     alert("⚠️ Base non connectée.\n\nLe fichier supabase/config.js n'est pas lu ou pas rempli.");
   } else {
-    try{
-      window._sb.from("fans").insert({
+    (async function(){
+      var _payload={
         id: fanId,
         user_id: window.MON_USER ? window.MON_USER.id : null,
         pseudo: prenom,
@@ -5146,11 +5146,28 @@ document.getElementById("formulaireFan").addEventListener("submit",async e=>{
         rencontre: !!fn.rencontre,
         accord_parental: accordParental,
         valide: true
-      }).then(function(r){
+      };
+      try{
+        /* ANTI-DOUBLON : si ce compte a DÉJÀ une fiche, on la met à jour au lieu d'en créer une 2e */
+        var _existId=null;
+        if(window.MON_USER){
+          try{
+            var _q=await window._sb.from("fans").select("id").eq("user_id",window.MON_USER.id).limit(1);
+            if(_q && _q.data && _q.data[0]){ _existId=_q.data[0].id; }
+          }catch(_e){ console.warn("verif fiche existante:",_e); }
+        }
+        var r;
+        if(_existId){
+          try{ MOI.fanId=_existId; window.MON_PROFIL_ID=_existId; if(window.sauverBD) sauverBD(); }catch(_e2){}
+          var _upd=Object.assign({},_payload); delete _upd.id; delete _upd.user_id;
+          r=await window._sb.from("fans").update(_upd).eq("id",_existId);
+        } else {
+          r=await window._sb.from("fans").insert(_payload);
+        }
         if(r && r.error){ console.warn("Supabase (fans) :", r.error); alert("Erreur base Supabase :\n\n"+r.error.message+"\n\n(code : "+(r.error.code||"?")+")"); }
-        else { console.log("Fan enregistré dans Supabase ✔"); toast("✔ Enregistré dans ta base Supabase !"); }
-      }, function(err){ console.warn("Supabase (fans) :", err); alert("Erreur réseau base :\n\n"+(err&&err.message||err)); });
-    }catch(err){ console.warn("Supabase (fans) :", err); alert("Erreur base :\n\n"+(err&&err.message||err)); }
+        else { console.log("Fan enregistré dans Supabase ✔ ("+(_existId?"mise à jour":"création")+")"); toast("✔ Enregistré dans ta base Supabase !"); }
+      }catch(err){ console.warn("Supabase (fans) :", err); alert("Erreur base :\n\n"+(err&&err.message||err)); }
+    })();
   }
   /* mon profil : première inscription sur cet appareil = moi */
   if(!MOI.depuis){ MOI.depuis=fn.inscritLe; MOI.concerts=nbTampons; }
@@ -8272,7 +8289,67 @@ function diapoMediaFixe(m,mid){
   </div>`;
 }
 /* ===== Vidéos externes par concert (Dailymotion / Instagram) — au lieu de fichiers lourds hébergés ===== */
-const VIDEOS_CONCERT = {};
+const VIDEOS_CONCERT = {
+  "solo24-0":[{url:"https://dai.ly/xaxrarq"},{url:"https://dai.ly/xaxrc0a"}], /* Stockholm 17.02.2024 */
+  "f24-0":[{url:"https://dai.ly/xaxrg9q"},{url:"https://dai.ly/xaxrghm"}], /* Gävle 25.05.2024 */
+  "f24-1":[{url:"https://dai.ly/xaxrgpa"},{url:"https://dai.ly/xaxrgxa"}], /* Stockholm 01.06.2024 */
+  "f24-2":[{url:"https://dai.ly/xaxrhti"}], /* Söderhamn 11.06.2024 */
+  "f24-3":[{url:"https://dai.ly/xaxri5u"}], /* Kristianstad 24.08.2024 */
+  "f24-4":[{url:"https://dai.ly/xaxriem"}], /* Göteborg 29.08.2024 */
+  "f24-5":[{url:"https://dai.ly/xaxriri"}], /* Soltau 01.09.2024 */
+  "enf24-0":[{url:"https://dai.ly/xaxrj3e"},{url:"https://dai.ly/xaxrjhu"},{url:"https://dai.ly/xaxrjn6"}], /* London 21.10.2024 */
+  "enf24-1":[{url:"https://dai.ly/xaxrjwa"}], /* Paris 23.10.2024 */
+  "enf24-2":[{url:"https://dai.ly/xay1i36"},{url:"https://dai.ly/xay1iki"}], /* Amsterdam 24.10.2024 */
+  "enf24-3":[{url:"https://dai.ly/xay1ipi"}], /* Cologne 25.10.2024 */
+  "enf24-4":[{url:"https://dai.ly/xay1jci"}], /* New York 28.10.2024 */
+  "enf24-5":[{url:"https://dai.ly/xay1jsi"}], /* Los Angeles 04.11.2024 */
+  "enf25-0":[{url:"https://dai.ly/xay1k8e"}], /* Glasgow 02.02.2025 */
+  "enf25-1":[{url:"https://dai.ly/xay1khm"},{url:"https://dai.ly/xay1kt6"},{url:"https://dai.ly/xay1l72"}], /* Manchester 03.02.2025 */
+  "enf25-2":[{url:"https://dai.ly/xay1m7q"}], /* London 05.02.2025 */
+  "enf25-3":[{url:"https://dai.ly/xay1ml2"},{url:"https://dai.ly/xayaybq"},{url:"https://dai.ly/xayayma"}], /* Birmingham 06.02.2025 */
+  "enf25-4":[{url:"https://dai.ly/xayayu6"},{url:"https://dai.ly/xayaz1q"},{url:"https://dai.ly/xayaz8m"}], /* Bristol 08.02.2025 */
+  "enf25-5":[{url:"https://dai.ly/xayazjq"}], /* Amsterdam 10.02.2025 */
+  "enf25-6":[{url:"https://dai.ly/xayazr2"},{url:"https://dai.ly/xayazxy"}], /* Antwerp 12.02.2025 */
+  "enf25-7":[{url:"https://dai.ly/xayb0d2"},{url:"https://dai.ly/xayb06m"},{url:"https://dai.ly/xayb0ue"},{url:"https://dai.ly/xayb10e"},{url:"https://dai.ly/xayb1i2"},{url:"https://dai.ly/xayb1oy"}], /* Paris 13.02.2025 */
+  "enf25-8":[{url:"https://dai.ly/xayubai"},{url:"https://dai.ly/xayubhe"},{url:"https://dai.ly/xayubnm"}], /* Madrid 15.02.2025 */
+  "enf25-9":[{url:"https://dai.ly/xayubu2"},{url:"https://dai.ly/xayubz6"}], /* Barcelona 16.02.2025 */
+  "enf25-10":[{url:"https://dai.ly/xayuc5i"},{url:"https://dai.ly/xayuc8y"}], /* Milan 18.02.2025 */
+  "enf25-11":[{url:"https://dai.ly/xayucfu"},{url:"https://dai.ly/xayucl2"}], /* Munich 19.02.2025 */
+  "enf25-12":[{url:"https://dai.ly/xayuct6"},{url:"https://dai.ly/xayud0q"},{url:"https://dai.ly/xayudhq"},{url:"https://dai.ly/xayudn2"}], /* Warsaw 21.02.2025 */
+  "enf25-13":[{url:"https://dai.ly/xayue7m"},{url:"https://dai.ly/xayueda"},{url:"https://dai.ly/xaz581i"},{url:"https://dai.ly/xaz58iq"}], /* Hamburg 23.02.2025 */
+  "enf25-14":[{url:"https://dai.ly/xaz5912"},{url:"https://dai.ly/xaz59eq"},{url:"https://dai.ly/xaz59si"}], /* Cologne 24.02.2025 */
+  "enf25-15":[{url:"https://dai.ly/xaz5aai"},{url:"https://dai.ly/xaz5aoq"}], /* Oslo 26.02.2025 */
+  "enf25-16":[{url:"https://dai.ly/xaz5b2y"},{url:"https://dai.ly/xaz5btm"},{url:"https://dai.ly/xaz5c8a"},{url:"https://dai.ly/xaz5cki"},{url:"https://dai.ly/xaz5d16"}], /* Stockholm 27.02.2025 */
+  "enf25-17":[{url:"https://dai.ly/xaz5dge"},{url:"https://dai.ly/xaz5dta"}], /* Copenhagen 28.02.2025 */
+  "enf25-18":[{url:"https://dai.ly/xazdgc6"},{url:"https://dai.ly/xazdg8u"},{url:"https://dai.ly/xazdgfm"},{url:"https://dai.ly/xazdgj6"},{url:"https://dai.ly/xazdgm2"},{url:"https://dai.ly/xazdgq2"}], /* Berlin 02.03.2025 */
+  "f25-0":[{url:"https://dai.ly/xazdgwi"},{url:"https://dai.ly/xazdh0i"}], /* London 31.05.2025 */
+  "f25-1":[{url:"https://dai.ly/xazdh46"},{url:"https://dai.ly/xazdh86"}], /* Landgraaf 21.06.2025 */
+  "f25-2":[{url:"https://dai.ly/xazdhba"},{url:"https://dai.ly/xazdheq"}], /* Odense 28.06.2025 */
+  "f25-4":[{url:"https://dai.ly/xazdhja"}], /* Stockholm 01.08.2025 */
+  "f25-5":[{url:"https://dai.ly/xazr12q"},{url:"https://dai.ly/xazr19u"}], /* Göteborg 09.08.2025 */
+  "f25-6":[{url:"https://dai.ly/xazr1d2"}], /* Bergen 23.08.2025 */
+  "f25-7":[{url:"https://dai.ly/xazr1hy"},{url:"https://dai.ly/xazr1mu"},{url:"https://dai.ly/xazr1r2"},{url:"https://dai.ly/xazr1ui"}], /* Munich 30.08.2025 */
+  "ms25-0":[{url:"https://dai.ly/xazr21e"}], /* Munich 28.10.2025 */
+  "ms25-1":[{url:"https://dai.ly/xazr2b6"}], /* Vienna 30.10.2025 */
+  "ms25-2":[{url:"https://dai.ly/xazr2ge"},{url:"https://dai.ly/xazr2ji"}], /* Berlin 31.10.2025 */
+  "ms25-3":[{url:"https://dai.ly/xazr2sq"}], /* Antwerp 02.11.2025 */
+  "ms25-4":[{url:"https://dai.ly/xazr2xy"},{url:"https://dai.ly/xazyc1e"}], /* Paris 03.11.2025 */
+  "ms25-5":[{url:"https://dai.ly/xazycb6"}], /* London 05.11.2025 */
+  "ms25-6":[{url:"https://dai.ly/xazychq"},{url:"https://dai.ly/xazycmy"}], /* Dublin 07.11.2025 */
+  "ms25-7":[{url:"https://dai.ly/xazycsq"}], /* Manchester 09.11.2025 */
+  "ms25-8":[{url:"https://dai.ly/xazycye"}], /* Düsseldorf 11.11.2025 */
+  "ms25-9":[{url:"https://dai.ly/xazyd6y"}], /* Amsterdam 12.11.2025 */
+  "ms25-10":[{url:"https://dai.ly/xazydeq"},{url:"https://dai.ly/xazydiq"}], /* Riga 16.11.2025 */
+  "ms25-11":[{url:"https://dai.ly/xazydne"}], /* Copenhagen 18.11.2025 */
+  "ms25-12":[{url:"https://dai.ly/xazydtu"},{url:"https://dai.ly/xazydzi"}], /* Malmö 19.11.2025 */
+  "ms25-13":[{url:"https://dai.ly/xazye3u"},{url:"https://dai.ly/xazye9a"}], /* Oslo 21.11.2025 */
+  "ms25-14":[{url:"https://dai.ly/xb0dp86"}], /* Göteborg 22.11.2025 */
+  "ms25-15":[{url:"https://dai.ly/xb0dq96"},{url:"https://dai.ly/xb0dr7q"},{url:"https://dai.ly/xb0drua"}], /* Helsinki 26.11.2025 */
+  "ms25-16":[{url:"https://dai.ly/xb0dsci"},{url:"https://dai.ly/xb0dsr2"},{url:"https://dai.ly/xb0dv1m"},{url:"https://dai.ly/xb0dtwa"},{url:"https://dai.ly/xb0du8u"},{url:"https://dai.ly/xb0duoa"}], /* Stockholm 28.11.2025 */
+  "f26-0":[{url:"https://dai.ly/xb0e7yu"},{url:"https://dai.ly/xb0e8qa"}], /* Cologne 27.06.2026 */
+  "f26-1":[{url:"https://dai.ly/xb0e95y"},{url:"https://dai.ly/xb0pr8y"},{url:"https://dai.ly/xb0prdm"}], /* Malmö 09.08.2026 */
+  "f26-2":[{url:"https://dai.ly/xb0priy"},{url:"https://dai.ly/xb0prpa"},{url:"https://dai.ly/xb0prty"}], /* Stockholm 12.08.2026 */
+};
 function _idDailymotion(u){ var m=String(u||"").match(/(?:dai\.ly\/|dailymotion\.com\/(?:embed\/)?video\/)([A-Za-z0-9]+)/); return m?m[1]:null; }
 function videoExterneHTML(v){
   var url=(v&&v.url)||"";
@@ -10806,21 +10883,31 @@ async function chargerFansSupabase(){
     if(rep.error){ console.warn("Supabase lecture fans:",rep.error.message); return; }
     const data=rep.data||[];
     if(!data.length) return;
-    const vus=new Set((window.REGISTRE_FANS||[]).map(f=>((f.prenom||"")+"|"+(f.ville||"")).toLowerCase()));
+    /* Clé anti-doublon ROBUSTE : ignore accents, espaces multiples et majuscules.
+       On dédoublonne aussi par COMPTE (user_id) : une même personne inscrite 2 fois
+       (même compte) n'apparaît plus qu'une seule fois, même si la ville diffère un peu. */
+    const _normFan=function(s){return String(s||"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase().replace(/\s+/g," ").trim();};
+    const _cleFanN=function(pseudo,ville){return _normFan(pseudo)+"|"+_normFan(ville);};
+    const vus=new Set();
+    (window.REGISTRE_FANS||[]).forEach(function(f){
+      vus.add(_cleFanN(f.prenom,f.ville));
+      if(f.user_id) vus.add("uid:"+f.user_id);
+    });
     data.forEach(function(row){
       const code=String(row.pays||"XX").toUpperCase();
-      const cle=((row.pseudo||"")+"|"+(row.ville||"")).toLowerCase();
-      if(vus.has(cle)){
-        /* fan déjà affiché localement → on complète sa photo/histoire depuis la base VALIDÉE */
+      const cle=_cleFanN(row.pseudo,row.ville);
+      const cleU=row.user_id?("uid:"+row.user_id):null;
+      if(vus.has(cle) || (cleU && vus.has(cleU))){
+        /* fan déjà affiché → on complète juste sa photo/histoire depuis la base VALIDÉE */
         if(row.photo || row.histoire || row.photo_histoire){
-          var fx=(window.REGISTRE_FANS||[]).find(function(x){return ((x.prenom||"")+"|"+(x.ville||"")).toLowerCase()===cle;});
+          var fx=(window.REGISTRE_FANS||[]).find(function(x){return _cleFanN(x.prenom,x.ville)===cle || (cleU && x.user_id && ("uid:"+x.user_id)===cleU);});
           if(fx){ if(row.photo && !fx.photo) fx.photo=row.photo; if(row.histoire && !fx.histoire) fx.histoire=row.histoire; if(row.photo_histoire && !fx.photoHistoire) fx.photoHistoire=row.photo_histoire; }
-          var hx=(typeof HISTOIRES!=="undefined"?HISTOIRES:[]).find(function(x){return ((x.prenom||"")+"|"+(x.ville||"")).toLowerCase()===cle;});
+          var hx=(typeof HISTOIRES!=="undefined"?HISTOIRES:[]).find(function(x){return _cleFanN(x.prenom,x.ville)===cle;});
           if(hx){ if(row.photo) hx.photoFan=row.photo; if(row.histoire) hx.texte=row.histoire; if(row.photo_histoire) hx.photoHistoire=row.photo_histoire; }
         }
         return;
       }
-      vus.add(cle);
+      vus.add(cle); if(cleU) vus.add(cleU);
       let age=0;
       if(row.date_naissance){ const dn=new Date(row.date_naissance);
         if(!isNaN(dn.getTime())) age=Math.max(0,Math.floor((Date.now()-dn.getTime())/(365.25*864e5))); }
