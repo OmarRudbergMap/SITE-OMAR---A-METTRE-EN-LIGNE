@@ -542,7 +542,7 @@ footer .marque{font-family:'Bebas Neue';font-size:1.1rem;letter-spacing:.15em;co
         <p style="margin:4px 0"><span data-i18n="acc.connected">Connected:</span> <b id="auth-qui"></b></p>
         <button type="button" class="btn fantome" onclick="seDeconnecter()" data-i18n="acc.logout">Log out</button>
       </div>
-      <div style="font-size:.66rem;opacity:.5;margin-top:8px">version : COMPTES-97</div>
+      <div style="font-size:.66rem;opacity:.5;margin-top:8px">version : COMPTES-99</div>
     </div>
     <div class="verre" id="dejaFiche" style="display:none;margin-bottom:16px">
       <h3 class="accent" data-i18n="acc.haveCard">Your card is created ✓</h3>
@@ -6224,6 +6224,10 @@ button.chip{font:inherit;text-align:left;line-height:1.5}
   width:auto !important;max-width:80vw;
 }
 .carrousel .diapo.media[data-type="video"] video{object-fit:contain !important;background:#111}
+/* Vignette « cliquer pour lire » (une seule vidéo joue à la fois) */
+.carrousel .diapo.media.dm-facade{position:relative;cursor:pointer;overflow:hidden;background:linear-gradient(150deg,#2a0e14,#431f2f) !important}
+.carrousel .diapo.media.dm-facade .dm-play{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:60px;height:60px;border-radius:50%;background:rgba(179,53,51,.92);color:#fff;display:flex;align-items:center;justify-content:center;font-size:1.4rem;padding-left:5px;box-shadow:0 4px 20px rgba(0,0,0,.55);transition:transform .15s ease,background .15s ease;pointer-events:none}
+.carrousel .diapo.media.dm-facade:hover .dm-play{transform:translate(-50%,-50%) scale(1.08);background:rgba(179,53,51,1)}
 /* règle universelle : tout visuel réel du site (galeries, tuiles, fans) suit le même traitement */
 .tuile img,.tuile video{width:100%;height:100%;object-fit:cover;object-position:center;border-radius:inherit;display:block}
 .tuile img{filter:saturate(1.06) contrast(1.04)}
@@ -8351,15 +8355,37 @@ const VIDEOS_CONCERT = {
   "f26-2":[{url:"https://dai.ly/xb0priy"},{url:"https://dai.ly/xb0prpa"},{url:"https://dai.ly/xb0prty"}], /* Stockholm 12.08.2026 */
 };
 function _idDailymotion(u){ var m=String(u||"").match(/(?:dai\.ly\/|dailymotion\.com\/(?:embed\/)?video\/)([A-Za-z0-9]+)/); return m?m[1]:null; }
+/* paramètres pour un lecteur propre : pas de vidéos suggérées à la fin, pas de file d'attente, pas de logo ni partage */
+var DM_PARAMS='endscreen-enable=false&queue-enable=false&queue-autoplay-next=false&sharing-enable=false&ui-logo=false&ui-start-screen-info=false';
+function _dmVignette(id){
+  /* affichée AVANT lecture : miniature Dailymotion + gros bouton ▶ (l'iframe ne se charge qu'au clic) */
+  return '<img src="https://www.dailymotion.com/thumbnail/video/'+id+'" alt="" loading="lazy" style="width:100%;height:100%;object-fit:cover;display:block" onerror="this.style.display=\'none\'">'
+    +'<span class="dm-play" aria-hidden="true">▶</span>';
+}
 function videoExterneHTML(v){
   var url=(v&&v.url)||"";
   var dm=_idDailymotion(url);
   if(dm){
-    return '<div class="diapo media portrait" data-type="video">'
-      +'<iframe src="https://www.dailymotion.com/embed/video/'+dm+'" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen frameborder="0" style="width:100%;height:100%;border:0;border-radius:14px;display:block;background:#000"></iframe></div>';
+    return '<div class="diapo media portrait dm-facade" data-type="video" data-dm="'+dm+'" role="button" tabindex="0" onclick="dmPlay(this)" onkeydown="if(event.key===\'Enter\'||event.key===\' \'){event.preventDefault();dmPlay(this);}">'
+      + _dmVignette(dm) + '</div>';
   }
   return '<a class="diapo media" href="'+url+'" target="_blank" rel="noopener" style="display:flex;align-items:center;justify-content:center;text-align:center;text-decoration:none;color:#fff;background:linear-gradient(145deg,#c2456a,#b33533);min-width:200px;min-height:130px;border-radius:12px;font-weight:600;padding:12px">🎬 '+t("x.cWatchInsta")+' ↗</a>';
 }
+/* remet une vidéo en vignette (arrête donc son lecteur/son) */
+function dmStop(el){
+  var id=el.getAttribute('data-dm'); if(!id) return;
+  el.classList.remove('dm-live'); el.classList.add('dm-facade');
+  el.innerHTML=_dmVignette(id);
+}
+/* lance UNE vidéo — et arrête d'abord toutes les autres pour éviter la cacophonie */
+function dmPlay(el){
+  if(el.classList.contains('dm-live')) return;
+  try{ document.querySelectorAll('.diapo.media.dm-live').forEach(function(o){ if(o!==el) dmStop(o); }); }catch(e){}
+  var id=el.getAttribute('data-dm'); if(!id) return;
+  el.classList.remove('dm-facade'); el.classList.add('dm-live');
+  el.innerHTML='<iframe src="https://www.dailymotion.com/embed/video/'+id+'?autoplay=true&'+DM_PARAMS+'" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen frameborder="0" style="width:100%;height:100%;border:0;border-radius:14px;display:block;background:#000"></iframe>';
+}
+window.dmPlay=dmPlay; window.dmStop=dmStop;
 /* ---- Instagram d'un fan : normalisation + recherche par média ---- */
 function normInsta(raw){
   raw=String(raw||"").trim(); if(!raw) return null;
