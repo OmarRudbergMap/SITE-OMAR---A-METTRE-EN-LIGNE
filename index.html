@@ -120,7 +120,13 @@ header{
   backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px);
   border-left:1px solid var(--verre-bord);
   transform:translateX(105%);transition:transform .35s cubic-bezier(.22,.9,.3,1);
-  padding:80px 26px 30px;display:flex;flex-direction:column;gap:4px;
+  padding:80px 26px calc(30px + env(safe-area-inset-bottom));display:flex;flex-direction:column;gap:4px;
+  overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;
+}
+/* écrans peu hauts (téléphones) : on resserre pour que TOUS les onglets tiennent / défilent */
+@media (max-height:760px){
+  .tiroir{padding-top:64px;gap:1px}
+  .tiroir a{font-size:1.3rem;padding:7px 4px}
 }
 .tiroir.ouvert{transform:translateX(0)}
 .tiroir a{
@@ -542,7 +548,7 @@ footer .marque{font-family:'Bebas Neue';font-size:1.1rem;letter-spacing:.15em;co
         <p style="margin:4px 0"><span data-i18n="acc.connected">Connected:</span> <b id="auth-qui"></b></p>
         <button type="button" class="btn fantome" onclick="seDeconnecter()" data-i18n="acc.logout">Log out</button>
       </div>
-      <div style="font-size:.66rem;opacity:.5;margin-top:8px">version : COMPTES-99</div>
+      <div style="font-size:.66rem;opacity:.5;margin-top:8px">version : COMPTES-100</div>
     </div>
     <div class="verre" id="dejaFiche" style="display:none;margin-bottom:16px">
       <h3 class="accent" data-i18n="acc.haveCard">Your card is created ✓</h3>
