@@ -548,7 +548,7 @@ footer .marque{font-family:'Bebas Neue';font-size:1.1rem;letter-spacing:.15em;co
         <p style="margin:4px 0"><span data-i18n="acc.connected">Connected:</span> <b id="auth-qui"></b></p>
         <button type="button" class="btn fantome" onclick="seDeconnecter()" data-i18n="acc.logout">Log out</button>
       </div>
-      <div style="font-size:.66rem;opacity:.5;margin-top:8px">version : COMPTES-101</div>
+      <div style="font-size:.66rem;opacity:.5;margin-top:8px">version : COMPTES-102</div>
     </div>
     <div class="verre" id="dejaFiche" style="display:none;margin-bottom:16px">
       <h3 class="accent" data-i18n="acc.haveCard">Your card is created ✓</h3>
@@ -6311,6 +6311,12 @@ button.chip{font:inherit;text-align:left;line-height:1.5}
   height:var(--hgal) !important;aspect-ratio:9/16 !important;
   width:auto !important;max-width:80vw;
 }
+/* photos officielles de concert en format téléphone (portrait) */
+.carrousel .diapo.media.portrait{
+  height:var(--hgal) !important;aspect-ratio:9/16 !important;
+  width:auto !important;max-width:80vw;
+}
+.carrousel .diapo.media.portrait img{object-fit:cover !important}
 .carrousel .diapo.media[data-type="video"] video{object-fit:contain !important;background:#111}
 /* Vignette « cliquer pour lire » (une seule vidéo joue à la fois) */
 .carrousel .diapo.media.dm-facade{position:relative;cursor:pointer;overflow:hidden;background:linear-gradient(150deg,#2a0e14,#431f2f) !important}
@@ -8442,6 +8448,11 @@ const VIDEOS_CONCERT = {
   "f26-0":[{url:"https://dai.ly/xb0e7yu"},{url:"https://dai.ly/xb0e8qa"}], /* Cologne 27.06.2026 */
   "f26-1":[{url:"https://dai.ly/xb0e95y"},{url:"https://dai.ly/xb0pr8y"},{url:"https://dai.ly/xb0prdm"}], /* Malmö 09.08.2026 */
   "f26-2":[{url:"https://dai.ly/xb0priy"},{url:"https://dai.ly/xb0prpa"},{url:"https://dai.ly/xb0prty"}], /* Stockholm 12.08.2026 */
+  "f26-3":[{url:"https://dai.ly/xb3ew3q"},{url:"https://dai.ly/xb3ewba"},{url:"https://dai.ly/xb3ewgm"}], /* Göteborg 30.08.2026 */
+};
+/* Photos officielles de la modératrice par concert — fichiers .webp légers hébergés sur GitHub (0 impact base Supabase) */
+const PHOTOS_CONCERT = {
+  "f26-3":["photos/gbg3008_01.webp","photos/gbg3008_02.webp","photos/gbg3008_03.webp","photos/gbg3008_04.webp","photos/gbg3008_05.webp","photos/gbg3008_06.webp","photos/gbg3008_07.webp","photos/gbg3008_08.webp","photos/gbg3008_09.webp","photos/gbg3008_10.webp","photos/gbg3008_11.webp","photos/gbg3008_13.webp","photos/gbg3008_14.webp","photos/gbg3008_15.webp","photos/gbg3008_16.webp","photos/gbg3008_17.webp","photos/gbg3008_18.webp","photos/gbg3008_19.webp"],
 };
 function _idDailymotion(u){ var m=String(u||"").match(/(?:dai\.ly\/|dailymotion\.com\/(?:embed\/)?video\/)([A-Za-z0-9]+)/); return m?m[1]:null; }
 /* paramètres pour un lecteur propre : pas de vidéos suggérées à la fin, pas de file d'attente, pas de logo ni partage */
@@ -8515,7 +8526,9 @@ function rangGalerie(cleBase,type,store,titre,placeholders){
     });
   }
   var externes = (store==="modo" && type==="v" && typeof VIDEOS_CONCERT!=="undefined") ? (VIDEOS_CONCERT[cleBase]||[]) : [];
-  const contenu = externes.map(videoExterneHTML).join("")
+  var photosOff = (store==="modo" && type==="p" && typeof PHOTOS_CONCERT!=="undefined") ? (PHOTOS_CONCERT[cleBase]||[]) : [];
+  const contenu = photosOff.map(function(src){return '<div class="diapo media portrait"><img src="'+src+'" alt="" loading="lazy"></div>';}).join("")
+                + externes.map(videoExterneHTML).join("")
                 + (externes.length ? "" : fixes.map((m,i)=>diapoMediaFixe(m,cle+"-f"+i)).join(""))
                 + valides.map((m)=>diapoMediaFanConcert(m,"fan-"+cle+"-sb"+m._id)).join("")
                 + persos.map((m,i)=>diapoMedia(m,cle,i,store)).join("");
