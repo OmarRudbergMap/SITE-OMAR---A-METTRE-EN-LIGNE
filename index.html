@@ -548,7 +548,7 @@ footer .marque{font-family:'Bebas Neue';font-size:1.1rem;letter-spacing:.15em;co
         <p style="margin:4px 0"><span data-i18n="acc.connected">Connected:</span> <b id="auth-qui"></b></p>
         <button type="button" class="btn fantome" onclick="seDeconnecter()" data-i18n="acc.logout">Log out</button>
       </div>
-      <div style="font-size:.66rem;opacity:.5;margin-top:8px">version : COMPTES-103</div>
+      <div style="font-size:.66rem;opacity:.5;margin-top:8px">version : COMPTES-104</div>
     </div>
     <div class="verre" id="dejaFiche" style="display:none;margin-bottom:16px">
       <h3 class="accent" data-i18n="acc.haveCard">Your card is created ✓</h3>
@@ -6624,6 +6624,8 @@ function demarrerCarrousels(){
         let idx=0,ecart=1e9;
         s.forEach((el,k)=>{const d=Math.abs(el.offsetLeft-c.scrollLeft);if(d<ecart){ecart=d;idx=k;}});
         c.querySelectorAll("video").forEach(v=>{ if(!s[idx].contains(v)) v.pause(); });
+        /* si on quitte une vidéo Dailymotion en lecture, on la remet en vignette (coupe le son) */
+        try{ c.querySelectorAll(".diapo.media.dm-live").forEach(d=>{ if(!s[idx].contains(d)) dmStop(d); }); }catch(e){}
         if(s[idx].dataset.mid && c.dataset.dernierVu!==s[idx].dataset.mid){
           c.dataset.dernierVu=s[idx].dataset.mid; vueMedia(s[idx].dataset.mid);
         }
@@ -6636,6 +6638,9 @@ function demarrerCarrousels(){
       if(c.dataset.tenue && Date.now() < +c.dataset.tenue){planifier(800);return;}
       /* Si la personne regarde une vidéo (elle l'a lancée elle-même), on n'avance pas. */
       if([...c.querySelectorAll("video")].some(v=>!v.paused && !v.ended)){planifier(1200);return;}
+      /* Idem pour une vidéo Dailymotion lancée par la personne (lecteur actif) : on reste dessus,
+         c'est à la personne de passer à la suivante si elle le veut. */
+      if(c.querySelector(".diapo.media.dm-live")){planifier(1500);return;}
       const s=visibles();
       if(pause||s.length<2){planifier(3000);return;}
       let idx=0,ecart=1e9;
