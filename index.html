@@ -548,7 +548,7 @@ footer .marque{font-family:'Bebas Neue';font-size:1.1rem;letter-spacing:.15em;co
         <p style="margin:4px 0"><span data-i18n="acc.connected">Connected:</span> <b id="auth-qui"></b></p>
         <button type="button" class="btn fantome" onclick="seDeconnecter()" data-i18n="acc.logout">Log out</button>
       </div>
-      <div style="font-size:.66rem;opacity:.5;margin-top:8px">version : COMPTES-105</div>
+      <div style="font-size:.66rem;opacity:.5;margin-top:8px">version : COMPTES-106</div>
     </div>
     <div class="verre" id="dejaFiche" style="display:none;margin-bottom:16px">
       <h3 class="accent" data-i18n="acc.haveCard">Your card is created ✓</h3>
@@ -11760,7 +11760,7 @@ var QZ={
    [[50,"qz-bronze","🥉"],[100,"qz-argent","🥈"],[250,"qz-or","🏅"],[500,"qz-rosegold","👑"],[1000,"qz-diamant","💎"]].forEach(function(t){h+=med(t[1],t[2],t[0]+" pts",st.points<t[0]);});
    Object.keys(QZ_CATS).forEach(function(cat){var c=QZ_CATS[cat];var n=(st.cats&&st.cats[cat])||0;h+=med(c.cls,c.g,n+"/10",n<10);});
    h+='</div></div>';return h;},
- ouvrir:function(){ if(qzDoneToday())return; qzCur=qzQuestionOfDay(); if(!qzCur)return; qzRender(); var o=document.getElementById("qzOv"); if(o)o.hidden=false; }
+ ouvrir:function(){ if(!window.MON_USER)return; /* seulement pour les fans connectés à leur compte */ if(qzDoneToday())return; qzCur=qzQuestionOfDay(); if(!qzCur)return; qzRender(); var o=document.getElementById("qzOv"); if(o)o.hidden=false; }
 };
 window.QZ=QZ;
 /* charge la progression (cross-appareil + classement) quand connecté */
@@ -11771,7 +11771,18 @@ function qzInjecterBadges(){try{var s=document.getElementById("secProfil");if(!s
 var _rp=window.rendreProfil;
 if(typeof _rp==="function"){window.rendreProfil=function(){var r=_rp.apply(this,arguments);qzInjecterBadges();return r;};}
 /* ouverture auto (une fois par jour) + rechargement langue */
-function qzBoot(){ setTimeout(function(){ QZ.ouvrir(); qzChargerProg(); }, 1400); }
+function qzBoot(){
+ setTimeout(function(){ try{qzChargerProg();}catch(e){} }, 1400);
+ /* on n'ouvre le quiz QUE lorsque le fan est connecté à son compte.
+    On attend donc que la connexion soit établie (elle peut arriver après le chargement). */
+ var tries=0;
+ var iv=setInterval(function(){
+   tries++;
+   if(qzDoneToday()){clearInterval(iv);return;}
+   if(window.MON_USER){ clearInterval(iv); setTimeout(function(){ QZ.ouvrir(); try{qzChargerProg();}catch(e){} }, 400); return; }
+   if(tries>800){ clearInterval(iv); } /* ~20 min de veille max, puis on arrête d'attendre */
+ }, 1500);
+}
 if(document.readyState==="complete"||document.readyState==="interactive") qzBoot();
 else document.addEventListener("DOMContentLoaded",qzBoot);
 })();
