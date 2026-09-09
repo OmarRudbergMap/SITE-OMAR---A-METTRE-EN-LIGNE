@@ -548,7 +548,7 @@ footer .marque{font-family:'Bebas Neue';font-size:1.1rem;letter-spacing:.15em;co
         <p style="margin:4px 0"><span data-i18n="acc.connected">Connected:</span> <b id="auth-qui"></b></p>
         <button type="button" class="btn fantome" onclick="seDeconnecter()" data-i18n="acc.logout">Log out</button>
       </div>
-      <div style="font-size:.66rem;opacity:.5;margin-top:8px">version : COMPTES-108</div>
+      <div style="font-size:.66rem;opacity:.5;margin-top:8px">version : COMPTES-109</div>
     </div>
     <div class="verre" id="dejaFiche" style="display:none;margin-bottom:16px">
       <h3 class="accent" data-i18n="acc.haveCard">Your card is created ✓</h3>
@@ -1425,7 +1425,8 @@ const CONT = {
 };
 const LOCALES={en:"en-GB",fr:"fr-FR",es:"es-ES",sv:"sv-SE",de:"de-DE",pt:"pt-BR"};
 const FLAGS={en:"🇬🇧",fr:"🇫🇷",es:"🇪🇸",sv:"🇸🇪",de:"🇩🇪",pt:"🇧🇷"};
-let LANG = "en";
+let LANG = (function(){try{var s=localStorage.getItem("omar_lang");if(s&&["fr","en","es","sv","de","pt"].indexOf(s)>-1)return s;var b=(navigator.language||navigator.userLanguage||"en").slice(0,2).toLowerCase();return ["fr","en","es","sv","de","pt"].indexOf(b)>-1?b:"en";}catch(e){return "en";}})();
+try{window.LANG=LANG;}catch(e){}   /* le quiz lit window.LANG : on le garde toujours synchronisé avec LANG */
 const I18N = {
 en:{
 "gd.eyebrow":"Fan guide",
@@ -3808,12 +3809,16 @@ langListeEl.querySelectorAll("button").forEach(bt=>{
 function changerLangue(l){
   if(l!=="en" && !I18N[l]) return;
   LANG=l;
+  try{ window.LANG=l; }catch(e){}   /* le quiz lit window.LANG */
+  try{ localStorage.setItem("omar_lang", l); }catch(e){}   /* on retient le choix du fan pour ses prochaines visites */
   traduirePage(); rendreSelectPays(); rendreBarres(true); rendreHistoires(); rendreClassement(); dessinerCartePlate(); fermerFiche();
   if(window.rendreProgression) rendreProgression();
   if(window.rendreExtension) rendreExtension();
   if(window.majAwards) majAwards();
   if(window.majLecteur) majLecteur();
   if(window.rendreBlindtest) rendreBlindtest();
+  /* si le quiz est ouvert, on le ré-affiche dans la nouvelle langue */
+  try{ var ov=document.getElementById("qzOv"); if(window.QZ && ov && !ov.hidden) QZ.render(); }catch(e){}
 }
 
 /* ---------------- NAVIGATION ---------------- */
