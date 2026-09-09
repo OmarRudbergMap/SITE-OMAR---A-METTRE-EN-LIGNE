@@ -548,7 +548,7 @@ footer .marque{font-family:'Bebas Neue';font-size:1.1rem;letter-spacing:.15em;co
         <p style="margin:4px 0"><span data-i18n="acc.connected">Connected:</span> <b id="auth-qui"></b></p>
         <button type="button" class="btn fantome" onclick="seDeconnecter()" data-i18n="acc.logout">Log out</button>
       </div>
-      <div style="font-size:.66rem;opacity:.5;margin-top:8px">version : COMPTES-107</div>
+      <div style="font-size:.66rem;opacity:.5;margin-top:8px">version : COMPTES-108</div>
     </div>
     <div class="verre" id="dejaFiche" style="display:none;margin-bottom:16px">
       <h3 class="accent" data-i18n="acc.haveCard">Your card is created ✓</h3>
@@ -4970,7 +4970,7 @@ function detailPoints(fn){
   if(nb>0) d.push(["🏅","pt.badges",nb*10, nb]);                   /* +10 par badge gagné */
   return d;
 }
-function pointsFan(fn){ var base=detailPoints(fn).reduce(function(s,l){return s+l[2];},0); var qz=(window.QZ_POINTS_MAP&&fn&&fn.user_id&&window.QZ_POINTS_MAP[fn.user_id])||0; return base+Math.floor(qz); }
+function pointsFan(fn){ var base=detailPoints(fn).reduce(function(s,l){return s+l[2];},0); var qz=(window.QZ_POINTS_MAP&&fn&&fn.user_id&&window.QZ_POINTS_MAP[fn.user_id])||0; return Math.round((base+qz)*10)/10; }
 
 /* intègre UNE inscription dans toutes les vues du site */
 function integrerFan(fn){
@@ -11765,7 +11765,10 @@ var QZ={
 window.QZ=QZ;
 /* charge la progression (cross-appareil + classement) quand connecté */
 window.QZ_POINTS_MAP=window.QZ_POINTS_MAP||{};
-function qzChargerProg(){try{if(!window._sb)return;window._sb.from("quiz_progression").select("user_id,points").then(function(r){if(r&&r.data){r.data.forEach(function(row){window.QZ_POINTS_MAP[row.user_id]=row.points||0;});if(window.MON_USER&&window.QZ_POINTS_MAP[window.MON_USER.id]!=null){var st=qzGetStat();if((window.QZ_POINTS_MAP[window.MON_USER.id]||0)>st.points){/* garder le max */}}if(window.toutMettreAJour)try{window.toutMettreAJour(false);}catch(e){}}},function(){});}catch(e){}}
+function qzChargerProg(){try{if(!window._sb)return;window._sb.from("quiz_progression").select("user_id,points").then(function(r){if(r&&r.data){r.data.forEach(function(row){window.QZ_POINTS_MAP[row.user_id]=row.points||0;});}
+ /* on garde TOUJOURS au moins les points locaux du fan connecté, au cas où la sauvegarde en ligne serait en retard ou absente */
+ if(window.MON_USER){var st=qzGetStat();var loc=(st&&st.points)||0;var rem=window.QZ_POINTS_MAP[window.MON_USER.id]||0;window.QZ_POINTS_MAP[window.MON_USER.id]=Math.max(loc,rem);}
+ if(window.toutMettreAJour)try{window.toutMettreAJour(false);}catch(e){}},function(){});}catch(e){}}
 /* injecte les badges quiz dans le passeport (profil) */
 function qzInjecterBadges(){try{var s=document.getElementById("secProfil");if(!s)return;if(s.querySelector(".qz-badges-blk"))return;var blk=document.createElement("div");blk.className="verre qz-badges-blk";blk.style.marginTop="14px";blk.innerHTML=QZ.badgesHTML();s.appendChild(blk);}catch(e){}}
 var _rp=window.rendreProfil;
