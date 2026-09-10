@@ -548,7 +548,7 @@ footer .marque{font-family:'Bebas Neue';font-size:1.1rem;letter-spacing:.15em;co
         <p style="margin:4px 0"><span data-i18n="acc.connected">Connected:</span> <b id="auth-qui"></b></p>
         <button type="button" class="btn fantome" onclick="seDeconnecter()" data-i18n="acc.logout">Log out</button>
       </div>
-      <div style="font-size:.66rem;opacity:.5;margin-top:8px">version : COMPTES-110</div>
+      <div style="font-size:.66rem;opacity:.5;margin-top:8px">version : COMPTES-111</div>
     </div>
     <div class="verre" id="dejaFiche" style="display:none;margin-bottom:16px">
       <h3 class="accent" data-i18n="acc.haveCard">Your card is created ✓</h3>
@@ -4850,8 +4850,10 @@ async function sauvegarderFiche(){
   var champs={ pseudo:prenom, pays:pays, ville:ville, chanson:chanson, insta:insta, concert:concert, fan_depuis:(fd||null) };
   if(naiss && naiss.indexOf("-")!==-1) champs.date_naissance=naiss;
   if(annee) champs.annee=annee;
-  var pos=window.POS_FICHE;
-  if(pos && !isNaN(pos.lat)){ champs.lat=pos.lat; champs.lon=pos.lon; }
+  toast(_geoMsg().searching);
+  var pos=await resoudrePosition(ville, pays, window.POS_FICHE);
+  if(!pos){ alertVilleIntrouvable(ville, pays, "POS_FICHE"); return; }
+  champs.lat=pos.lat; champs.lon=pos.lon;
   var ok=await majFicheSupabase(champs); if(ok===false) return;
   var f=monFanCourant();
   if(f){ f.prenom=prenom; f.code=pays; f.drapeau=drapeauISO(pays); f.ville=ville; if(naiss)f.naissance=naiss; f.chanson=chanson; f.insta=insta; f.concert=concert; f.fanDepuis=fd; if(annee)f.annee=annee; if(pos&&!isNaN(pos.lat)){ f.lat=pos.lat; f.lon=pos.lon; } }
@@ -5203,6 +5205,10 @@ document.getElementById("formulaireFan").addEventListener("submit",async e=>{
   const nbTampons=window.tamponsDepuisFormulaire?tamponsDepuisFormulaire():0;
   const clesConcerts=window.MES_CONCERTS_VUS||[];
   const fanId=nouvelIdFan();
+  /* position OBLIGATOIRE : point posé à la main > liste locale > recherche en ligne. Sinon on bloque. */
+  toast(_geoMsg().searching);
+  const _pos=await resoudrePosition(ville, code, window.POS_INSCRIPTION);
+  if(!_pos){ alertVilleIntrouvable(ville, code, "POS_INSCRIPTION"); return; }
   const fn={
     id:Date.now(), fanId, estMoi:true, prenom, code, drapeau:drapeauISO(code), ville, age:+age, naissance,
     insta:document.getElementById("f-insta").value.trim(),
@@ -5211,8 +5217,8 @@ document.getElementById("formulaireFan").addEventListener("submit",async e=>{
     rencontre:(document.querySelector('input[name="rencontre"]:checked')||{}).value==="oui",
     histoire:document.getElementById("f-histoire").value.trim(),
     photo, photoHistoire:photoFond, tampons:nbTampons, lieuYR:aLieuYR(clesConcerts), concertsVus:clesConcerts,
-    lat:(window.POS_INSCRIPTION&&!isNaN(window.POS_INSCRIPTION.lat))?window.POS_INSCRIPTION.lat:null,
-    lon:(window.POS_INSCRIPTION&&!isNaN(window.POS_INSCRIPTION.lon))?window.POS_INSCRIPTION.lon:null,
+    lat:_pos.lat,
+    lon:_pos.lon,
     inscritLe:new Date().toISOString()
   };
   integrerFan(fn);
@@ -5238,8 +5244,8 @@ document.getElementById("formulaireFan").addEventListener("submit",async e=>{
         insta: fn.insta || null,
         annee: fn.annee || null,
         fan_depuis: (depuis && /^\d{4}-\d{2}/.test(depuis)) ? depuis : null,
-        lat: (window.POS_INSCRIPTION && !isNaN(window.POS_INSCRIPTION.lat)) ? window.POS_INSCRIPTION.lat : null,
-        lon: (window.POS_INSCRIPTION && !isNaN(window.POS_INSCRIPTION.lon)) ? window.POS_INSCRIPTION.lon : null,
+        lat: _pos.lat,
+        lon: _pos.lon,
         concert: fn.concert || null,
         concerts_vus: clesConcerts,
         rencontre: !!fn.rencontre,
@@ -8891,6 +8897,61 @@ function coordsVille(ville, code){
   return null;
 }
 window.coordsVille=coordsVille;
+/* ---- Géocodage automatique : calcule la position d'une ville (liste locale + recherche en ligne OpenStreetMap) ---- */
+var _geoCache={};
+async function geocodeVilleEnLigne(ville, code){
+  var key=(code||"")+"|"+_normVille(ville);
+  if(_geoCache[key]!==undefined) return _geoCache[key];
+  try{
+    var url="https://nominatim.openstreetmap.org/search?format=jsonv2&limit=1&accept-language="+(window.LANG||"en")
+      +"&q="+encodeURIComponent(ville)+(code?("&countrycodes="+code.toLowerCase()):"");
+    var r=await fetch(url,{headers:{"Accept":"application/json"}});
+    var j=await r.json();
+    if(j&&j[0]&&j[0].lat){ var res={lat:+(+j[0].lat).toFixed(4),lon:+(+j[0].lon).toFixed(4)}; _geoCache[key]=res; return res; }
+  }catch(e){ console.warn("geocode en ligne:",e); }
+  _geoCache[key]=null; return null;
+}
+window.geocodeVilleEnLigne=geocodeVilleEnLigne;
+/* renvoie {lat,lon} ou null : point posé à la main > liste locale > recherche en ligne */
+async function resoudrePosition(ville, code, posManuel){
+  if(posManuel && posManuel.lat!=null && !isNaN(posManuel.lat)) return {lat:+posManuel.lat, lon:+posManuel.lon};
+  var cv=coordsVille(ville, code); if(cv) return {lat:+cv.lat, lon:+cv.lon};
+  var g=await geocodeVilleEnLigne(ville, code); if(g) return g;
+  return null;
+}
+window.resoudrePosition=resoudrePosition;
+/* grandes villes connues du même pays, pour proposer une alternative proche */
+function villesProchesPays(code){
+  var out=[],seen={};
+  if(typeof VILLES_MONDE!=="undefined"){VILLES_MONDE.forEach(function(x){ if(x[3]===code){ var n=x[0]; if(!seen[n]){seen[n]=1; out.push({nom:n,lat:x[1],lon:x[2]});} } });}
+  return out.slice(0,10);
+}
+var GEO_MSG={
+ fr:{title:"Nous n'avons pas trouvé « %v ».",sub:"Choisis une grande ville proche de chez toi, corrige l'orthographe, ou place ton point sur la mini-carte.",map:"👉 Tu peux aussi poser ton point directement sur la mini-carte du formulaire.",picked:"Ville enregistrée ✦ — clique à nouveau sur Valider.",searching:"Recherche de ta ville…"},
+ en:{title:"We couldn't find “%v”.",sub:"Pick a big city near you, fix the spelling, or place your point on the mini-map.",map:"👉 You can also drop your point directly on the mini-map in the form.",picked:"City saved ✦ — tap Validate again.",searching:"Locating your city…"},
+ es:{title:"No encontramos «%v».",sub:"Elige una gran ciudad cercana, corrige la ortografía o coloca tu punto en el mini-mapa.",map:"👉 También puedes poner tu punto directamente en el mini-mapa del formulario.",picked:"Ciudad guardada ✦ — pulsa Validar de nuevo.",searching:"Buscando tu ciudad…"},
+ sv:{title:"Vi hittade inte ”%v”.",sub:"Välj en större stad nära dig, rätta stavningen eller placera din punkt på minikartan.",map:"👉 Du kan också placera din punkt direkt på minikartan i formuläret.",picked:"Stad sparad ✦ — tryck på Validera igen.",searching:"Söker din stad…"},
+ de:{title:"Wir konnten „%v“ nicht finden.",sub:"Wähle eine große Stadt in der Nähe, korrigiere die Schreibweise oder setze deinen Punkt auf die Minikarte.",map:"👉 Du kannst deinen Punkt auch direkt auf der Minikarte im Formular setzen.",picked:"Stadt gespeichert ✦ — tippe erneut auf Bestätigen.",searching:"Deine Stadt wird gesucht…"},
+ pt:{title:"Não encontrámos «%v».",sub:"Escolhe uma grande cidade perto de ti, corrige a ortografia ou coloca o teu ponto no mini-mapa.",map:"👉 Também podes colocar o teu ponto diretamente no mini-mapa do formulário.",picked:"Cidade guardada ✦ — clica novamente em Validar.",searching:"A localizar a tua cidade…"}
+};
+function _geoMsg(){return GEO_MSG[window.LANG]||GEO_MSG.en;}
+function alertVilleIntrouvable(ville, code, store){
+  var m=_geoMsg();
+  var sugg=villesProchesPays(code);
+  var ov=document.getElementById("geoAideOv");
+  if(!ov){ov=document.createElement("div");ov.className="qz-ov";ov.id="geoAideOv";ov.style.zIndex="1200";ov.innerHTML='<div class="qz-card" style="max-width:440px" id="geoAideCard"></div>';document.body.appendChild(ov);}
+  var chips=sugg.map(function(s){var nm=s.nom.charAt(0).toUpperCase()+s.nom.slice(1);
+    return '<button class="geo-chip" data-lat="'+s.lat+'" data-lon="'+s.lon+'" style="margin:4px;padding:8px 14px;border-radius:20px;border:1px solid var(--verre-bord);background:var(--verre);color:var(--blanc);cursor:pointer;font-size:.85rem;font-family:inherit">'+nm+'</button>';}).join("");
+  document.getElementById("geoAideCard").innerHTML=
+    '<button class="qz-x" onclick="document.getElementById(\'geoAideOv\').hidden=true">✕</button>'
+    +'<p style="font-size:1.02rem;color:var(--blanc);text-align:center;margin:8px 6px 10px;font-weight:500">📍 '+m.title.replace("%v",(ville||"").replace(/</g,""))+'</p>'
+    +'<p style="font-size:.84rem;color:var(--beige);text-align:center;margin:0 6px 12px;line-height:1.5">'+m.sub+'</p>'
+    +(chips?'<div style="display:flex;flex-wrap:wrap;justify-content:center;gap:2px">'+chips+'</div>':'')
+    +'<p style="font-size:.76rem;color:var(--orange);text-align:center;margin-top:14px;line-height:1.5">'+m.map+'</p>';
+  ov.hidden=false;
+  ov.querySelectorAll(".geo-chip").forEach(function(b){b.onclick=function(){window[store]={lat:+b.dataset.lat,lon:+b.dataset.lon};ov.hidden=true;toast(m.picked);};});
+}
+window.alertVilleIntrouvable=alertVilleIntrouvable;
 /* ---- Mini-carte cliquable : le fan pose son point EXACT, dans son pays ---- */
 function bornesPays(code){
   var g=(typeof PAYS_GEO!=="undefined")?PAYS_GEO[code]:null;
