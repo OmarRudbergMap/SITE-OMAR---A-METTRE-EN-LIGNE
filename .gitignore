@@ -21,3 +21,6 @@ videos/
 
 # Fichiers sources du quiz (à conserver localement, pas sur le site)
 _sources_quiz/
+
+# Reels Instagram (assets marketing, pas des fichiers du site)
+_reels/
