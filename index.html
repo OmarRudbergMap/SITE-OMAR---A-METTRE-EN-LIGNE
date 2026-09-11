@@ -548,7 +548,7 @@ footer .marque{font-family:'Bebas Neue';font-size:1.1rem;letter-spacing:.15em;co
         <p style="margin:4px 0"><span data-i18n="acc.connected">Connected:</span> <b id="auth-qui"></b></p>
         <button type="button" class="btn fantome" onclick="seDeconnecter()" data-i18n="acc.logout">Log out</button>
       </div>
-      <div style="font-size:.66rem;opacity:.5;margin-top:8px">version : COMPTES-112</div>
+      <div style="font-size:.66rem;opacity:.5;margin-top:8px">version : COMPTES-113</div>
     </div>
     <div class="verre" id="dejaFiche" style="display:none;margin-bottom:16px">
       <h3 class="accent" data-i18n="acc.haveCard">Your card is created ✓</h3>
@@ -9414,7 +9414,14 @@ function classementChansonsCommunaute(){
     var N=c.length;
     c.forEach(function(n,i){ scores[n]=(scores[n]||0)+(N-i); });
   });
-  return Object.keys(scores).map(function(n){return [n,scores[n]];}).sort(function(a,b){return b[1]-a[1];});
+  /* inclure TOUTES les chansons (même celles sans vote) pour afficher la liste complète */
+  var ordre=ordreChansonsDefaut(), rangDefaut={};
+  ordre.forEach(function(n,i){ rangDefaut[n]=i; });
+  (typeof DISCO!=="undefined"?DISCO:[]).forEach(function(m){ if(scores[m.n]===undefined) scores[m.n]=0; });
+  return Object.keys(scores).map(function(n){return [n,scores[n]];}).sort(function(a,b){
+    if(b[1]!==a[1]) return b[1]-a[1];                 /* d'abord par points */
+    return (rangDefaut[a[0]]||0)-(rangDefaut[b[0]]||0); /* égalité : ordre par défaut (récent → ancien) */
+  });
 }
 window.ouvrirEditeurChansons=ouvrirEditeurChansons; window.rendreEditeurChansons=rendreEditeurChansons;
 window.majRangChanson=majRangChanson; window.ordreEditeurChansons=ordreEditeurChansons; window.enregistrerClassementChansons=enregistrerClassementChansons;
@@ -10291,7 +10298,7 @@ function rendreProfil(){
     <div class="verre" style="margin-top:14px">
       <h3 style="color:var(--rose)">🏆 ${t("cs.communityTitle")}</h3>
       <p style="font-size:.78rem;color:var(--beige)">${t("cs.communityIntro")}</p>
-      ${clsCommunaute.length?clsCommunaute.slice(0,15).map(function(e,i){var n=e[0],p=e[1],vg=PHOTOS_CHANSONS[n];return '<div class="chanson-com"><span class="cc-num">'+(i+1)+'</span>'+(vg?'<img class="vig" src="'+vg+'" alt="" loading="lazy">':'<span class="vig-vide"></span>')+'<span class="cc-nom" translate="no">'+n+'</span><span class="cc-pts">'+p+' '+t("cs.pts")+'</span></div>';}).join(""):'<p style="font-size:.78rem;color:var(--beige);margin-top:8px">'+t("cs.none")+'</p>'}
+      ${clsCommunaute.length?clsCommunaute.map(function(e,i){var n=e[0],p=e[1],vg=PHOTOS_CHANSONS[n];return '<div class="chanson-com"><span class="cc-num">'+(i+1)+'</span>'+(vg?'<img class="vig" src="'+vg+'" alt="" loading="lazy">':'<span class="vig-vide"></span>')+'<span class="cc-nom" translate="no">'+n+'</span><span class="cc-pts">'+p+' '+t("cs.pts")+'</span></div>';}).join(""):'<p style="font-size:.78rem;color:var(--beige);margin-top:8px">'+t("cs.none")+'</p>'}
     </div>
     ${window.MON_PROFIL_ID?`<div class="verre" style="margin-top:14px">
       <h3 style="color:var(--rose)">💙 ${t("eng.title")}</h3>
