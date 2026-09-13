@@ -548,7 +548,7 @@ footer .marque{font-family:'Bebas Neue';font-size:1.1rem;letter-spacing:.15em;co
         <p style="margin:4px 0"><span data-i18n="acc.connected">Connected:</span> <b id="auth-qui"></b></p>
         <button type="button" class="btn fantome" onclick="seDeconnecter()" data-i18n="acc.logout">Log out</button>
       </div>
-      <div style="font-size:.66rem;opacity:.5;margin-top:8px">version : COMPTES-115</div>
+      <div style="font-size:.66rem;opacity:.5;margin-top:8px">version : COMPTES-116</div>
     </div>
     <div class="verre" id="dejaFiche" style="display:none;margin-bottom:16px">
       <h3 class="accent" data-i18n="acc.haveCard">Your card is created ✓</h3>
@@ -6396,7 +6396,7 @@ document.head.appendChild(styleExt);
    de nouveaux chiffres officiels, mettez à jour s (base) et T0_STREAMS. */
 const T0_STREAMS = new Date("2026-05-25T00:00:00Z").getTime();   /* dossier de presse */
 const T0_KWORB  = new Date("2026-09-13T00:00:00Z").getTime();   /* recalé sur la somme réelle de la liste au 13.09.2026 */
-const TOTAL_STREAMS = { s:252947365, r:0.79 };  /* = somme exacte de toutes les chansons de la liste au 13.09.2026 */
+const TOTAL_STREAMS = { s:253154562, r:0.79 };  /* = somme exacte de toutes les chansons de la liste au 13.09.2026 */
 const DISCO=[
  /* s = streams Spotify exacts fournis par le site (relevés des 17-18.07.2026, t0)
     r = streams/seconde · rythmes quotidiens réels Kworb (relevé du 19.04.2026) pour les titres suivis ; estimations pour les autres. RECALAGE HEBDOMADAIRE : la modératrice fournit les chiffres exacts ~1x/semaine → mettre à jour s et t0.
@@ -6473,6 +6473,7 @@ const DISCO=[
  {n:"La Mesa (feat. Elias Hurtig)", d:"2018-08-17", s:3320562, r:0.00584, t0:"2026-09-13"},
  {n:"Que Pasa (feat. Lamix)", d:"2018-02-23", s:7462819, r:0.007, t0:"2026-09-13"},
  {n:"Sorry (reprise de Madonna)", d:"2024-06-18", yt:true, vues:257221, s:257221, r:0, t0:"2026-09-13"},
+ {n:"Wrong (acoustic)", d:"", yt:true, vues:207197, s:207197, r:0, t0:"2026-09-13"},
 ];
 const BIO = {
  fr:[
