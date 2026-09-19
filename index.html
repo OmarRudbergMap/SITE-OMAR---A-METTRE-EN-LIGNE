@@ -561,7 +561,7 @@ footer .marque{font-family:'Bebas Neue';font-size:1.1rem;letter-spacing:.15em;co
         <p style="margin:4px 0"><span data-i18n="acc.connected">Connected:</span> <b id="auth-qui"></b></p>
         <button type="button" class="btn fantome" onclick="seDeconnecter()" data-i18n="acc.logout">Log out</button>
       </div>
-      <div style="font-size:.66rem;opacity:.5;margin-top:8px">version : COMPTES-132</div>
+      <div style="font-size:.66rem;opacity:.5;margin-top:8px">version : COMPTES-133</div>
     </div>
     <div class="verre" id="dejaFiche" style="display:none;margin-bottom:16px">
       <h3 class="accent" data-i18n="acc.haveCard">Your card is created ✓</h3>
@@ -4979,16 +4979,19 @@ function detailPoints(fn){
   if(fn.assoRencontre) d.push(["🤝","pt.rencontre",15]);
   var an=anneesFidelite(fn);
   if(an>0) d.push(["💙","pt.fidelite",an*50, an]);                 /* +50 par année de fan */
-  var _nl=(window.LIKES_PAR_USER&&fn.user_id)?(window.LIKES_PAR_USER[fn.user_id]||0):0;
-  var _nc=(window.COMS_PAR_USER&&fn.user_id)?(window.COMS_PAR_USER[fn.user_id]||0):0;
+  /* identifiant de compte : celui de la fiche, ou — si absent en local — celui du fan connecté quand c'est SA fiche.
+     (sans lui, likes/commentaires/quiz/blind test seraient comptés 0) */
+  var _uid = fn.user_id || ((window.MON_USER && window.MON_PROFIL_ID && fn.fanId && fn.fanId===window.MON_PROFIL_ID) ? window.MON_USER.id : null);
+  var _nl=(window.LIKES_PAR_USER&&_uid)?(window.LIKES_PAR_USER[_uid]||0):0;
+  var _nc=(window.COMS_PAR_USER&&_uid)?(window.COMS_PAR_USER[_uid]||0):0;
   var _eng=_nl*1+_nc*2;                                            /* +1 par like donné, +2 par commentaire */
   d.push(["💬","pt.engagement",_eng]);                              /* TOUJOURS affiché (même 0) */
   var _rep=["qChanson","qConcertVoyage","qProjet","yrPremiereFois","yrNbVu","yrRencontre","yrTatouage","yrScene"].filter(function(k){return fn[k]&&String(fn[k]).trim();}).length;
   if(_rep>0) d.push(["📝","pt.questions",_rep*5,_rep]);
-  var _bb=(window.BT_BONUS&&fn.user_id)?(window.BT_BONUS[fn.user_id]||0):0;
+  var _bb=(window.BT_BONUS&&_uid)?(window.BT_BONUS[_uid]||0):0;
   d.push(["🎧","pt.blindtest",_bb]);                                /* TOUJOURS affiché (bonus podium, 0 si pas dans le top 3) */
   /* Quiz « Question du jour » : TOUJOURS affiché, et compté dans le total via la somme ci-dessous. */
-  var _qz=(window.QZ_POINTS_MAP&&fn.user_id)?(window.QZ_POINTS_MAP[fn.user_id]||0):0;
+  var _qz=(window.QZ_POINTS_MAP&&_uid)?(window.QZ_POINTS_MAP[_uid]||0):0;
   d.push(["✦","pt.quiz", Math.round(_qz*10)/10]);
   var nb=badgesFan(fn).filter(function(_x){return !(_x[2]&&_x[2].noPoints);}).length;
   if(nb>0) d.push(["🏅","pt.badges",nb*10, nb]);                   /* +10 par badge gagné */
@@ -11181,13 +11184,28 @@ async function chargerFansSupabase(){
       const cle=_cleFanN(row.pseudo,row.ville);
       const cleU=row.user_id?("uid:"+row.user_id):null;
       if(vus.has(cle) || (cleU && vus.has(cleU))){
-        /* fan déjà affiché → on complète juste sa photo/histoire depuis la base VALIDÉE */
-        if(row.photo || row.histoire || row.photo_histoire){
-          var fx=(window.REGISTRE_FANS||[]).find(function(x){return _cleFanN(x.prenom,x.ville)===cle || (cleU && x.user_id && ("uid:"+x.user_id)===cleU);});
-          if(fx){ if(row.photo && !fx.photo) fx.photo=row.photo; if(row.histoire && !fx.histoire) fx.histoire=row.histoire; if(row.photo_histoire && !fx.photoHistoire) fx.photoHistoire=row.photo_histoire; }
-          var hx=(typeof HISTOIRES!=="undefined"?HISTOIRES:[]).find(function(x){return _cleFanN(x.prenom,x.ville)===cle;});
-          if(hx){ if(row.photo) hx.photoFan=row.photo; if(row.histoire) hx.texte=row.histoire; if(row.photo_histoire) hx.photoHistoire=row.photo_histoire; }
+        /* fan déjà présent (souvent via la sauvegarde locale) → on COMPLÈTE sa fiche depuis la base VALIDÉE.
+           CRUCIAL : on récupère le user_id (sinon likes/commentaires/quiz/blind test ne sont pas comptés,
+           car ils sont rangés par identifiant de compte) ainsi que les réponses aux questions. */
+        var fx=(window.REGISTRE_FANS||[]).find(function(x){return _cleFanN(x.prenom,x.ville)===cle || (cleU && x.user_id && ("uid:"+x.user_id)===cleU);});
+        if(fx){
+          if(row.user_id && !fx.user_id) fx.user_id=row.user_id;   /* ← indispensable pour les points d'engagement/quiz/blind test */
+          if(row.id && !fx.fanId) fx.fanId=row.id;
+          if(row.photo && !fx.photo) fx.photo=row.photo;
+          if(row.histoire && !fx.histoire) fx.histoire=row.histoire;
+          if(row.photo_histoire && !fx.photoHistoire) fx.photoHistoire=row.photo_histoire;
+          /* champs qui donnent des points « réponses aux questions » : on les complète s'ils manquent en local */
+          if(row.q_premiere_chanson && !fx.qChanson) fx.qChanson=row.q_premiere_chanson;
+          if(row.q_premier_concert_voyage && !fx.qConcertVoyage) fx.qConcertVoyage=row.q_premier_concert_voyage;
+          if(row.q_premier_projet && !fx.qProjet) fx.qProjet=row.q_premier_projet;
+          if(row.yr_premiere_fois && !fx.yrPremiereFois) fx.yrPremiereFois=row.yr_premiere_fois;
+          if(row.yr_nb_visionnages && !fx.yrNbVu) fx.yrNbVu=row.yr_nb_visionnages;
+          if(row.yr_rencontre && !fx.yrRencontre) fx.yrRencontre=row.yr_rencontre;
+          if(row.yr_tatouage && !fx.yrTatouage) fx.yrTatouage=row.yr_tatouage;
+          if(row.yr_scene_pref && !fx.yrScene) fx.yrScene=row.yr_scene_pref;
         }
+        var hx=(typeof HISTOIRES!=="undefined"?HISTOIRES:[]).find(function(x){return _cleFanN(x.prenom,x.ville)===cle;});
+        if(hx){ if(row.photo) hx.photoFan=row.photo; if(row.histoire) hx.texte=row.histoire; if(row.photo_histoire) hx.photoHistoire=row.photo_histoire; }
         return;
       }
       vus.add(cle); if(cleU) vus.add(cleU);
