@@ -561,7 +561,7 @@ footer .marque{font-family:'Bebas Neue';font-size:1.1rem;letter-spacing:.15em;co
         <p style="margin:4px 0"><span data-i18n="acc.connected">Connected:</span> <b id="auth-qui"></b></p>
         <button type="button" class="btn fantome" onclick="seDeconnecter()" data-i18n="acc.logout">Log out</button>
       </div>
-      <div style="font-size:.66rem;opacity:.5;margin-top:8px">version : COMPTES-131</div>
+      <div style="font-size:.66rem;opacity:.5;margin-top:8px">version : COMPTES-132</div>
     </div>
     <div class="verre" id="dejaFiche" style="display:none;margin-bottom:16px">
       <h3 class="accent" data-i18n="acc.haveCard">Your card is created ✓</h3>
@@ -5585,6 +5585,7 @@ async function chargerBlindtest(){
   }catch(e){ console.warn("blindtest:",e); }
   if(window.rendreBlindtest) rendreBlindtest();
   if(window.toutMettreAJour) try{ toutMettreAJour(false); }catch(_e){}
+  try{ if(window.rendreProfil) rendreProfil(); }catch(_e){}   /* rafraîchit AUSSI le bloc « Tes points » */
 }
 window.chargerBlindtest=chargerBlindtest;
 function btClassement(edId){ return (window.BT_SCORES||[]).filter(function(x){return x.edition===edId;})
@@ -8271,6 +8272,7 @@ async function chargerInteractionsSupabase(){
   }catch(e){ console.warn("interactions:",e); }
   /* recalcul points/badges + rafraîchissement de l'affichage */
   try{ if(window.toutMettreAJour) toutMettreAJour(false); }catch(e){}
+  try{ if(window.rendreProfil) rendreProfil(); }catch(e){}   /* rafraîchit AUSSI le bloc « Tes points » */
   try{ if(window.rendreConcerts) rendreConcerts(); }catch(e){}
 }
 window.chargerInteractionsSupabase=chargerInteractionsSupabase;
@@ -11992,7 +11994,9 @@ function qzChargerProg(){try{if(!window._sb)return;window._sb.from("quiz_progres
    if(best>loc){ st.points=best; try{localStorage.setItem("qzomar_stat",JSON.stringify(st));}catch(e){} }
    /* rattrapage : si des points locaux n'ont pas été enregistrés en ligne, on les renvoie */
    if(loc>rem){try{qzSync(st);}catch(e){}}}
- if(window.toutMettreAJour)try{window.toutMettreAJour(false);}catch(e){}},function(){});}catch(e){}}
+ if(window.toutMettreAJour)try{window.toutMettreAJour(false);}catch(e){}
+ try{ if(window.rendreProfil) rendreProfil(); }catch(e){}   /* rafraîchit AUSSI le bloc « Tes points » */
+ },function(){});}catch(e){}}
 window.qzChargerProg=qzChargerProg;  /* accessible depuis la connexion pour rattraper les points juste après re-connexion */
 /* injecte les badges quiz dans le passeport (profil) */
 function qzInjecterBadges(){try{var s=document.getElementById("secProfil");if(!s)return;if(s.querySelector(".qz-badges-blk"))return;var blk=document.createElement("div");blk.className="verre qz-badges-blk";blk.style.marginTop="14px";blk.innerHTML=QZ.badgesHTML();s.appendChild(blk);}catch(e){}}
