@@ -555,7 +555,7 @@ footer .marque{font-family:'Bebas Neue';font-size:1.1rem;letter-spacing:.15em;co
         <p style="margin:4px 0"><span data-i18n="acc.connected">Connected:</span> <b id="auth-qui"></b></p>
         <button type="button" class="btn fantome" onclick="seDeconnecter()" data-i18n="acc.logout">Log out</button>
       </div>
-      <div style="font-size:.66rem;opacity:.5;margin-top:8px">version : COMPTES-124</div>
+      <div style="font-size:.66rem;opacity:.5;margin-top:8px">version : COMPTES-125</div>
     </div>
     <div class="verre" id="dejaFiche" style="display:none;margin-bottom:16px">
       <h3 class="accent" data-i18n="acc.haveCard">Your card is created ✓</h3>
@@ -9856,6 +9856,10 @@ function unItemModeration(m){
 function rendreModeration(){
   var s=document.getElementById("secModeration"); if(!s) return;
   if(!(typeof estAdmin==="function" && estAdmin())){ s.innerHTML=""; return; }
+  /* NE PAS reconstruire pendant que la modératrice utilise un menu déroulant
+     (concert / catégorie) : sinon sa sélection s'efface avant qu'elle valide. */
+  var _ae=document.activeElement;
+  if(_ae && s.contains(_ae) && _ae.tagName==="SELECT"){ return; }
   var enAttente=window.MEDIAS_MODERER||[];
   var traites=(window.MEDIAS_VALIDES||[]).slice(0,12);
   var htmlAttente = enAttente.length
@@ -11383,6 +11387,11 @@ if(window._sb && window._sb.auth){
         if(d) d.style.display="none"; if(c) c.style.display="none"; if(rc) rc.style.display="";
         try{ if(window.MON_USER===undefined && session) window.MON_USER=session.user; }catch(_y){}
         return;
+      }
+      /* Rafraîchissement de jeton : même personne déjà chargée → on met juste à jour la
+         session sans TOUT recharger (évite de reconstruire les listes en boucle, ex. modération). */
+      if(_e==="TOKEN_REFRESHED" && session && session.user && window.MON_USER && window.MON_USER.id===session.user.id){
+        window.MON_USER=session.user; return;
       }
       majPanneauCompte(session);
     });
