@@ -555,7 +555,7 @@ footer .marque{font-family:'Bebas Neue';font-size:1.1rem;letter-spacing:.15em;co
         <p style="margin:4px 0"><span data-i18n="acc.connected">Connected:</span> <b id="auth-qui"></b></p>
         <button type="button" class="btn fantome" onclick="seDeconnecter()" data-i18n="acc.logout">Log out</button>
       </div>
-      <div style="font-size:.66rem;opacity:.5;margin-top:8px">version : COMPTES-123</div>
+      <div style="font-size:.66rem;opacity:.5;margin-top:8px">version : COMPTES-124</div>
     </div>
     <div class="verre" id="dejaFiche" style="display:none;margin-bottom:16px">
       <h3 class="accent" data-i18n="acc.haveCard">Your card is created ✓</h3>
@@ -11357,24 +11357,20 @@ window.majPanneauCompte=majPanneauCompte; window.chargerMonProfil=chargerMonProf
 majFormulaireVisibilite();
 if(window._sb && window._sb.auth){
   try{
-    /* Au démarrage, on RESTAURE la session ET on vérifie qu'elle est encore VALIDE.
-       Si le jeton est périmé (getUser échoue), on nettoie la session et on affiche
-       « connecte-toi » au lieu de faire semblant d'être connecté (sinon les
-       enregistrements échouent en silence). Vaut pour TOUS les fans. */
+    /* Au démarrage, on RESTAURE la session et on RAFRAÎCHIT le jeton (au lieu de
+       déconnecter). Ça permet d'utiliser le compte sur PLUSIEURS appareils sans
+       que les enregistrements échouent. Si le rafraîchissement échoue (réseau,
+       ou jeton vraiment mort), on garde la session : l'enregistrement du quiz
+       réessaiera tout seul (qzSync) et préviendra le fan seulement si besoin. */
     var _isRecovery=((location.hash||"")+(location.search||"")).indexOf("type=recovery")>-1;
     window._sb.auth.getSession().then(function(r){
       if(_isRecovery){ return; }  /* lien de réinitialisation : c'est le handler PASSWORD_RECOVERY qui gère l'affichage */
       var session=(r&&r.data)?r.data.session:null;
       if(session && session.user){
-        window._sb.auth.getUser().then(function(u){
-          if(u && u.data && u.data.user && !u.error){
-            majPanneauCompte(session);                 /* session valide */
-          } else {
-            try{ window._sb.auth.signOut(); }catch(_e){}
-            majPanneauCompte(null);                     /* session périmée : on demande une reconnexion */
-            try{ if(window.toast) toast(t("acc.expired")); }catch(_e){}
-          }
-        }, function(){ try{ window._sb.auth.signOut(); }catch(_e){} majPanneauCompte(null); try{ if(window.toast) toast(t("acc.expired")); }catch(_e){} });
+        window._sb.auth.refreshSession().then(function(rr){
+          var s2=(rr&&rr.data&&rr.data.session)?rr.data.session:session;
+          majPanneauCompte(s2);
+        }, function(){ majPanneauCompte(session); });
       } else {
         majPanneauCompte(null);
       }
@@ -11862,7 +11858,21 @@ function qzSeenToday(){try{return localStorage.getItem("qzomar_seen")===qzTodayK
 function qzMarkSeen(){try{localStorage.setItem("qzomar_seen",qzTodayKey());}catch(e){}}
 function qzGetStat(){try{var s=JSON.parse(localStorage.getItem("qzomar_stat")||"{}");if(!s.cats)s.cats={};if(!s.points)s.points=0;if(!s.joue)s.joue=0;return s;}catch(e){return {points:0,cats:{},joue:0};}}
 function qzSaveStat(st){try{localStorage.setItem("qzomar_stat",JSON.stringify(st));}catch(e){}qzSync(st);}
-function qzSync(st){try{if(window._sb&&window.MON_USER){window._sb.from("quiz_progression").upsert({user_id:window.MON_USER.id,points:st.points,cats:st.cats,joue:st.joue,maj_le:new Date().toISOString()},{onConflict:"user_id"}).then(function(res){ if(res&&res.error){ qzSyncEchec(res.error); } },function(err){ qzSyncEchec(err); });}}catch(e){}}
+function qzSync(st){
+  try{
+    if(!(window._sb&&window.MON_USER)) return;
+    var payload={user_id:window.MON_USER.id,points:st.points,cats:st.cats,joue:st.joue,maj_le:new Date().toISOString()};
+    function ecrire(){ return window._sb.from("quiz_progression").upsert(payload,{onConflict:"user_id"}); }
+    ecrire().then(function(res){
+      if(res&&res.error){
+        /* échec (jeton peut-être périmé) : on rafraîchit la connexion et on RÉESSAIE une fois */
+        window._sb.auth.refreshSession().then(function(){ ecrire().then(function(r2){ if(r2&&r2.error) qzSyncEchec(r2.error); }, function(e){ qzSyncEchec(e); }); }, function(e){ qzSyncEchec(e); });
+      }
+    }, function(){
+      window._sb.auth.refreshSession().then(function(){ ecrire().then(function(r2){ if(r2&&r2.error) qzSyncEchec(r2.error); }, function(e){ qzSyncEchec(e); }); }, function(e){ qzSyncEchec(e); });
+    });
+  }catch(e){}
+}
 /* si l'enregistrement en ligne échoue (session expirée…), on prévient le fan au lieu d'échouer en silence */
 function qzSyncEchec(err){ try{ console.warn("quiz save failed:",err); if(window.toast) toast(t("qz.saveFail")); }catch(e){} }
 /* ---- rendu ---- */
