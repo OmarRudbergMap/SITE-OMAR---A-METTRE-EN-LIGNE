@@ -8,7 +8,7 @@
 
 create table if not exists public.quiz_progression (
   user_id uuid primary key references auth.users(id) on delete cascade,
-  points  integer not null default 0,
+  points  numeric not null default 0,
   cats    jsonb   not null default '{}'::jsonb,   -- bonnes réponses par catégorie
   joue    integer not null default 0,             -- nombre de questions jouées
   maj_le  timestamptz not null default now()
