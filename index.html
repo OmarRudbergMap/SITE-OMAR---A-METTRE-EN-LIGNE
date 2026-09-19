@@ -555,7 +555,7 @@ footer .marque{font-family:'Bebas Neue';font-size:1.1rem;letter-spacing:.15em;co
         <p style="margin:4px 0"><span data-i18n="acc.connected">Connected:</span> <b id="auth-qui"></b></p>
         <button type="button" class="btn fantome" onclick="seDeconnecter()" data-i18n="acc.logout">Log out</button>
       </div>
-      <div style="font-size:.66rem;opacity:.5;margin-top:8px">version : COMPTES-125</div>
+      <div style="font-size:.66rem;opacity:.5;margin-top:8px">version : COMPTES-126</div>
     </div>
     <div class="verre" id="dejaFiche" style="display:none;margin-bottom:16px">
       <h3 class="accent" data-i18n="acc.haveCard">Your card is created ✓</h3>
@@ -11883,7 +11883,11 @@ function qzSync(st){
   }catch(e){}
 }
 /* si l'enregistrement en ligne échoue (session expirée…), on prévient le fan au lieu d'échouer en silence */
-function qzSyncEchec(err){ try{ console.warn("quiz save failed:",err); if(window.toast) toast(t("qz.saveFail")); }catch(e){} }
+function qzSyncEchec(err){ try{ console.warn("quiz save failed:",err);
+  var det=""; try{ det=(err&&(err.message||err.msg||err.error_description||err.code))||JSON.stringify(err); }catch(_e){ det=String(err); }
+  var uid=(window.MON_USER&&window.MON_USER.id)?window.MON_USER.id.slice(0,8):"—";
+  if(window.toast) toast("⚠️ DIAG enregistrement ["+uid+"] : "+String(det).slice(0,150));
+}catch(e){} }
 /* ---- rendu ---- */
 function qzEsc(s){return String(s==null?"":s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");}
 var qzCur=null, qzAnswered=false;
