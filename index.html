@@ -555,7 +555,7 @@ footer .marque{font-family:'Bebas Neue';font-size:1.1rem;letter-spacing:.15em;co
         <p style="margin:4px 0"><span data-i18n="acc.connected">Connected:</span> <b id="auth-qui"></b></p>
         <button type="button" class="btn fantome" onclick="seDeconnecter()" data-i18n="acc.logout">Log out</button>
       </div>
-      <div style="font-size:.66rem;opacity:.5;margin-top:8px">version : COMPTES-126</div>
+      <div style="font-size:.66rem;opacity:.5;margin-top:8px">version : COMPTES-127</div>
     </div>
     <div class="verre" id="dejaFiche" style="display:none;margin-bottom:16px">
       <h3 class="accent" data-i18n="acc.haveCard">Your card is created ✓</h3>
@@ -11886,7 +11886,19 @@ function qzSync(st){
 function qzSyncEchec(err){ try{ console.warn("quiz save failed:",err);
   var det=""; try{ det=(err&&(err.message||err.msg||err.error_description||err.code))||JSON.stringify(err); }catch(_e){ det=String(err); }
   var uid=(window.MON_USER&&window.MON_USER.id)?window.MON_USER.id.slice(0,8):"—";
-  if(window.toast) toast("⚠️ DIAG enregistrement ["+uid+"] : "+String(det).slice(0,150));
+  var texte="⚠️ DIAG enregistrement ["+uid+"] : "+String(det);
+  /* bandeau FIXE qui reste affiché (ne disparaît pas), pour pouvoir le lire/recopier */
+  var b=document.getElementById("qz-diag-box");
+  if(!b){ b=document.createElement("div"); b.id="qz-diag-box";
+    b.style.cssText="position:fixed;left:0;right:0;top:0;z-index:99999;background:#7d1f3a;color:#fff;font-size:13px;line-height:1.4;padding:12px 40px 12px 12px;box-shadow:0 2px 10px rgba(0,0,0,.4);white-space:pre-wrap;word-break:break-word;font-family:system-ui,sans-serif";
+    var x=document.createElement("button"); x.textContent="✕"; x.setAttribute("aria-label","Fermer");
+    x.style.cssText="position:absolute;right:8px;top:8px;background:transparent;border:none;color:#fff;font-size:18px;cursor:pointer";
+    x.onclick=function(){ b.remove(); };
+    b.appendChild(x);
+    var span=document.createElement("div"); span.id="qz-diag-txt"; b.appendChild(span);
+    document.body.appendChild(b);
+  }
+  var s=document.getElementById("qz-diag-txt"); if(s) s.textContent=texte;
 }catch(e){} }
 /* ---- rendu ---- */
 function qzEsc(s){return String(s==null?"":s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");}
