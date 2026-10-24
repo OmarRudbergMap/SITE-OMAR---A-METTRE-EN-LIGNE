@@ -561,7 +561,7 @@ footer .marque{font-family:'Bebas Neue';font-size:1.1rem;letter-spacing:.15em;co
         <p style="margin:4px 0"><span data-i18n="acc.connected">Connected:</span> <b id="auth-qui"></b></p>
         <button type="button" class="btn fantome" onclick="seDeconnecter()" data-i18n="acc.logout">Log out</button>
       </div>
-      <div style="font-size:.66rem;opacity:.5;margin-top:8px">version : COMPTES-141</div>
+      <div style="font-size:.66rem;opacity:.5;margin-top:8px">version : COMPTES-142</div>
     </div>
     <div class="verre" id="dejaFiche" style="display:none;margin-bottom:16px">
       <h3 class="accent" data-i18n="acc.haveCard">Your card is created ✓</h3>
@@ -11795,6 +11795,9 @@ try{ [2500,5000,9000,15000].forEach(function(_d){ setTimeout(function(){ try{ if
 .qz-libre button{flex:none;white-space:nowrap;font-family:'Bebas Neue',sans-serif;letter-spacing:.06em;font-size:1.1rem;color:var(--blanc);background:var(--bordeaux);border:none;border-radius:13px;padding:0 20px;cursor:pointer}
 .qz-photo{position:relative;width:210px;height:210px;margin:0 auto 14px;border-radius:16px;overflow:hidden;border:1px solid var(--verre-bord);box-shadow:0 10px 30px rgba(0,0,0,.5)}
 .qz-photo img{width:100%;height:100%;object-fit:cover;display:block;filter:blur(2px);transform:scale(1.04);transition:filter .8s,transform .8s}
+/* Pochettes (petites images 160px) : flou léger sinon illisible sur mobile. Photos YR (haute déf) : flou un peu plus marqué. */
+.qz-photo.poch:not(.net) img{filter:blur(1px);transform:scale(1.02)}
+.qz-photo.yr:not(.net) img{filter:blur(1.5px)}
 .qz-photo.net img{filter:none;transform:none}
 .qz-photo .lp{position:absolute;right:8px;bottom:8px;font-size:1.4rem;opacity:.85}
 .qz-photo.net .lp{opacity:0}
@@ -11943,11 +11946,11 @@ function qzRender(){
    h+='</div>';
  } else if(q.type==="Photo à deviner"){
    h+='<p class="qz-q">'+qzTx(QZ_UI.photoQ)+'</p>';
-   h+='<div class="qz-photo" id="qzPbox"><img src="photos/'+q.photo+'" alt=""><span class="lp">🔍</span></div>';
+   h+='<div class="qz-photo poch" id="qzPbox"><img src="photos/'+q.photo+'" alt=""><span class="lp">🔍</span></div>';
    h+='<div class="qz-libre"><input id="qzRep" placeholder="'+qzTx(QZ_UI.phSong)+'" onkeydown="if(event.key===\'Enter\')QZ.repLibre()"><button onclick="QZ.repLibre()">'+qzTx(QZ_UI.ok)+'</button></div>';
  } else if(q.type==="Scène YR"){
    h+='<p class="qz-q">'+qzTx(QZ_UI.sceneQ)+'</p>';
-   h+='<div class="qz-photo" id="qzPbox"><img src="photos/'+q.photo+'" alt=""><span class="lp">🔍</span></div>';
+   h+='<div class="qz-photo yr" id="qzPbox"><img src="photos/'+q.photo+'" alt=""><span class="lp">🔍</span></div>';
    h+='<div class="qz-scene">';
    h+='<label class="qz-lbl">'+qzTx(QZ_UI.lblSE)+'<small>+0,5</small></label>';
    h+='<div class="qz-libre"><input id="qzSE" placeholder="'+qzEsc(qzTx(QZ_UI.phSE))+'"></div>';
