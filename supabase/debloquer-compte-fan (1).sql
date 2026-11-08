@@ -4,7 +4,7 @@
 -- ============================================================
 
 -- ÉTAPE 1 — RETROUVER le compte.
---   Remplace MORCEAU_DU_MAIL par un bout de son e-mail (ex. le nom avant @),
+--   Remplace valeryk1973 par un bout de son e-mail (ex. le nom avant @),
 --   puis Run. Une ou plusieurs lignes vont apparaître en bas.
 --   Repère la bonne, et COPIE la valeur de la colonne "id"
 --   (ça ressemble à : 3f9a1c2b-6d4e-47aa-9b1c-8e2f1a2b3c4d)
@@ -15,8 +15,8 @@ where email ilike '%MORCEAU_DU_MAIL%';
 
 
 -- ÉTAPE 2 — REMETTRE le mot de passe.
---   Colle l'id copié à la place de COLLE_L_ID_ICI (garde les guillemets),
---   mets ton mot de passe (tes 6 chiffres) à la place de MOT_DE_PASSE,
+--   Colle l'id copié à la place de (27b7d3df-ee1c-4b6d-812c-146bf739cf8b) (garde les guillemets),
+--   mets ton mot de passe (123456) à la place de MOT_DE_PASSE,
 --   puis Run. Une ligne avec l'e-mail doit apparaître = c'est bon ✅
 
 update auth.users
