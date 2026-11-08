@@ -561,7 +561,7 @@ footer .marque{font-family:'Bebas Neue';font-size:1.1rem;letter-spacing:.15em;co
         <p style="margin:4px 0"><span data-i18n="acc.connected">Connected:</span> <b id="auth-qui"></b></p>
         <button type="button" class="btn fantome" onclick="seDeconnecter()" data-i18n="acc.logout">Log out</button>
       </div>
-      <div style="font-size:.66rem;opacity:.5;margin-top:8px">version : COMPTES-151</div>
+      <div style="font-size:.66rem;opacity:.5;margin-top:8px">version : COMPTES-152</div>
     </div>
     <div class="verre" id="dejaFiche" style="display:none;margin-bottom:16px">
       <h3 class="accent" data-i18n="acc.haveCard">Your card is created ✓</h3>
@@ -6436,89 +6436,89 @@ document.head.appendChild(styleExt);
    rythme estimé et RÉGLABLE : champ r = streams gagnés par seconde. Quand vous aurez
    de nouveaux chiffres officiels, mettez à jour s (base) et T0_STREAMS. */
 const T0_STREAMS = new Date("2026-05-25T00:00:00Z").getTime();   /* dossier de presse */
-const T0_KWORB  = new Date("2026-11-01T00:00:00Z").getTime();   /* recalé sur la somme réelle de la liste au 11.10.2026 */
-const TOTAL_STREAMS = { s:254064566, r:0.89 };  /* = somme exacte de toutes les chansons de la liste au 11.10.2026 */
+const T0_KWORB = new Date("2026-11-08T00:00:00Z").getTime();   /* recalé sur la somme réelle de la liste au 08.11.2026 */
+const TOTAL_STREAMS = { s:254784864, r:1.19 };  /* = somme exacte de toutes les chansons de la liste au 08.11.2026 */
 const DISCO=[
  /* EP MIRAGE — sorti le 06/11/2026. Streams à 0 en attendant le premier relevé. */
- {n:"Mirage", d:"2026-11-06", s:0, r:0.00000, t0:"2026-11-06"},
- {n:"Slow Dancer", d:"2026-11-06", s:0, r:0.00000, t0:"2026-11-06"},
- {n:"Could've Been Love", d:"2026-11-06", s:0, r:0.00000, t0:"2026-11-06"},
- {n:"Pop My Adrenaline", d:"2026-11-06", s:0, r:0.00000, t0:"2026-11-06"},
+ {n:"Mirage", d:"2026-11-06", s:73774, r:0.12198, t0:"2026-11-08"},
+ {n:"Slow Dancer", d:"2026-11-06", s:41138, r:0.06802, t0:"2026-11-08"},
+ {n:"Could've Been Love", d:"2026-11-06", s:43902, r:0.07259, t0:"2026-11-08"},
+ {n:"Pop My Adrenaline", d:"2026-11-06", s:47489, r:0.07852, t0:"2026-11-08"},
  /* s = streams Spotify exacts fournis par le site (relevés des 17-18.07.2026, t0)
     r = streams/seconde · rythmes quotidiens réels Kworb (relevé du 19.04.2026) pour les titres suivis ; estimations pour les autres. RECALAGE HEBDOMADAIRE : la modératrice fournit les chiffres exacts ~1x/semaine → mettre à jour s et t0.
     d = date de sortie officielle (tableau du 17.07.2026) */
- {n:"Careless", d:"2026-07-03", s:1759000, r:0.06357, t0:"2026-11-01"},
- {n:"Siren (feat. Felix Jaehn)", d:"2026-06-19", s:1249482, r:0.02466, t0:"2026-11-01"},
- {n:"A World Like This", d:"2026-05-29", s:1569883, r:0.04152, t0:"2026-11-01"},
- {n:"Gabriela (Spotify Singles)", d:"2025-12-12", s:1849091, r:0.01682, t0:"2026-11-01"},
- {n:"Bebezinho (feat. Omar Rudberg)", d:"2025-11-28", s:529319, r:0.00894, t0:"2026-11-01"},
- {n:"Malandro", d:"2025-10-31", s:4600242, r:0.04348, t0:"2026-11-01"},
- {n:"Dying", d:"2025-09-05", s:2926430, r:0.02422, t0:"2026-11-01"},
- {n:"No Soy un Hombre", d:"2025-02-20", s:696877, r:0.00785, t0:"2026-11-01"}  /* de retour sur Spotify le 23.10.2026 */,
- {n:"I'm Not a Boy", d:"2025-01-30", s:29408, r:0.03367, t0:"2026-11-01"}  /* de retour sur Spotify le 23.10.2026 */,
- {n:"Girlfriend", d:"2024-10-18", s:3722115, r:0.02615, t0:"2026-11-01"},
- {n:"Lose Me", d:"2024-10-18", s:3002330, r:0.03237, t0:"2026-11-01"},
- {n:"Wrong", d:"2024-10-18", s:2675427, r:0.02243, t0:"2026-11-01"},
- {n:"Luz Roja (Bonus)", d:"2024-10-18", s:984477, r:0.00649, t0:"2026-11-01"},
- {n:"Sabotage", d:"2024-09-20", s:4680397, r:0.02483, t0:"2026-11-01"},
- {n:"Talk", d:"2024-06-28", s:5242117, r:0.02132, t0:"2026-11-01"},
- {n:"Bye Bye", d:"2024-06-28", s:3922427, r:0.01931, t0:"2026-11-01"},
- {n:"Red Light", d:"2024-05-17", s:4923837, r:0.01781, t0:"2026-11-01"},
- {n:"Om du inte fanns (Don't Wait)", d:"2023-12-10", s:2821534, r:0.00879, t0:"2026-11-01"},
- {n:"Höj ett glas (Fanfar)", d:"2023-12-10", s:2205852, r:0.00796, t0:"2026-11-01"},
- {n:"Min Första (I Will Always Be Your Soldier)", d:"2023-12-10", s:1959029, r:0.00674, t0:"2026-11-01"},
- {n:"Off My Mind (feat. Jubël)", d:"2023-10-20", s:2972548, r:0.00993, t0:"2026-11-01"},
- {n:"Happier (After Midnight xxx / In The Club Remix)", d:"2023-10-31", s:126176, r:0.00025, t0:"2026-11-01"},
- {n:"Happier (House/Club Remix)", d:"2023-10-31", s:132966, r:0.00046, t0:"2026-11-01"},
- {n:"Happier (Jungle Mood Remix)", d:"2023-10-31", s:103592, r:0.00036, t0:"2026-11-01"},
- {n:"Happier (Indiefeels Remix)", d:"2023-10-31", s:98938, r:0.00031, t0:"2026-11-01"},
- {n:"Happier (Move Your Body / Rhythm & Dance Remix)", d:"2023-10-31", s:90413, r:0.00038, t0:"2026-11-01"},
- {n:"Happier (Steerner Remix)", d:"2023-10-31", s:81294, r:0.00023, t0:"2026-11-01"},
- {n:"Happier (On The Beat Remix)", d:"2023-10-31", s:65663, r:0.00026, t0:"2026-11-01"},
- {n:"Happier (Floor Remix)", d:"2023-10-31", s:48672, r:0.00027, t0:"2026-11-01"},
- {n:"Happier (Just Dance Remix)", d:"2023-10-31", s:42252, r:0.00016, t0:"2026-11-01"},
- {n:"Happier (SlowNspeed Remix)", d:"2023-10-31", s:41893, r:0.00017, t0:"2026-11-01"},
- {n:"Happier (Either Way Remix)", d:"2023-10-31", s:35054, r:0.00016, t0:"2026-11-01"},
- {n:"Happier (Mystic Remix)", d:"2023-10-31", s:32945, r:0.00013, t0:"2026-11-01"},
- {n:"Happier", d:"2023-06-30", s:3485738, r:0.01293, t0:"2026-11-01"},
- {n:"All In My Head (feat. Omar Rudberg)", d:"2023-06-29", s:2537512, r:0.00567, t0:"2026-11-01"}, /* single FDVM feat. Omar · date et streams fournis le 20.07.2026 · rythme estimé */
- {n:"She Fell In Love In The Summer", d:"2023-04-27", s:4438231, r:0.01795, t0:"2026-11-01"},
- {n:"She Fell In Love In The Summer (acoustic)", d:"2023-04-27", s:666536, r:0.00252, t0:"2026-11-01"},
- {n:"I'm So Excited (club version)", d:"2023-03-09", s:1812318, r:0.00522, t0:"2026-11-01"},
- {n:"I'm So Excited (Live at QX Gala)", d:"2023-03-09", s:456764, r:0.00173, t0:"2026-11-01"},
- {n:"I'm So Excited (additional version)", d:"2023-03-09", s:626654, r:0.00272, t0:"2026-11-01"},
- {n:"Call Me By Your Name", d:"2023-01-06", s:5180099, r:0.01013, t0:"2026-11-01"},
- {n:"Simon's Song", d:"2022-11-01", s:16182686, r:0.04420, t0:"2026-11-01"},
- {n:"Todo De Ti (All That She Wants)", d:"2022-07-01", s:5094123, r:0.01098, t0:"2026-11-01"},
- {n:"Nakna", d:"2022-06-03", s:5575867, r:0.00731, t0:"2026-11-01"},
- {n:"In The Sunrise", d:"2022-05-27", s:3538063, r:0.01049, t0:"2026-11-01"},
- {n:"Coast Side", d:"2022-05-27", s:3408704, r:0.00921, t0:"2026-11-01"},
- {n:"Coast Side (Carousel Remix)", d:"2022-08-26", s:470688, r:0.00375, t0:"2026-11-01"}, /* chiffre exact fourni le 18.07.2026 · ≈ 210/jour · date de sortie à préciser */
- {n:"Pull Up", d:"2022-05-27", s:2860452, r:0.00969, t0:"2026-11-01"},
- {n:"Que Puedo Hacer?", d:"2022-05-27", s:2078811, r:0.00621, t0:"2026-11-01"},
- {n:"Como Ayer", d:"2022-05-27", s:2132492, r:0.00798, t0:"2026-11-01"},
- {n:"Breathe", d:"2022-05-27", s:2800143, r:0.00677, t0:"2026-11-01"},
- {n:"Mama", d:"2022-05-27", s:1744866, r:0.00468, t0:"2026-11-01"},
- {n:"La Incondicional", d:"2022-05-27", s:1155890, r:0.00268, t0:"2026-11-01"},
- {n:"La Incondicional (live from Benjamin's)", d:"2022-04-19", s:2335392, r:0.00537, t0:"2026-11-01"},
- {n:"Moving Like That", d:"2022-02-05", s:11777274, r:0.01867, t0:"2026-11-01"},
- {n:"Mi Casa Su Casa", d:"2022-01-07", s:25792140, r:0.06431, t0:"2026-11-01"},
- {n:"Yo Dije OUFF", d:"2021-07-21", s:10135310, r:0.01692, t0:"2026-11-01"},
- {n:"Symphony", d:"2021-07-09", s:7857233, r:0.01647, t0:"2026-11-01"},
- {n:"Remember", d:"2021-07-09", s:5213476, r:0.01021, t0:"2026-11-01"},
- {n:"It Takes A Fool To Remain Sane", d:"2021-07-02", s:15008726, r:0.02622, t0:"2026-11-01"},
- {n:"Alla Ba OUFF", d:"2021-05-07", s:4345775, r:0.00659, t0:"2026-11-01"},
- {n:"Läppar", d:"2020-07-17", s:2854176, r:0.00701, t0:"2026-11-01"},
- {n:"Jag e nån annan", d:"2020-05-15", s:3076580, r:0.00746, t0:"2026-11-01"},
- {n:"Dale Bye", d:"2020-04-17", s:500795, r:0.00199, t0:"2026-11-01"}, /* date et streams fournis le 20.07.2026 · rythme estimé */
- {n:"Dum", d:"2020-01-24", s:15223649, r:0.02479, t0:"2026-11-01"},
- {n:"Dum (Singback version)", d:"2020-01-24", s:576102, r:0.00086, t0:"2026-11-01"},
- {n:"På min telephone toda la noche", d:"2019-08-02", s:2595573, r:0.00493, t0:"2026-11-01"},
- {n:"Om om och om igen", d:"2019-02-16", s:13398800, r:0.00957, t0:"2026-11-01"},
- {n:"La Mesa (feat. Elias Hurtig)", d:"2018-08-17", s:3349131, r:0.00634, t0:"2026-11-01"},
- {n:"Que Pasa (feat. Lamix)", d:"2018-02-23", s:7497186, r:0.00789, t0:"2026-11-01"},
- {n:"Sorry (reprise de Madonna)", d:"2024-06-18", yt:true, vues:262851, s:262851, r:0.00000, t0:"2026-11-01"},
- {n:"Wrong (acoustic)", d:"", yt:true, vues:215671, s:215671, r:0.00000, t0:"2026-11-01"},
+ {n:"Careless", d:"2026-07-03", s:1793400, r:0.05688, t0:"2026-11-08"},
+ {n:"Siren (feat. Felix Jaehn)", d:"2026-06-19", s:1264292, r:0.02449, t0:"2026-11-08"},
+ {n:"A World Like This", d:"2026-05-29", s:1594507, r:0.04071, t0:"2026-11-08"},
+ {n:"Gabriela (Spotify Singles)", d:"2025-12-12", s:1859704, r:0.01755, t0:"2026-11-08"},
+ {n:"Bebezinho (feat. Omar Rudberg)", d:"2025-11-28", s:534739, r:0.00896, t0:"2026-11-08"},
+ {n:"Malandro", d:"2025-10-31", s:4628177, r:0.04619, t0:"2026-11-08"},
+ {n:"Dying", d:"2025-09-05", s:2939135, r:0.02101, t0:"2026-11-08"},
+ {n:"No Soy un Hombre", d:"2025-02-20", s:700763, r:0.00643, t0:"2026-11-08"}  /* de retour sur Spotify le 23.10.2026 */,
+ {n:"I'm Not a Boy", d:"2025-01-30", s:48732, r:0.03195, t0:"2026-11-08"}  /* de retour sur Spotify le 23.10.2026 */,
+ {n:"Girlfriend", d:"2024-10-18", s:3737990, r:0.02625, t0:"2026-11-08"},
+ {n:"Lose Me", d:"2024-10-18", s:3020560, r:0.03014, t0:"2026-11-08"},
+ {n:"Wrong", d:"2024-10-18", s:2686435, r:0.01820, t0:"2026-11-08"},
+ {n:"Luz Roja (Bonus)", d:"2024-10-18", s:988347, r:0.00640, t0:"2026-11-08"},
+ {n:"Sabotage", d:"2024-09-20", s:4694393, r:0.02314, t0:"2026-11-08"},
+ {n:"Talk", d:"2024-06-28", s:5254808, r:0.02098, t0:"2026-11-08"},
+ {n:"Bye Bye", d:"2024-06-28", s:3934711, r:0.02031, t0:"2026-11-08"},
+ {n:"Red Light", d:"2024-05-17", s:4934320, r:0.01733, t0:"2026-11-08"},
+ {n:"Om du inte fanns (Don't Wait)", d:"2023-12-10", s:2826459, r:0.00814, t0:"2026-11-08"},
+ {n:"Höj ett glas (Fanfar)", d:"2023-12-10", s:2210111, r:0.00704, t0:"2026-11-08"},
+ {n:"Min Första (I Will Always Be Your Soldier)", d:"2023-12-10", s:1962894, r:0.00639, t0:"2026-11-08"},
+ {n:"Off My Mind (feat. Jubël)", d:"2023-10-20", s:2978520, r:0.00987, t0:"2026-11-08"},
+ {n:"Happier (After Midnight xxx / In The Club Remix)", d:"2023-10-31", s:126281, r:0.00017, t0:"2026-11-08"},
+ {n:"Happier (House/Club Remix)", d:"2023-10-31", s:133237, r:0.00045, t0:"2026-11-08"},
+ {n:"Happier (Jungle Mood Remix)", d:"2023-10-31", s:103801, r:0.00035, t0:"2026-11-08"},
+ {n:"Happier (Indiefeels Remix)", d:"2023-10-31", s:99056, r:0.00020, t0:"2026-11-08"},
+ {n:"Happier (Move Your Body / Rhythm & Dance Remix)", d:"2023-10-31", s:90590, r:0.00029, t0:"2026-11-08"},
+ {n:"Happier (Steerner Remix)", d:"2023-10-31", s:81422, r:0.00021, t0:"2026-11-08"},
+ {n:"Happier (On The Beat Remix)", d:"2023-10-31", s:65782, r:0.00020, t0:"2026-11-08"},
+ {n:"Happier (Floor Remix)", d:"2023-10-31", s:48782, r:0.00018, t0:"2026-11-08"},
+ {n:"Happier (Just Dance Remix)", d:"2023-10-31", s:42334, r:0.00014, t0:"2026-11-08"},
+ {n:"Happier (SlowNspeed Remix)", d:"2023-10-31", s:41978, r:0.00014, t0:"2026-11-08"},
+ {n:"Happier (Either Way Remix)", d:"2023-10-31", s:35139, r:0.00014, t0:"2026-11-08"},
+ {n:"Happier (Mystic Remix)", d:"2023-10-31", s:33018, r:0.00012, t0:"2026-11-08"},
+ {n:"Happier", d:"2023-06-30", s:3494697, r:0.01481, t0:"2026-11-08"},
+ {n:"All In My Head (feat. Omar Rudberg)", d:"2023-06-29", s:2541236, r:0.00616, t0:"2026-11-08"}, /* single FDVM feat. Omar · date et streams fournis le 20.07.2026 · rythme estimé */
+ {n:"She Fell In Love In The Summer", d:"2023-04-27", s:4448777, r:0.01744, t0:"2026-11-08"},
+ {n:"She Fell In Love In The Summer (acoustic)", d:"2023-04-27", s:668279, r:0.00288, t0:"2026-11-08"},
+ {n:"I'm So Excited (club version)", d:"2023-03-09", s:1815414, r:0.00512, t0:"2026-11-08"},
+ {n:"I'm So Excited (Live at QX Gala)", d:"2023-03-09", s:457855, r:0.00180, t0:"2026-11-08"},
+ {n:"I'm So Excited (additional version)", d:"2023-03-09", s:628370, r:0.00284, t0:"2026-11-08"},
+ {n:"Call Me By Your Name", d:"2023-01-06", s:5186097, r:0.00992, t0:"2026-11-08"},
+ {n:"Simon's Song", d:"2022-11-01", s:16208530, r:0.04273, t0:"2026-11-08"},
+ {n:"Todo De Ti (All That She Wants)", d:"2022-07-01", s:5100447, r:0.01046, t0:"2026-11-08"},
+ {n:"Nakna", d:"2022-06-03", s:5579843, r:0.00657, t0:"2026-11-08"},
+ {n:"In The Sunrise", d:"2022-05-27", s:3544785, r:0.01111, t0:"2026-11-08"},
+ {n:"Coast Side", d:"2022-05-27", s:3414371, r:0.00937, t0:"2026-11-08"},
+ {n:"Coast Side (Carousel Remix)", d:"2022-08-26", s:471989, r:0.00215, t0:"2026-11-08"}, /* chiffre exact fourni le 18.07.2026 · ≈ 210/jour · date de sortie à préciser */
+ {n:"Pull Up", d:"2022-05-27", s:2866372, r:0.00979, t0:"2026-11-08"},
+ {n:"Que Puedo Hacer?", d:"2022-05-27", s:2082248, r:0.00568, t0:"2026-11-08"},
+ {n:"Como Ayer", d:"2022-05-27", s:2137144, r:0.00769, t0:"2026-11-08"},
+ {n:"Breathe", d:"2022-05-27", s:2804165, r:0.00665, t0:"2026-11-08"},
+ {n:"Mama", d:"2022-05-27", s:1747628, r:0.00457, t0:"2026-11-08"},
+ {n:"La Incondicional", d:"2022-05-27", s:1157384, r:0.00247, t0:"2026-11-08"},
+ {n:"La Incondicional (live from Benjamin's)", d:"2022-04-19", s:2335392, r:0.00000, t0:"2026-11-08"},
+ {n:"Moving Like That", d:"2022-02-05", s:11788237, r:0.01813, t0:"2026-11-08"},
+ {n:"Mi Casa Su Casa", d:"2022-01-07", s:25830543, r:0.06350, t0:"2026-11-08"},
+ {n:"Yo Dije OUFF", d:"2021-07-21", s:10145803, r:0.01735, t0:"2026-11-08"},
+ {n:"Symphony", d:"2021-07-09", s:7862811, r:0.00922, t0:"2026-11-08"},
+ {n:"Remember", d:"2021-07-09", s:5219727, r:0.01034, t0:"2026-11-08"},
+ {n:"It Takes A Fool To Remain Sane", d:"2021-07-02", s:15024995, r:0.02690, t0:"2026-11-08"},
+ {n:"Alla Ba OUFF", d:"2021-05-07", s:4349680, r:0.00646, t0:"2026-11-08"},
+ {n:"Läppar", d:"2020-07-17", s:2858337, r:0.00688, t0:"2026-11-08"},
+ {n:"Jag e nån annan", d:"2020-05-15", s:3080915, r:0.00717, t0:"2026-11-08"},
+ {n:"Dale Bye", d:"2020-04-17", s:502301, r:0.00249, t0:"2026-11-08"}, /* date et streams fournis le 20.07.2026 · rythme estimé */
+ {n:"Dum", d:"2020-01-24", s:15235318, r:0.01929, t0:"2026-11-08"},
+ {n:"Dum (Singback version)", d:"2020-01-24", s:576579, r:0.00079, t0:"2026-11-08"},
+ {n:"På min telephone toda la noche", d:"2019-08-02", s:2598396, r:0.00467, t0:"2026-11-08"},
+ {n:"Om om och om igen", d:"2019-02-16", s:13404247, r:0.00901, t0:"2026-11-08"},
+ {n:"La Mesa (feat. Elias Hurtig)", d:"2018-08-17", s:3352837, r:0.00613, t0:"2026-11-08"},
+ {n:"Que Pasa (feat. Lamix)", d:"2018-02-23", s:7501824, r:0.00767, t0:"2026-11-08"},
+ {n:"Sorry (reprise de Madonna)", d:"2024-06-18", yt:true, vues:263576, s:263576, r:0.00000, t0:"2026-11-08"},
+ {n:"Wrong (acoustic)", d:"", yt:true, vues:216586, s:216586, r:0.00000, t0:"2026-11-08"},
  {n:"I'm Not a Boy (clip YouTube)", d:"", yt:true, vues:580409, s:580409, r:0.00000, t0:"2026-11-01"},
 ];
 const BIO = {
@@ -6612,7 +6612,7 @@ function rendreTimeline(){
       <div style="font-family:'Bebas Neue';font-size:2.6rem;color:var(--bordeaux);text-shadow:0 0 18px var(--lueur);line-height:1.1"
            data-live data-s="${TOTAL_STREAMS.s}" data-r="${TOTAL_STREAMS.r}" data-t0="${T0_KWORB}"></div>
       <div style="font-size:.6rem;color:var(--beige)">Spotify · ${t("x.omStreamNote")}</div>
-      <div style="font-size:.6rem;color:var(--orange);margin-top:4px;font-weight:600">${t("x.omMaj")} : 01/11/2026</div>
+      <div style="font-size:.6rem;color:var(--orange);margin-top:4px;font-weight:600">${t("x.omMaj")} : 08/11/2026</div>
     </div>
     <div class="verre" style="margin-top:12px;display:flex;gap:16px;align-items:flex-start">
       <div style="font-size:.7rem;color:var(--beige);line-height:1.8">
