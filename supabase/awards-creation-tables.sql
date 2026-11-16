@@ -158,6 +158,26 @@ create policy awards_votes_delete on public.awards_votes
   for delete using (auth.uid() = user_id);
 
 -- ─────────────────────────────────────────────────────────────
+-- 3 bis. Le jour du vote est décidé par le serveur, pas par le
+--        téléphone du votant : impossible de revoter en changeant
+--        la date de son appareil.
+-- ─────────────────────────────────────────────────────────────
+create or replace function public.awards_jour_serveur()
+returns trigger
+language plpgsql
+as $$
+begin
+  new.jour := to_char((now() at time zone 'utc')::date, 'YYYY-MM-DD');
+  return new;
+end;
+$$;
+
+drop trigger if exists awards_votes_jour on public.awards_votes;
+create trigger awards_votes_jour
+  before insert or update on public.awards_votes
+  for each row execute function public.awards_jour_serveur();
+
+-- ─────────────────────────────────────────────────────────────
 -- 4. Les totaux officiels : donnés par le serveur
 --    uniquement le jour de la cérémonie (ou à la modératrice)
 -- ─────────────────────────────────────────────────────────────
@@ -175,6 +195,19 @@ as $$
 $$;
 
 grant execute on function public.awards_resultats() to anon, authenticated;
+
+-- combien de votes chaque fan a déposés (pour ses points) — sans jamais
+-- révéler POUR QUI il a voté
+create or replace function public.awards_votes_par_fan()
+returns table(user_id uuid, n bigint)
+language sql
+security definer
+set search_path = public
+as $$
+  select v.user_id, count(*)::bigint from public.awards_votes v group by v.user_id;
+$$;
+
+grant execute on function public.awards_votes_par_fan() to anon, authenticated;
 
 -- ─────────────────────────────────────────────────────────────
 -- 5. Vérification
